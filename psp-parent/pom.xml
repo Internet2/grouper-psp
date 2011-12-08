@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
     
     <modules>
-      <module>psp-provisioning-engine</module>
+      <module>../psp-provisioning-engine</module>
     </modules>
 
     <dependencies>
