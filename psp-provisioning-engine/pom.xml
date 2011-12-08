@@ -8,6 +8,7 @@
     <artifactId>psp-parent</artifactId>
     <groupId>edu.internet2.middleware.psp</groupId>
     <version>2.1.0-SNAPSHOT</version>
+    <relativePath>../psp-parent</relativePath>
   </parent>
 
   <name>Provisioning Engine</name>
