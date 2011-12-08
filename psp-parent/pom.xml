@@ -8,6 +8,10 @@
     <artifactId>psp-parent</artifactId>
     <version>2.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+    
+    <modules>
+      <module>psp-provisioning-engine</module>
+    </modules>
 
     <dependencies>
         <!-- Compile Dependencies -->
