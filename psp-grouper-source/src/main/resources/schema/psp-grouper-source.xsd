@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  targetNamespace="http://grouper.internet2.edu/psp-grouper-source"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  elementFormDefault="qualified">
+
+  <import
+    namespace="http://grouper.internet2.edu/shibboleth/2.0"
+    schemaLocation="classpath:/schema/shibboleth-2.0-grouper.xsd" />
+
+  <annotation>
+    <documentation>
+      Provisioning Service Provider - Grouper source
+    </documentation>
+  </annotation>
+
+  <complexType name="AllGroupNamesDataConnector">
+    <annotation>
+      <documentation>
+        An extension to the GroupDataConnector which returns the names of all configured groups.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:GroupDataConnector" />
+    </complexContent>
+  </complexType>
+
+  <complexType name="AllMemberSubjectIdsDataConnector">
+    <annotation>
+      <documentation>
+        An extension to the MemberDataConnector which returns the subject ids of all configured members.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:MemberDataConnector" />
+    </complexContent>
+  </complexType>
+
+  <complexType name="AllStemNamesDataConnector">
+    <annotation>
+      <documentation>
+        An extension to the StemDataConnector which returns the names of all configured stems.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:StemDataConnector" />
+    </complexContent>
+  </complexType>
+
+</schema>

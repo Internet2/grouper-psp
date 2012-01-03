@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AttributeResolver xmlns="urn:mace:shibboleth:2.0:resolver"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:psp-grouper-source="http://grouper.internet2.edu/psp-grouper-source"
+  xsi:schemaLocation="
+   urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd
+   urn:mace:shibboleth:2.0:resolver:dc classpath:/schema/shibboleth-2.0-attribute-resolver-dc.xsd
+   http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+   http://grouper.internet2.edu/psp-grouper-source classpath:/schema/psp-grouper-source.xsd">
+
+  <resolver:DataConnector id="testAll" xsi:type="psp-grouper-source:AllStemNamesDataConnector">
+    <grouper:Attribute id="parentStem:mailAlternateAddress" />
+  </resolver:DataConnector>
+
+</AttributeResolver>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AttributeResolver xmlns="urn:mace:shibboleth:2.0:resolver"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:psp-grouper-source="http://grouper.internet2.edu/psp-grouper-source"
+  xsi:schemaLocation="
+   urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd
+   http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+   http://grouper.internet2.edu/psp-grouper-source classpath:/schema/psp-grouper-source.xsd">
+
+  <resolver:DataConnector id="testIdOnly" xsi:type="psp-grouper-source:AllMemberSubjectIdsDataConnector" />  
+  
+  <resolver:DataConnector id="testIdOnlySource" xsi:type="psp-grouper-source:AllMemberSubjectIdsDataConnector" >
+    <grouper:Filter xsi:type="grouper:MemberSource" sourceId="jdbc" />
+  </resolver:DataConnector>
+  
+</AttributeResolver>
