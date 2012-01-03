@@ -1,0 +1,7 @@
+dn: cn=test.subject.10,ou=testpeople,${edu.vt.middleware.ldap.base}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.10
+cn: test.subject.1
+sn: subject.10
