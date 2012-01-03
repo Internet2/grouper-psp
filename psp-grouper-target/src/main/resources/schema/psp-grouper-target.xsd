@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema
+  targetNamespace="http://grouper.internet2.edu/psp-grouper-target"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  elementFormDefault="qualified">
+
+  <import
+    namespace="http://grouper.internet2.edu/psp"
+    schemaLocation="classpath:/schema/psp.xsd" />
+  <import
+    namespace="urn:mace:shibboleth:2.0:resolver"
+    schemaLocation="classpath:/schema/shibboleth-2.0-attribute-resolver.xsd" />
+
+  <annotation>
+    <documentation>
+      Provisioning Service Provider - Grouper Target Schema
+    </documentation>
+  </annotation>
+
+  <complexType name="GrouperTarget">
+    <annotation>
+      <documentation>Defines a Grouper target for provisioning.</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="psp:BaseSpmlProviderType" />
+    </complexContent>
+  </complexType>
+
+</schema>
