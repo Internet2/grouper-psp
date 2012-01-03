@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema
+  targetNamespace="http://grouper.internet2.edu/psp-grouper-changelog"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  elementFormDefault="qualified">
+
+  <import
+    namespace="http://grouper.internet2.edu/shibboleth/2.0"
+    schemaLocation="classpath:/schema/shibboleth-2.0-grouper.xsd" />
+
+  <annotation>
+    <documentation>
+      Provisioning Service Provider - Grouper Changelog Schema
+    </documentation>
+  </annotation>
+
+  <complexType name="ChangeLogDataConnector">
+    <annotation>
+      <documentation>
+        A data connector that returns change log entry attributes.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:BaseGrouperDataConnectorType">
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="ChangeLogEntry">
+    <annotation>
+      <documentation>
+        Filter change log entries by change log category and action name.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:BaseFilterType">
+        <attribute
+          name="category"
+          type="string">
+          <annotation>
+            <documentation>
+              The change log category.
+            </documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="action"
+          type="string">
+          <annotation>
+            <documentation>
+              The change log action name.
+            </documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="ChangeLogAudit">
+    <annotation>
+      <documentation>
+        Filter by change log entries by audit category and action name.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:BaseFilterType">
+        <attribute
+          name="category"
+          type="string">
+          <annotation>
+            <documentation>
+              The audit category.
+            </documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="action"
+          type="string">
+          <annotation>
+            <documentation>
+              The audit action name.
+            </documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="ChangeLogExactAttribute">
+    <annotation>
+      <documentation>
+        Filter by exact attribute name and value.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:BaseFilterType">
+        <attribute
+          name="name"
+          type="string"
+          use="required">
+          <annotation>
+            <documentation>
+              The name of the attribute.
+            </documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="value"
+          type="string"
+          use="required">
+          <annotation>
+            <documentation>
+              The value of the attribute.
+            </documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AttributeResolver xmlns="urn:mace:shibboleth:2.0:resolver"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:psp-grouper-changelog="http://grouper.internet2.edu/psp-grouper-changelog"
+  xsi:schemaLocation="
+   urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd
+   http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+   http://grouper.internet2.edu/psp-grouper-changelog classpath:/schema/psp-grouper-changelog.xsd">
+
+  <resolver:DataConnector id="testFilterChangeLogEntryCategory" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogEntry" category="membership" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterChangeLogEntryAction" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogEntry" action="deleteMembership" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterChangeLogEntry" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogEntry" category="membership" action="deleteMembership" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterChangeLogAuditCategory" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogAudit" category="stem" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterChangeLogAuditAction" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogAudit" action="deleteGroup" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterChangeLogAudit" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogAudit" category="group" action="deleteGroup" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterDeleteMembership" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogEntry" category="membership" action="deleteMembership" />
+      <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogAudit" category="group" action="deleteGroup" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
+  <resolver:DataConnector id="testFilterChangeLogExactAttribute" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="grouper:AND">
+      <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogAudit" category="stem" action="updateStem" />
+      <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogExactAttribute" name="propertyChanged" value="description" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+   
+</AttributeResolver>
