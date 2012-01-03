@@ -1,0 +1,6 @@
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+  <psp:pso>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='altID' targetID='targetID'/>
+    <psoID ID='ID' targetID='targetID' />
+  </psp:pso>
+</psp:calcResponse>

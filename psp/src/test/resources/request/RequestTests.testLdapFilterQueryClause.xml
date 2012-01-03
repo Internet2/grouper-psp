@@ -1,0 +1,3 @@
+<psp:ldapFilterQueryClause xmlns:psp='http://grouper.internet2.edu/psp'>
+  <psp:filter>(&amp;(objectClass=person)(uid=foo))</psp:filter>
+</psp:ldapFilterQueryClause>

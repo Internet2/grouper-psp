@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Services xmlns="urn:mace:shibboleth:2.0:services"
+          xmlns:attribute-afp="urn:mace:shibboleth:2.0:afp"
+          xmlns:attribute-authority="urn:mace:shibboleth:2.0:attribute:authority"
+          xmlns:attribute-resolver="urn:mace:shibboleth:2.0:resolver"
+          xmlns:resource="urn:mace:shibboleth:2.0:resource"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+          xmlns:psp="http://grouper.internet2.edu/psp"
+          xsi:schemaLocation="urn:mace:shibboleth:2.0:services classpath:/schema/shibboleth-2.0-services.xsd 
+                              urn:mace:shibboleth:2.0:afp classpath:/schema/shibboleth-2.0-afp.xsd                            
+                              urn:mace:shibboleth:2.0:attribute:authority classpath:/schema/shibboleth-2.0-attribute-authority.xsd
+                              urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd                              
+                              urn:mace:shibboleth:2.0:resource classpath:/schema/shibboleth-2.0-resource.xsd
+                              http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+                              http://grouper.internet2.edu/psp classpath:/schema/psp.xsd">
+
+  <!-- The attribute resolver id must be grouper.AttributeResolver. -->
+  <Service id="grouper.AttributeResolver" xsi:type="attribute-resolver:ShibbolethAttributeResolver">
+    <ConfigurationResource file="ldappc-resolver.xml" xsi:type="resource:ClasspathResource" />     
+  </Service>
+
+  <!-- The attribute authority id must be grouper.AttributeAuthority. -->
+  <Service id="grouper.AttributeAuthority" xsi:type="grouper:SimpleAttributeAuthority" depends-on="grouper.AttributeResolver" resolver="grouper.AttributeResolver"
+  <ConfigurationResource file="/edu/internet2/middleware/psp/util/empty-bean.xml" xsi:type="resource:ClasspathResource" />
+  </Service>
+
+  <Service id="psp" xsi:type="psp:ProvisioningServiceProvider" depends-on="grouper.AttributeAuthority" authority="grouper.AttributeAuthority"
+           logSpml="true" writeRequests="true" writeResponses="true" pathToOutputFile="">
+           <ConfigurationResource file="/edu/internet2/middleware/psp/util/empty-bean.xml" xsi:type="resource:ClasspathResource" />
+           <!-- 
+    <ConfigurationResource file="/test2/ldappc.xml" xsi:type="resource:ClasspathResource" />
+     -->      
+  </Service>
+ 
+</Services>

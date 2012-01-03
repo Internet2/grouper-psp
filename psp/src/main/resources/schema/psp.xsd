@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema
+  targetNamespace="http://grouper.internet2.edu/psp"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:resource="urn:mace:shibboleth:2.0:resource"
+  xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
+  xmlns:service="urn:mace:shibboleth:2.0:services"
+  xmlns:authority="urn:mace:shibboleth:2.0:attribute:authority"
+  xmlns:spml="urn:oasis:names:tc:SPML:2:0"
+  xmlns:spmldsml="urn:oasis:names:tc:SPML:2:0:DSML"
+  elementFormDefault="qualified">
+
+  <import
+    namespace="urn:mace:shibboleth:2.0:services"
+    schemaLocation="classpath:/schema/shibboleth-2.0-services.xsd" />
+  <import
+    namespace="urn:mace:shibboleth:2.0:resolver"
+    schemaLocation="classpath:/schema/shibboleth-2.0-attribute-resolver.xsd" />
+  <import
+    namespace="urn:mace:shibboleth:2.0:resolver:dc"
+    schemaLocation="classpath:/schema/shibboleth-2.0-attribute-resolver-dc.xsd" />
+  <import
+    namespace="urn:mace:shibboleth:2.0:resource"
+    schemaLocation="classpath:/schema/shibboleth-2.0-resource.xsd" />
+  <import
+    namespace="urn:oasis:names:tc:SPML:2:0"
+    schemaLocation="classpath:/schema/pstc_spmlv2_core.xsd" />
+  <import
+    namespace="http://grouper.internet2.edu/shibboleth/2.0"
+    schemaLocation="classpath:/schema/shibboleth-2.0-grouper.xsd" />
+  <import
+    namespace="urn:mace:shibboleth:2.0:attribute:authority"
+    schemaLocation="classpath:/schema/shibboleth-2.0-attribute-authority.xsd" />
+
+  <annotation>
+    <documentation>
+      Provisioning Service Provider Schema
+    </documentation>
+  </annotation>
+
+
+  <complexType name="BaseSpmlProviderType">
+    <annotation>
+      <documentation>A base type for SPMLv2 Provisioning Service Providers.</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="service:ServiceType">
+        <attribute
+          name="logSpml"
+          type="boolean"
+          default="false">
+          <annotation>
+            <documentation>If true will log SPML messages.</documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="pathToOutputFile"
+          type="string">
+          <annotation>
+            <documentation>Path to file to which SPML requests and or responses are written.</documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="writeRequests"
+          type="boolean"
+          default="false">
+          <annotation>
+            <documentation>If true will write SPML requests to output file or STDOUT.</documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="writeResponses"
+          type="boolean"
+          default="false">
+          <annotation>
+            <documentation>If true will write SPML responses to output file or STDOUT.</documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="bundleModifications"
+          type="boolean"
+          default="true">
+          <annotation>
+            <documentation>Whether or not to bundle modifications into a single modify operation.</documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="EmptyResource">
+    <annotation>
+      <documentation>A do nothing resource.</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="resource:ResourceType" />
+    </complexContent>
+  </complexType>
+
+  <complexType name="ProvisioningServiceProvider">
+    <annotation>
+      <documentation>Defines an incomplete SPMLv2 Provisioning Service Provider (PSP).</documentation>
+    </annotation>
+    <complexContent>
+      <extension base="psp:BaseSpmlProviderType">
+        <attribute
+          name="authority"
+          type="string"
+          use="required">
+          <annotation>
+            <documentation>The id of the Shibboleth Attribute Authority</documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="PsoAlternateIdentifierType">
+    <annotation>
+      <documentation>
+        Defines an alternate PSO Identifier.
+      </documentation>
+    </annotation>
+    <attribute
+      name="ref"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The id of the Shibboleth attribute definition referred to.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+  <complexType name="PsoAttributeType">
+    <annotation>
+      <documentation>
+        Represents an spmlv2 provisioning service object attribute calculated from a shibboleth attribute
+        resolver.
+      </documentation>
+    </annotation>
+    <attribute
+      name="name"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The provisioned object attribute name.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="ref"
+      type="string">
+      <annotation>
+        <documentation>
+          The id of the attribute resolver definition referred to.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="isMultiValued"
+      type="string"
+      default="true">
+      <annotation>
+        <documentation>
+          Whether or not to return the first or all values from the attribute resolver.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="replaceValues"
+      type="boolean"
+      default="false">
+      <annotation>
+        <documentation>
+          Whether or not values are added and deleted or replaced.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="retainAll"
+      type="boolean"
+      default="false">
+      <annotation>
+        <documentation>
+          Whether or not existing values are deleted during a modification.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+  <complexType name="PSOIdentifier">
+    <annotation>
+      <documentation>
+        A Shibboleth Attribute Definition extension which returns PSO Identifiers.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="resolver:BaseAttributeDefinitionType" />
+    </complexContent>
+  </complexType>
+
+  <complexType name="PsoIdentifierType">
+    <annotation>
+      <documentation>
+        Defines an spmlv2 provisioning service object identifier calculated from a shibboleth attribute
+        resolver.
+      </documentation>
+    </annotation>
+    <attribute
+      name="ref"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The id of the attribute resolver definition referred to.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="targetId"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The id of the target.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="containerId"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The id of the container.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+
+  <complexType name="PsoIdentifyingAttributeType">
+    <annotation>
+      <documentation>
+        Defines the attribute of the provisioned object which maps the object to the corresponding schema
+        entity.
+      </documentation>
+    </annotation>
+    <attribute
+      name="name"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The name of the identifying attribute.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="value"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The value of the identifying attribute.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+  <complexType name="PsoReferenceType">
+    <annotation>
+      <documentation>
+        Represents an spmlv2 provisioning service object reference calculated from a shibboleth attribute
+        resolver.
+      </documentation>
+    </annotation>
+    <attribute
+      name="toObject"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The id of the provisioned object referred to.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="ref"
+      type="string">
+      <annotation>
+        <documentation>
+          The id of the attribute resolver definition referred to.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="onNotFound"
+      default="warn">
+      <annotation>
+        <documentation>
+          The action performed when the object referred to is not found.
+        </documentation>
+      </annotation>
+      <simpleType>
+        <restriction base="string">
+          <enumeration value="fail" />
+          <enumeration value="ignore" />
+          <enumeration value="warn" />
+        </restriction>
+      </simpleType>
+    </attribute>
+    <attribute
+      name="multipleResults"
+      type="boolean"
+      default="false">
+      <annotation>
+        <documentation>
+          Whether or not to allow multiple provisioned objects on a target for a single subject.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+  <complexType name="PsoReferencesType">
+    <annotation>
+      <documentation>
+        Represents spmlv2 provisioning service object references calculated from a shibboleth attribute
+        resolver.
+      </documentation>
+    </annotation>
+    <sequence>
+      <element
+        name="reference"
+        type="psp:PsoReferenceType"
+        minOccurs="1"
+        maxOccurs="unbounded">
+        <annotation>
+          <documentation>
+            The pso references.
+          </documentation>
+        </annotation>
+      </element>
+    </sequence>
+    <attribute
+      name="name"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The name of the provisioned attribute whose values are references.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="emptyValue"
+      type="string">
+      <annotation>
+        <documentation>
+          The value of the provisioned attribute if no references exist.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+  <complexType name="PsoType">
+    <annotation>
+      <documentation>
+        Represents an spmlv2 provisioning service object (pso) calculated from a shibboleth attribute
+        resolver.
+      </documentation>
+    </annotation>
+    <sequence>
+      <element
+        name="identifier"
+        type="psp:PsoIdentifierType">
+        <annotation>
+          <documentation>
+            The identifier of a provisioned object.
+          </documentation>
+        </annotation>
+      </element>
+      <element
+        name="identifyingAttribute"
+        type="psp:PsoIdentifyingAttributeType"
+        minOccurs="0"
+        maxOccurs="1">
+        <annotation>
+          <documentation>
+            An attribute of a provisioned object which identifies the SPMLv2 schema entity.
+          </documentation>
+        </annotation>
+      </element>
+      <element
+        name="alternateIdentifier"
+        type="psp:PsoAlternateIdentifierType"
+        minOccurs="0"
+        maxOccurs="unbounded">
+        <annotation>
+          <documentation>
+            An alternate identifier. For example, the previous value of a renamed identifier.
+          </documentation>
+        </annotation>
+      </element>
+      <element
+        name="attribute"
+        type="psp:PsoAttributeType"
+        minOccurs="0"
+        maxOccurs="unbounded">
+        <annotation>
+          <documentation>
+            Defines an attribute of a provisioned object.
+          </documentation>
+        </annotation>
+      </element>
+      <element
+        name="references"
+        type="psp:PsoReferencesType"
+        minOccurs="0"
+        maxOccurs="unbounded">
+        <annotation>
+          <documentation>
+            Defines references of a provisioned object.
+          </documentation>
+        </annotation>
+      </element>
+    </sequence>
+    <attribute
+      name="id"
+      type="string"
+      use="required">
+      <annotation>
+        <documentation>
+          The id of the provisioning service object.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="authoritative"
+      type="boolean"
+      use="optional"
+      default="false">
+      <annotation>
+        <documentation>
+          If true, delete orphan objects.
+        </documentation>
+      </annotation>
+    </attribute>
+    <attribute
+      name="allSourceIdentifiersRef"
+      type="string">
+      <annotation>
+        <documentation>
+          The id of the attribute definition whose values are all source identifiers.
+        </documentation>
+      </annotation>
+    </attribute>
+  </complexType>
+
+  <element
+    name="psp"
+    type="psp:PspType" />
+  <complexType name="PspType">
+    <annotation>
+      <documentation>
+        Represents an spmlv2 provisioning service provider supporting calc, diff, and sync operations whose
+        data is calculated by a shibboleth attribute resolver.
+      </documentation>
+    </annotation>
+    <sequence>
+      <element
+        name="pso"
+        type="psp:PsoType"
+        minOccurs="1"
+        maxOccurs="unbounded" />
+    </sequence>
+  </complexType>
+
+  <complexType name="SimpleAttributeAuthority">
+    <annotation>
+      <documentation>
+        A Shibboleth 2.0 Attribute Authority which supports filtering. Does not encode attributes.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="authority:AttributeAuthorityType">
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>
