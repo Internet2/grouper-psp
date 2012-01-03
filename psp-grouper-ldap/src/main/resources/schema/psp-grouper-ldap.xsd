@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:psp-grouper-ldap="http://grouper.internet2.edu/psp-grouper-ldap"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  targetNamespace="http://grouper.internet2.edu/psp-grouper-ldap"
+  elementFormDefault="qualified">
+
+  <import
+    namespace="urn:mace:shibboleth:2.0:resolver"
+    schemaLocation="classpath:/schema/shibboleth-2.0-attribute-resolver.xsd" />
+
+  <annotation>
+    <documentation>
+      Provisioning Service Provider - Grouper LDAP integration
+    </documentation>
+  </annotation>
+
+  <complexType name="LdapDnFromGrouperNamePSOIdentifier">
+    <annotation>
+      <documentation>
+        A Shibboleth Attribute Definition extension which returns a PSO Identifier whose ID is an LDAP DN.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="resolver:BaseAttributeDefinitionType">
+        <attribute
+          name="structure"
+          use="required">
+          <annotation>
+            <documentation>
+              The Grouper DN structure.
+            </documentation>
+          </annotation>
+          <simpleType>
+            <restriction base="string">
+              <enumeration value="flat">
+                <annotation>
+                  <documentation>
+                    Provisions objects to a single container.
+                  </documentation>
+                </annotation>
+              </enumeration>
+              <enumeration value="bushy">
+                <annotation>
+                  <documentation>
+                    Provisions objects to a tree hierarchy.
+                  </documentation>
+                </annotation>
+              </enumeration>
+            </restriction>
+          </simpleType>
+        </attribute>
+        <attribute
+          name="base"
+          type="string"
+          use="required">
+          <annotation>
+            <documentation>
+              The LDAP DN base.
+            </documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="rdnAttributeName"
+          type="string"
+          use="required">
+          <annotation>
+            <documentation>
+              The LDAP RDN attribute name.
+            </documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="GrouperNameFromLdapDnPSOIdentifier">
+    <annotation>
+      <documentation>
+        A Shibboleth Attribute Definition extension which returns a PSO Identifier whose ID is a Grouper
+        name built from an LDAP DN.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="resolver:BaseAttributeDefinitionType">
+        <attribute
+          name="base"
+          type="string"
+          use="required">
+          <annotation>
+            <documentation>
+              The LDAP DN base.
+            </documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+  <complexType name="SortedLdapName">
+    <annotation>
+      <documentation>
+        A Shibboleth Attribute Definition extension which returns an attribute whose values are the result
+        of sorting dependency values as if they were LDAP names.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="resolver:BaseAttributeDefinitionType" />
+    </complexContent>
+  </complexType>
+
+</schema>
