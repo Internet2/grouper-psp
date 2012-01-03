@@ -1,0 +1,174 @@
+<psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:syncResponse>
+    <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+      <psp:psoID ID='edu' targetID='grouper'/>
+    </psp:synchronizedResponse>
+    <psp:id ID='ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.641'>
+      <pso entityName='stem'>
+        <psoID ID='edu:courses' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>courses</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.667'>
+      <pso entityName='stem'>
+        <psoID ID='edu:courses:fall' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>fall</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.693'>
+      <pso entityName='stem'>
+        <psoID ID='edu:courses:spring' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>spring</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.730'>
+      <pso entityName='group'>
+        <psoID ID='edu:groupA' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>groupA</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.760'>
+      <pso entityName='group'>
+        <psoID ID='edu:groupB' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>groupB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>descriptionB</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.810'>
+      <pso entityName='group'>
+        <psoID ID='edu:groupC' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>groupC</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=groupC,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.830'>
+      <pso entityName='group'>
+        <psoID ID='edu:groupD' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>groupD</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=groupD,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.853'>
+      <pso entityName='group'>
+        <psoID ID='edu:courses:fall:courseA' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>courseA</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.879'>
+      <pso entityName='group'>
+        <psoID ID='edu:courses:fall:courseB' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>courseB</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.903'>
+      <pso entityName='group'>
+        <psoID ID='edu:courses:spring:courseA' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>courseA</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.923'>
+      <pso entityName='group'>
+        <psoID ID='edu:courses:spring:courseB' targetID='grouper'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+            <dsml:value>courseB</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.956'/>
+    <psp:id ID='edu:stemDeleteParent:stemDeleteChild:groupDelete'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.956'/>
+    <psp:id ID='edu:stemDeleteParent:stemDeleteChild'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.956'/>
+    <psp:id ID='edu:stemDeleteParent:groupDelete'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.956'/>
+    <psp:id ID='edu:stemDeleteParent'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.956'/>
+    <psp:id ID='edu:groupDelete'/>
+  </psp:syncResponse>
+</psp:bulkSyncResponse>

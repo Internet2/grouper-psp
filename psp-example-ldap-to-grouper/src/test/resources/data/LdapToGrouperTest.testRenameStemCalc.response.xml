@@ -1,0 +1,12 @@
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:id ID='ou=stemNEW,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  <psp:pso entityName='stem'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='edu:stemOLD' targetID='grouper'/>
+    <psoID ID='edu:stemNEW' targetID='grouper'/>
+    <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+        <dsml:value>stemNEW</dsml:value>
+      </dsml:attr>
+    </data>
+  </psp:pso>
+</psp:calcResponse>

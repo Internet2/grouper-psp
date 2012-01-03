@@ -1,0 +1,17 @@
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:id ID='cn=groupNEW,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  <psp:pso entityName='group'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='edu:groupOLD' targetID='grouper'/>
+    <psoID ID='edu:groupNEW' targetID='grouper'/>
+    <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='displayExtension'>
+        <dsml:value>groupNEW</dsml:value>
+      </dsml:attr>
+    </data>
+    <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+      <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='members'>
+        <spmlref:toPsoID ID='test.subject.0' targetID='grouper'/>
+      </spmlref:reference>
+    </capabilityData>
+  </psp:pso>
+</psp:calcResponse>

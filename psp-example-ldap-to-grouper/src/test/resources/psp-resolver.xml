@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AttributeResolver
+  xmlns="urn:mace:shibboleth:2.0:resolver"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:ad="urn:mace:shibboleth:2.0:resolver:ad"
+  xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:psp-grouper-ldap="http://grouper.internet2.edu/psp-grouper-ldap"
+  xmlns:psp-grouper-target="http://grouper.internet2.edu/psp-grouper-target"
+  xmlns:psp-ldap-source="http://grouper.internet2.edu/psp-ldap-source"
+  xsi:schemaLocation="
+   urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd
+   urn:mace:shibboleth:2.0:resolver:dc classpath:/schema/shibboleth-2.0-attribute-resolver-dc.xsd
+   urn:mace:shibboleth:2.0:resolver:ad classpath:/schema/shibboleth-2.0-attribute-resolver-ad.xsd
+   http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+   http://grouper.internet2.edu/psp classpath:/schema/psp.xsd
+   http://grouper.internet2.edu/psp-grouper-ldap classpath:/schema/psp-grouper-ldap.xsd
+   http://grouper.internet2.edu/psp-grouper-target classpath:/schema/psp-grouper-target.xsd
+   http://grouper.internet2.edu/psp-ldap-source classpath:/schema/psp-ldap-source.xsd">
+
+  <!-- Returns the DNs of ldap organizational units. Excludes the baseDN. -->
+  <resolver:DataConnector
+    id="AllLDAPOrganizationalUnits"
+    xsi:type="dc:LDAPDirectory"
+    ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
+    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    principal="${edu.vt.middleware.ldap.serviceUser}"
+    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    mergeResults="true"
+    maxResultSize="100000">
+    <dc:FilterTemplate>
+      (&amp;(objectclass=organizationalUnit)(!(ou=testgroups)))
+    </dc:FilterTemplate>
+    <dc:ReturnAttributes>entryDN</dc:ReturnAttributes>
+  </resolver:DataConnector>
+
+  <!-- Returns the sorted DNs of ldap organizational units to be provisioned as grouper stems. The SortedLdapName attribute 
+    definition sorts ldap DNs hierarchically. -->
+  <resolver:AttributeDefinition
+    id="allSortedOrganizationalUnitDNs"
+    xsi:type="psp-grouper-ldap:SortedLdapName"
+    sourceAttributeID="entryDN">
+    <resolver:Dependency ref="AllLDAPOrganizationalUnits" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the DN of an ldap organizational unit. The SortedLdapDirectory type sorts attribute names and values. -->
+  <resolver:DataConnector
+    id="LDAPOrganizationalUnit"
+    xsi:type="dc:LDAPDirectory"
+    ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
+    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    principal="${edu.vt.middleware.ldap.serviceUser}"
+    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    maxResultSize="1">
+    <dc:FilterTemplate>
+        <![CDATA[
+            (&(entryDN=${requestContext.principalName})(objectclass=organizationalUnit))
+        ]]>
+    </dc:FilterTemplate>
+  </resolver:DataConnector>
+
+  <!-- Returns a stem name constructed from an ldap DN. The base DN is excluded. For example, "ou=stem,ou=edu,ou=testgroups,dc=example,dc=edu" 
+    will be translated to "edu:stem". -->
+  <resolver:AttributeDefinition
+    id="stemName"
+    xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
+    sourceAttributeID="entryDN"
+    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    <resolver:Dependency ref="LDAPOrganizationalUnit" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns previous stem names. -->
+  <resolver:AttributeDefinition
+    id="previousStemName"
+    xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
+    sourceAttributeID="stemPreviousOu"
+    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    <resolver:Dependency ref="stemPreviousOu" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns values of ou which are not the RDN. -->
+  <resolver:AttributeDefinition
+    id="stemPreviousOu"
+    xsi:type="ad:Script"
+    dependencyOnly="true">
+    <resolver:Dependency ref="LDAPOrganizationalUnit" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        importPackage(Packages.javax.naming.ldap);
+
+        importPackage(Packages.org.slf4j);
+        logger = LoggerFactory.getLogger("edu.internet2.middleware.shibboleth.resolver.Script.scriptTest");
+        
+        stemPreviousOu = new BasicAttribute("stemPreviousOu");
+                        
+        if (!(typeof entryDN === 'undefined')) {
+                        
+            // the ldap DN
+            ldapName = new LdapName(entryDN.getValues().get(0));
+        
+            // the leftmost RDN
+            rdn = ldapName.getRdn(ldapName.size()-1);
+            rdnValue = rdn.getValue();
+        
+            // return a DN for any value of ou which does not match the leftmost rdn value
+            for ( i = 0; ou != null && i < ou.getValues().size(); i++ ) {
+            
+                ouValue = ou.getValues().get(i);
+             
+                // if the cn does not match the leftmost rdn, consider it a previous rdn
+                if (!ouValue.equals(rdnValue)) {
+                    // create a previous rdn using the current rdn type and the ou value            
+                    previousRdn = rdn.toString().replace(rdnValue, ouValue);
+                    
+                    // create a previous dn by replacing the current leftmost rdn
+                    previousDN = ldapName.toString().replace(rdn.toString(), previousRdn);
+                    
+                    // return the previous dn
+                    stemPreviousOu.getValues().add(previousDN);
+                }               
+            }
+        }
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the description of an ldap organizational unit. -->
+  <resolver:AttributeDefinition
+    id="stemDescription"
+    xsi:type="ad:Simple"
+    sourceAttributeID="description">
+    <resolver:Dependency ref="LDAPOrganizationalUnit" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the value of the leftmost RDN of an ldap ou. -->
+  <resolver:AttributeDefinition
+    id="stemDisplayExtension"
+    xsi:type="ad:Script">
+    <resolver:Dependency ref="LDAPOrganizationalUnit" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        importPackage(Packages.javax.naming.ldap);
+        
+        // the attribute to return
+        stemDisplayExtension = new BasicAttribute("stemDisplayExtension");
+                      
+        if (!(typeof entryDN === 'undefined')) {                        
+            // the ldap DN
+            ldapName = new LdapName(entryDN.getValues().get(0));
+        
+            // the leftmost RDN
+            rdn = ldapName.getRdn(ldapName.size()-1);
+        
+            // the value to return
+            stemDisplayExtension.getValues().add(rdn.getValue());
+        }              
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+
+  <!-- Returns the DNs of ldap groups. -->
+  <resolver:DataConnector
+    id="AllLDAPGroups"
+    xsi:type="dc:LDAPDirectory"
+    ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
+    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    principal="${edu.vt.middleware.ldap.serviceUser}"
+    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    mergeResults="true"
+    maxResultSize="100000">
+    <dc:FilterTemplate>
+      (objectclass=groupOfNames)
+    </dc:FilterTemplate>
+    <dc:ReturnAttributes>entryDN</dc:ReturnAttributes>
+  </resolver:DataConnector>
+
+  <!-- Returns the sorted DNs of ldap groups to be provisioned as grouper groups. The SortedLdapName attribute definition 
+    sorts ldap DNs hierarchically. -->
+  <resolver:AttributeDefinition
+    id="allSortedGroupDNs"
+    xsi:type="psp-grouper-ldap:SortedLdapName"
+    sourceAttributeID="entryDN">
+    <resolver:Dependency ref="AllLDAPGroups" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the DN of an ldap group. The SortedLdapDirectory type sorts attribute names and values. -->
+  <resolver:DataConnector
+    id="LDAPGroup"
+    xsi:type="dc:LDAPDirectory"
+    ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
+    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    principal="${edu.vt.middleware.ldap.serviceUser}"
+    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    maxResultSize="1">
+    <dc:FilterTemplate>
+        <![CDATA[
+            (&(entryDN=${requestContext.principalName})(objectclass=groupOfNames))
+        ]]>
+    </dc:FilterTemplate>
+  </resolver:DataConnector>
+
+  <!-- Returns a group name constructed from an ldap DN. The base DN is excluded. For example, "cn=group,ou=stem,ou=edu,ou=testgroups,dc=example,dc=edu" 
+    will be translated to "edu:stem:group". -->
+  <resolver:AttributeDefinition
+    id="groupName"
+    xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
+    sourceAttributeID="entryDN"
+    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    <resolver:Dependency ref="LDAPGroup" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns previous group names. -->
+  <resolver:AttributeDefinition
+    id="previousGroupName"
+    xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
+    sourceAttributeID="groupPreviousCn"
+    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    <resolver:Dependency ref="groupPreviousCn" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns values of cn which are not the RDN. -->
+  <resolver:AttributeDefinition
+    id="groupPreviousCn"
+    xsi:type="ad:Script"
+    dependencyOnly="true">
+    <resolver:Dependency ref="LDAPGroup" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        importPackage(Packages.javax.naming.ldap);
+
+        importPackage(Packages.org.slf4j);
+        logger = LoggerFactory.getLogger("edu.internet2.middleware.shibboleth.resolver.Script.scriptTest");
+        
+        groupPreviousCn = new BasicAttribute("groupPreviousCn");
+                        
+        if (!(typeof entryDN === 'undefined')) {
+                        
+            // the ldap DN
+            ldapName = new LdapName(entryDN.getValues().get(0));
+        
+            // the leftmost RDN
+            rdn = ldapName.getRdn(ldapName.size()-1);
+            rdnValue = rdn.getValue();
+        
+            // return a DN for any value of cn which does not match the leftmost rdn value
+            for ( i = 0; cn != null && i < cn.getValues().size(); i++ ) {
+            
+                cnValue = cn.getValues().get(i);
+             
+                // if the cn does not match the leftmost rdn, consider it a previous rdn
+                if (!cnValue.equals(rdnValue)) {
+                    // create a previous rdn using the current rdn type and the cn value            
+                    previousRdn = rdn.toString().replace(rdnValue, cnValue);
+                    
+                    // create a previous dn by replacing the current leftmost rdn
+                    previousDN = ldapName.toString().replace(rdn.toString(), previousRdn);
+                    
+                    // return the previous dn
+                    groupPreviousCn.getValues().add(previousDN);
+                }               
+            }
+        }
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the description of an ldap group. -->
+  <resolver:AttributeDefinition
+    id="groupDescription"
+    xsi:type="ad:Simple"
+    sourceAttributeID="description">
+    <resolver:Dependency ref="LDAPGroup" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the value of the leftmost RDN of an ldap group. -->
+  <resolver:AttributeDefinition
+    id="groupDisplayExtension"
+    xsi:type="ad:Script">
+    <resolver:Dependency ref="LDAPGroup" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        importPackage(Packages.javax.naming.ldap);
+        
+        // the attribute to return
+        groupDisplayExtension = new BasicAttribute("groupDisplayExtension");
+                      
+        if (!(typeof entryDN === 'undefined')) {                        
+            // the ldap DN
+            ldapName = new LdapName(entryDN.getValues().get(0));
+        
+            // the leftmost RDN
+            rdn = ldapName.getRdn(ldapName.size()-1);
+        
+            // the value to return
+            groupDisplayExtension.getValues().add(rdn.getValue());
+        }              
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the DNs of group members which are groups. -->
+  <resolver:AttributeDefinition
+    id="groupMembers"
+    xsi:type="ad:RegexSplit"
+    sourceAttributeID="member"
+    regex="(cn=.*ou=testgroups,${edu.vt.middleware.ldap.base})">
+    <resolver:Dependency ref="LDAPGroup" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns the DNs of group members which are people. -->
+  <resolver:AttributeDefinition
+    id="personMembers"
+    xsi:type="ad:RegexSplit"
+    sourceAttributeID="member"
+    regex="(cn=.*ou=testpeople,${edu.vt.middleware.ldap.base})">
+    <resolver:Dependency ref="LDAPGroup" />
+  </resolver:AttributeDefinition>
+
+  <!-- Returns a member of an ldap group which is a person. -->
+  <resolver:DataConnector
+    id="LDAPMemberPersonLookup"
+    xsi:type="dc:LDAPDirectory"
+    ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
+    baseDN="ou=testpeople,${edu.vt.middleware.ldap.base}"
+    principal="${edu.vt.middleware.ldap.serviceUser}"
+    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    maxResultSize="1">
+    <dc:FilterTemplate>
+        <![CDATA[
+            (entryDN=${requestContext.principalName})
+        ]]>
+    </dc:FilterTemplate>
+  </resolver:DataConnector>
+
+  <!-- Returns the cn of an ldap person group member. -->
+  <resolver:AttributeDefinition
+    id="memberDn"
+    xsi:type="psp:PSOIdentifier"
+    sourceAttributeID="cn">
+    <resolver:Dependency ref="LDAPMemberPersonLookup" />
+  </resolver:AttributeDefinition>
+
+</AttributeResolver>

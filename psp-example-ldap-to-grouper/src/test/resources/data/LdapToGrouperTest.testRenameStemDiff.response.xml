@@ -1,0 +1,9 @@
+<psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/01/01-16:21:38.621' returnData='everything'>
+    <psoID ID='edu:stemOLD' targetID='grouper'/>
+    <modification modificationMode='replace'>
+      <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='edu:stemNEW' targetID='grouper'/>
+    </modification>
+  </modifyRequest>
+  <psp:id ID='ou=stemNEW,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+</psp:diffResponse>
