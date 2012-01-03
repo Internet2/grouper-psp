@@ -1,0 +1,4 @@
+dn: ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+objectClass: organizationalUnit
+objectClass: top
+ou: edu

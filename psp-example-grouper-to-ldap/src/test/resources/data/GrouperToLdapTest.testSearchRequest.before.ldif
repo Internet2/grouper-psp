@@ -1,0 +1,6 @@
+dn: cn=groupB,ou=testgroups,${edu.vt.middleware.ldap.base}
+objectclass: top
+objectclass: ${groupObjectClass}
+cn: groupB
+member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+description: descriptionB

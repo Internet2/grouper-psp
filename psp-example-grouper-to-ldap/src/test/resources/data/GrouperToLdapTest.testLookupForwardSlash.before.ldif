@@ -1,0 +1,9 @@
+dn: ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+objectclass: organizationalUnit
+ou: edu
+
+dn: cn=group/F,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+objectClass: top
+objectClass: ${groupObjectClass}
+cn: group/F
+member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
