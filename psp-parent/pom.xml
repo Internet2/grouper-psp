@@ -248,4 +248,70 @@
     </plugins>
 
   </build>
+  
+      <!-- Project Metadata -->
+    <url>http://grouper.internet2.edu</url>
+
+    <licenses>
+        <license>
+            <name>Apache 2</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <organization>
+        <name>Internet2</name>
+        <url>http://www.internet2.edu/</url>
+    </organization>
+
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://bugs.internet2.edu/</url>
+    </issueManagement>
+
+    <mailingLists>
+        <mailingList>
+            <name>Grouper Users</name>
+            <subscribe>http://www.internet2.edu/grouper/lists.html</subscribe>
+            <unsubscribe>http://www.internet2.edu/grouper/lists.html</unsubscribe>
+            <post>grouper-users@internet2.edu</post>
+            <archive>https://mail.internet2.edu/wws/arc/grouper-users</archive>
+            <otherArchives>
+                <otherArchive>http://groups.google.com/group/grouper-users</otherArchive>
+            </otherArchives>
+        </mailingList>
+        <mailingList>
+            <name>Grouper Development</name>
+            <subscribe>http://www.internet2.edu/grouper/lists.html</subscribe>
+            <unsubscribe>http://www.internet2.edu/grouper/lists.html</unsubscribe>
+            <post>grouper-dev@internet2.edu</post>
+            <archive>https://mail.internet2.edu/wws/arc/grouper-dev</archive>
+            <otherArchives>
+                <otherArchive>http://groups.google.com/group/grouper-dev</otherArchive>
+            </otherArchives>
+        </mailingList>
+    </mailingLists>
+
+    <scm>
+        <connection>scm:svn:http://anonsvn.internet2.edu/svn/i2mi/</connection>
+        <developerConnection>scm:svn:https://svn.internet2.edu/svn/i2mi</developerConnection>
+        <tag>trunk</tag>
+        <url>http://anonsvn.internet2.edu/cgi-bin/viewvc.cgi/i2mi/</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>tzeller</id>
+            <name>Tom Zeller</name>
+            <organization>Unicon</organization>
+            <organizationUrl>http://www.unicon.net</organizationUrl>
+            <email>tzeller@unicon.net</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>-6</timezone>
+        </developer>
+    </developers>
+  
 </project>
