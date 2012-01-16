@@ -19,5 +19,5 @@
  * Grouper change log consumer.
  */
 
-package edu.internet2.middleware.grouper;
+package edu.internet2.middleware.psp.grouper;
 

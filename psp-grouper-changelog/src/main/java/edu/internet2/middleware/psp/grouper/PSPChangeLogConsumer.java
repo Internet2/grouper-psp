@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package edu.internet2.middleware.grouper;
+package edu.internet2.middleware.psp.grouper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
