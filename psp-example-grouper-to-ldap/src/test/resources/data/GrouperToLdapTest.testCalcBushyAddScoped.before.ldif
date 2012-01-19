@@ -1,10 +1,10 @@
-dn: ou=org,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: ou=org,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: organizationalUnit
 description: people
 ou: org
 
-dn: cn=test.subject.10,ou=org,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.10,ou=org,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson

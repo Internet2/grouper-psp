@@ -1,7 +1,7 @@
 <psp:bulkDiffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
@@ -16,7 +16,7 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
@@ -31,7 +31,7 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
@@ -46,7 +46,7 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
@@ -61,11 +61,11 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='cn=courseA,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='cn=courseA,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
-          <dsml:value>${groupObjectClass}</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
           <dsml:value>courseA</dsml:value>
@@ -73,10 +73,10 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>
@@ -84,11 +84,11 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='cn=courseB,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='cn=courseB,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
-          <dsml:value>${groupObjectClass}</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
           <dsml:value>courseB</dsml:value>
@@ -96,7 +96,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>
@@ -104,11 +104,11 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='cn=courseA,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='cn=courseA,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
-          <dsml:value>${groupObjectClass}</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
           <dsml:value>courseA</dsml:value>
@@ -116,10 +116,10 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>
@@ -127,11 +127,11 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='cn=courseB,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='cn=courseB,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
-          <dsml:value>${groupObjectClass}</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
           <dsml:value>courseB</dsml:value>
@@ -139,7 +139,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>
@@ -147,11 +147,11 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
-          <dsml:value>${groupObjectClass}</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
           <dsml:value>groupA</dsml:value>
@@ -159,7 +159,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>
@@ -167,11 +167,11 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' targetId='ldap' returnData='everything' requestID='REQUEST_ID'>
-      <psoID ID='cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+      <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>top</dsml:value>
-          <dsml:value>${groupObjectClass}</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
           <dsml:value>groupB</dsml:value>
@@ -182,7 +182,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>

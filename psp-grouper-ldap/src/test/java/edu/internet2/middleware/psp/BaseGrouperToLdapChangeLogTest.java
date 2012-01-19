@@ -33,7 +33,6 @@ import org.opensaml.xml.util.DatatypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import edu.internet2.middleware.grouper.PSPChangeLogConsumer;
 import edu.internet2.middleware.grouper.app.loader.GrouperLoaderConfig;
 import edu.internet2.middleware.grouper.app.loader.GrouperLoaderStatus;
 import edu.internet2.middleware.grouper.app.loader.db.Hib3GrouperLoaderLog;
@@ -43,10 +42,11 @@ import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.grouper.hibernate.HibernateSession;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.util.GrouperUtil;
+import edu.internet2.middleware.psp.grouper.PspChangeLogConsumer;
 import edu.internet2.middleware.psp.shibboleth.ChangeLogDataConnector;
 import edu.internet2.middleware.psp.util.PSPUtil;
 
-/** Abstract class for testing the {@link PSPChangeLogConsumer} */
+/** Abstract class for testing the {@link PspChangeLogConsumer} */
 public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest {
 
     /** Logger. */
@@ -56,7 +56,7 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
     private File tmpFile;
 
     /** The PSP change log consumer. */
-    private PSPChangeLogConsumer pspConsumer;
+    private PspChangeLogConsumer pspConsumer;
 
     /**
      * Constructor
@@ -68,7 +68,7 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
     }
 
     /**
-     * Create temporary file. Initialize the {@link PSPChangeLogConsumer} and underlying {@link Psp}.
+     * Create temporary file. Initialize the {@link PspChangeLogConsumer} and underlying {@link Psp}.
      * 
      * {@inheritDoc}
      */
@@ -76,10 +76,9 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
 
         super.setUp();
 
-        GrouperLoaderConfig.testConfig.put("changeLog.consumer.psp.class", PSPChangeLogConsumer.class.getName());
+        GrouperLoaderConfig.testConfig.put("changeLog.consumer.psp.class", PspChangeLogConsumer.class.getName());
         // GrouperLoaderConfig.testConfig.put("changeLog.consumer.ldappcng.quartzCron", "0 0 8 * * ?");
         // GrouperLoaderConfig.testConfig.put("changeLog.consumer.ldappcng.confDir",
-        // GrouperUtil.fileFromResourceName(confDir).getAbsolutePath());
 
         try {
 
@@ -113,7 +112,7 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
      * @throws ResourceException
      */
     public void setUpPSPConsumer(File outputFile) throws ResourceException {
-        pspConsumer = new PSPChangeLogConsumer();
+        pspConsumer = new PspChangeLogConsumer();
         pspConsumer.initialize();
         pspConsumer.getPsp().setWriteRequests(true);
         pspConsumer.getPsp().setWriteResponses(true);

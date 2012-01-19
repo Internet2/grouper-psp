@@ -29,7 +29,6 @@ import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.Stem.Scope;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.helper.StemHelper;
-import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
 import edu.internet2.middleware.psp.spml.request.BulkCalcRequest;
 import edu.internet2.middleware.psp.spml.request.BulkCalcResponse;
 import edu.internet2.middleware.psp.spml.request.BulkDiffRequest;
@@ -345,26 +344,26 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
         verifySpml(responseSyncEverything, DATA_PATH + "LdapToGrouperTest.testBulkSyncBushyEverything.response.xml");
 
         assertEquals(1, groupA.getMembers().size());
-        assertTrue(groupA.hasImmediateMember(SubjectTestHelper.SUBJ0));
+        assertTrue(groupA.hasImmediateMember(LdapSubjectTestHelper.SUBJ0));
 
         assertEquals(3, groupB.getMembers().size());
-        assertTrue(groupB.hasEffectiveMember(SubjectTestHelper.SUBJ0));
+        assertTrue(groupB.hasEffectiveMember(LdapSubjectTestHelper.SUBJ0));
         assertTrue(groupB.hasImmediateMember(groupA.toSubject()));
-        assertTrue(groupB.hasImmediateMember(SubjectTestHelper.SUBJ1));
+        assertTrue(groupB.hasImmediateMember(LdapSubjectTestHelper.SUBJ1));
 
         assertEquals(2, fallCourseA.getMembers().size());
-        assertTrue(fallCourseA.hasImmediateMember(SubjectTestHelper.SUBJ0));
-        assertTrue(fallCourseA.hasImmediateMember(SubjectTestHelper.SUBJ1));
+        assertTrue(fallCourseA.hasImmediateMember(LdapSubjectTestHelper.SUBJ0));
+        assertTrue(fallCourseA.hasImmediateMember(LdapSubjectTestHelper.SUBJ1));
 
         assertEquals(2, springCourseA.getMembers().size());
-        assertTrue(springCourseA.hasImmediateMember(SubjectTestHelper.SUBJ2));
-        assertTrue(springCourseA.hasImmediateMember(SubjectTestHelper.SUBJ3));
+        assertTrue(springCourseA.hasImmediateMember(LdapSubjectTestHelper.SUBJ2));
+        assertTrue(springCourseA.hasImmediateMember(LdapSubjectTestHelper.SUBJ3));
 
         assertEquals(1, fallCourseB.getMembers().size());
-        assertTrue(fallCourseB.hasImmediateMember(SubjectTestHelper.SUBJ1));
+        assertTrue(fallCourseB.hasImmediateMember(LdapSubjectTestHelper.SUBJ1));
 
         assertEquals(1, springCourseB.getMembers().size());
-        assertTrue(springCourseB.hasImmediateMember(SubjectTestHelper.SUBJ3));
+        assertTrue(springCourseB.hasImmediateMember(LdapSubjectTestHelper.SUBJ3));
 
         assertEquals(2, groupC.getMembers().size());
         assertTrue(groupC.hasEffectiveMember(groupC.toSubject()));
@@ -382,7 +381,7 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
 
         CalcRequest request = new CalcRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setId("cn=groupNEW,ou=edu,ou=testgroups," + getLdapBaseDn());
+        request.setId("cn=groupNEW,ou=edu,ou=groups," + getLdapBaseDn());
         CalcResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "LdapToGrouperTest.testRenameGroupCalc.response.xml");
@@ -395,7 +394,7 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
 
         DiffRequest request = new DiffRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setId("cn=groupNEW,ou=edu,ou=testgroups," + getLdapBaseDn());
+        request.setId("cn=groupNEW,ou=edu,ou=groups," + getLdapBaseDn());
         DiffResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "LdapToGrouperTest.testRenameGroupDiff.response.xml");
@@ -408,7 +407,7 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
 
         SyncRequest request = new SyncRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setId("cn=groupNEW,ou=edu,ou=testgroups," + getLdapBaseDn());
+        request.setId("cn=groupNEW,ou=edu,ou=groups," + getLdapBaseDn());
         SyncResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "LdapToGrouperTest.testRenameGroupSync.response.xml");
@@ -427,7 +426,7 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
 
         CalcRequest request = new CalcRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setId("ou=stemNEW,ou=edu,ou=testgroups," + getLdapBaseDn());
+        request.setId("ou=stemNEW,ou=edu,ou=groups," + getLdapBaseDn());
         CalcResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "LdapToGrouperTest.testRenameStemCalc.response.xml");
@@ -441,7 +440,7 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
 
         DiffRequest request = new DiffRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setId("ou=stemNEW,ou=edu,ou=testgroups," + getLdapBaseDn());
+        request.setId("ou=stemNEW,ou=edu,ou=groups," + getLdapBaseDn());
         DiffResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "LdapToGrouperTest.testRenameStemDiff.response.xml");
@@ -455,7 +454,7 @@ public class LdapToGrouperTest extends BaseGrouperLdapTest {
 
         SyncRequest request = new SyncRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setId("ou=stemNEW,ou=edu,ou=testgroups," + getLdapBaseDn());
+        request.setId("ou=stemNEW,ou=edu,ou=groups," + getLdapBaseDn());
         SyncResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "LdapToGrouperTest.testRenameStemSync.response.xml");

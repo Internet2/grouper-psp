@@ -5,5 +5,5 @@
       <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='edu:stemNEW' targetID='grouper'/>
     </modification>
   </modifyRequest>
-  <psp:id ID='ou=stemNEW,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  <psp:id ID='ou=stemNEW,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
 </psp:diffResponse>

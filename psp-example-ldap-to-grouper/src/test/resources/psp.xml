@@ -119,7 +119,7 @@
     <identifier
       ref="memberDn"
       targetId="grouper"
-      containerId="ou=testpeople,${edu.vt.middleware.ldap.base}" />
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
 
     <!-- Identifies member objects which exist on the target by objectclass attribute value. -->
     <identifyingAttribute

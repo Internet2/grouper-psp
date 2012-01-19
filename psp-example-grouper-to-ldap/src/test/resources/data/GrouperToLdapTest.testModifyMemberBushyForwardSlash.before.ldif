@@ -1,24 +1,24 @@
-dn: ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
 objectClass: organizationalUnit
 ou: edu
 
-dn: cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
-objectClass: ${groupObjectClass}
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupA
-member: cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 
-dn: cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
-objectClass: ${groupObjectClass}
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupB
-member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 description: descriptionB
 
-dn: cn=group/F,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
-objectClass: ${groupObjectClass}
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: group/F
-member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 

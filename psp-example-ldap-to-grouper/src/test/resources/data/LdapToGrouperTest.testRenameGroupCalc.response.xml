@@ -1,5 +1,5 @@
 <psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
-  <psp:id ID='cn=groupNEW,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+  <psp:id ID='cn=groupNEW,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   <psp:pso entityName='group'>
     <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='edu:groupOLD' targetID='grouper'/>
     <psoID ID='edu:groupNEW' targetID='grouper'/>

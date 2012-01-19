@@ -1,6 +1,6 @@
 <psp:bulkCalcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.456'>
-    <psp:id ID='ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='stem'>
       <psoID ID='edu' targetID='grouper'/>
       <data>
@@ -11,7 +11,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.499'>
-    <psp:id ID='ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='stem'>
       <psoID ID='edu:courses' targetID='grouper'/>
       <data>
@@ -22,7 +22,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.512'>
-    <psp:id ID='ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='stem'>
       <psoID ID='edu:courses:fall' targetID='grouper'/>
       <data>
@@ -33,7 +33,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.525'>
-    <psp:id ID='ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='stem'>
       <psoID ID='edu:courses:spring' targetID='grouper'/>
       <data>
@@ -44,7 +44,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.539'>
-    <psp:id ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:groupA' targetID='grouper'/>
       <data>
@@ -55,7 +55,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.554'>
-    <psp:id ID='cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:groupB' targetID='grouper'/>
       <data>
@@ -69,7 +69,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.572'>
-    <psp:id ID='cn=groupC,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupC,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:groupC' targetID='grouper'/>
       <data>
@@ -80,7 +80,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.588'>
-    <psp:id ID='cn=groupD,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupD,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:groupD' targetID='grouper'/>
       <data>
@@ -91,7 +91,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.605'>
-    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:courses:fall:courseA' targetID='grouper'/>
       <data>
@@ -102,7 +102,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.627'>
-    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:courses:fall:courseB' targetID='grouper'/>
       <data>
@@ -113,7 +113,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.645'>
-    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:courses:spring:courseA' targetID='grouper'/>
       <data>
@@ -124,7 +124,7 @@
     </psp:pso>
   </psp:calcResponse>
   <psp:calcResponse status='success' requestID='2012/01/01-10:41:30.665'>
-    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
     <psp:pso entityName='group'>
       <psoID ID='edu:courses:spring:courseB' targetID='grouper'/>
       <data>

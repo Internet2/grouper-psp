@@ -26,7 +26,7 @@
     id="AllLDAPOrganizationalUnits"
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
-    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
     principal="${edu.vt.middleware.ldap.serviceUser}"
     principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
     mergeResults="true"
@@ -51,7 +51,7 @@
     id="LDAPOrganizationalUnit"
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
-    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
     principal="${edu.vt.middleware.ldap.serviceUser}"
     principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
     maxResultSize="1">
@@ -68,7 +68,7 @@
     id="stemName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="entryDN"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <resolver:Dependency ref="LDAPOrganizationalUnit" />
   </resolver:AttributeDefinition>
 
@@ -77,7 +77,7 @@
     id="previousStemName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="stemPreviousOu"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <resolver:Dependency ref="stemPreviousOu" />
   </resolver:AttributeDefinition>
 
@@ -165,7 +165,7 @@
     id="AllLDAPGroups"
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
-    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
     principal="${edu.vt.middleware.ldap.serviceUser}"
     principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
     mergeResults="true"
@@ -190,7 +190,7 @@
     id="LDAPGroup"
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
-    baseDN="ou=testgroups,${edu.vt.middleware.ldap.base}"
+    baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
     principal="${edu.vt.middleware.ldap.serviceUser}"
     principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
     maxResultSize="1">
@@ -207,7 +207,7 @@
     id="groupName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="entryDN"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <resolver:Dependency ref="LDAPGroup" />
   </resolver:AttributeDefinition>
 
@@ -216,7 +216,7 @@
     id="previousGroupName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="groupPreviousCn"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <resolver:Dependency ref="groupPreviousCn" />
   </resolver:AttributeDefinition>
 
@@ -303,7 +303,7 @@
     id="groupMembers"
     xsi:type="ad:RegexSplit"
     sourceAttributeID="member"
-    regex="(cn=.*ou=testgroups,${edu.vt.middleware.ldap.base})">
+    regex="(cn=.*${edu.internet2.middleware.psp.groupsBaseDn})">
     <resolver:Dependency ref="LDAPGroup" />
   </resolver:AttributeDefinition>
 
@@ -312,7 +312,7 @@
     id="personMembers"
     xsi:type="ad:RegexSplit"
     sourceAttributeID="member"
-    regex="(cn=.*ou=testpeople,${edu.vt.middleware.ldap.base})">
+    regex="(cn=.*${edu.internet2.middleware.psp.peopleBaseDn})">
     <resolver:Dependency ref="LDAPGroup" />
   </resolver:AttributeDefinition>
 
@@ -321,7 +321,7 @@
     id="LDAPMemberPersonLookup"
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
-    baseDN="ou=testpeople,${edu.vt.middleware.ldap.base}"
+    baseDN="${edu.internet2.middleware.psp.peopleBaseDn}"
     principal="${edu.vt.middleware.ldap.serviceUser}"
     principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
     maxResultSize="1">

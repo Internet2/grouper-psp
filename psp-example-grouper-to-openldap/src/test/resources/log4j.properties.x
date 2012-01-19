@@ -12,7 +12,7 @@ log4j.appender.psp-file.layout                     = org.apache.log4j.PatternLay
 log4j.appender.psp-file.layout.ConversionPattern   = %d{ISO8601}: [%t] %X{requestID} %-5p %C{1}.%M(%L) - %m%n
 
 # root logger
-log4j.rootLogger  = WARN, psp-stdout, psp-file
+log4j.rootLogger  = DEBUG, psp-stdout, psp-file
 
 # psp
 log4j.logger.edu.internet2.middleware.psp = INFO
@@ -24,7 +24,7 @@ log4j.logger.edu.internet2.middleware.grouper = WARN
 log4j.logger.edu.internet2.middleware.grouper.shibboleth = INFO
 
 # vt-ldap
-log4j.logger.edu.vt.middleware.ldap = INFO
+log4j.logger.edu.vt.middleware.ldap = DEBUG
 
 log4j.logger.net.sf.ehcache = WARN
 log4j.logger.org.hibernate = WARN

@@ -1,5 +1,5 @@
 /*
-A * Copyright 2010 University Corporation for Advanced Internet Development, Inc.
+ * Copyright 2010 University Corporation for Advanced Internet Development, Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,7 +21,6 @@ import org.opensaml.util.resource.ResourceException;
 import org.openspml.v2.msg.spml.ReturnData;
 
 import edu.internet2.middleware.grouper.SubjectFinder;
-import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
 import edu.internet2.middleware.psp.spml.request.BulkCalcRequest;
 import edu.internet2.middleware.psp.spml.request.BulkCalcResponse;
 import edu.internet2.middleware.psp.spml.request.BulkDiffRequest;
@@ -244,7 +243,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         CalcRequest request = new CalcRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -258,7 +257,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         CalcRequest request = new CalcRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -273,7 +272,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         DiffRequest request = new DiffRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -287,7 +286,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         DiffRequest request = new DiffRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -316,7 +315,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapTest.testDiffFlatModifyEmptyListDeleteMember.before.ldif");
 
@@ -332,7 +331,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         SyncRequest request = new SyncRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -347,7 +346,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         SyncRequest request = new SyncRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -410,7 +409,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapTest.testDiffFlatModifyEmptyListDeleteMember.before.ldif");
 
@@ -441,7 +440,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         psp.getTarget("ldap").setBundleModifications(false);
 
-        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        groupB.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapTest.testDiffFlatModifyEmptyListDeleteMember.before.ldif");
 

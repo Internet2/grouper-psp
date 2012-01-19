@@ -37,7 +37,6 @@ import org.openspml.v2.profiles.dsml.Filter;
 import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.grouper.helper.StemHelper;
-import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
 import edu.internet2.middleware.psp.helper.LdapTestHelper;
 import edu.internet2.middleware.psp.spml.request.BulkCalcRequest;
 import edu.internet2.middleware.psp.spml.request.BulkCalcResponse;
@@ -114,7 +113,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testBulkCalcBushyAddForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ1);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ1);
         groupB.addMember(groupF.toSubject());
 
         BulkCalcRequest request = new BulkCalcRequest();
@@ -140,9 +139,9 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap")
                 .setOnNotFound(OnNotFound.fail);
 
-        groupA.addMember(SubjectTestHelper.SUBJ2);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ2);
 
-        LdapTestHelper.deleteCn(SubjectTestHelper.SUBJ2_ID, ldap);
+        LdapTestHelper.deleteCn(LdapSubjectTestHelper.SUBJ2_ID, ldap);
 
         BulkCalcRequest request = new BulkCalcRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -156,9 +155,9 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap")
                 .setOnNotFound(OnNotFound.ignore);
 
-        groupA.addMember(SubjectTestHelper.SUBJ2);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ2);
 
-        LdapTestHelper.deleteCn(SubjectTestHelper.SUBJ2_ID, ldap);
+        LdapTestHelper.deleteCn(LdapSubjectTestHelper.SUBJ2_ID, ldap);
 
         BulkCalcRequest request = new BulkCalcRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -169,9 +168,9 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
 
     public void testBulkCalcBushyAddSubjectNotFoundWarn() throws Exception {
 
-        groupA.addMember(SubjectTestHelper.SUBJ2);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ2);
 
-        LdapTestHelper.deleteCn(SubjectTestHelper.SUBJ2_ID, ldap);
+        LdapTestHelper.deleteCn(LdapSubjectTestHelper.SUBJ2_ID, ldap);
 
         BulkCalcRequest request = new BulkCalcRequest();
         request.setRequestID("REQUESTID_TEST");
@@ -231,7 +230,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testBulkDiffBushyAddForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ1);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ1);
         groupB.addMember(groupF.toSubject());
 
         BulkDiffRequest request = new BulkDiffRequest();
@@ -305,7 +304,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testBulkSyncBushyAddForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ1);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ1);
         groupB.addMember(groupF.toSubject());
 
         BulkSyncRequest request = new BulkSyncRequest();
@@ -439,7 +438,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testDiffBushyModifyMemberForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ0);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ0);
 
         loadLdif(DATA_PATH + "GrouperToLdapTest.testModifyMemberBushyForwardSlash.before.ldif");
 
@@ -474,7 +473,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         LookupRequest request = new LookupRequest();
         request.setReturnData(ReturnData.DATA);
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=groupB,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=groupB,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupData.response.xml");
@@ -483,14 +482,14 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testLookupDataForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ1);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ1);
 
         loadLdif(DATA_PATH + "GrouperToLdapTest.testLookupForwardSlash.before.ldif");
 
         LookupRequest request = new LookupRequest();
         request.setReturnData(ReturnData.DATA);
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=group/F,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=group/F,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupDataForwardSlash.response.xml");
@@ -503,7 +502,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         LookupRequest request = new LookupRequest();
         request.setReturnData(ReturnData.EVERYTHING);
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=groupB,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=groupB,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupEverything.response.xml");
@@ -516,7 +515,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         LookupRequest request = new LookupRequest();
         request.setReturnData(ReturnData.IDENTIFIER);
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=groupB,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=groupB,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupIdentifier.response.xml");
@@ -525,14 +524,14 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testLookupIdentifierForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ1);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ1);
 
         loadLdif(DATA_PATH + "GrouperToLdapTest.testLookupForwardSlash.before.ldif");
 
         LookupRequest request = new LookupRequest();
         request.setReturnData(ReturnData.IDENTIFIER);
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=group/F,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=group/F,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupIdentifierForwardSlash.response.xml");
@@ -541,14 +540,14 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
     public void testLookupIdentifierForwardSlashEscaped() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ1);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ1);
 
         loadLdif(DATA_PATH + "GrouperToLdapTest.testLookupForwardSlash.before.ldif");
 
         LookupRequest request = new LookupRequest();
         request.setReturnData(ReturnData.IDENTIFIER);
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=group\\/F,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=group\\/F,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupIdentifierForwardSlash.response.xml");
@@ -560,7 +559,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
 
         LookupRequest request = new LookupRequest();
         request.setRequestID("REQUESTID_TEST");
-        request.setPsoID(new PSOIdentifier("cn=UnknownGroup,ou=edu,ou=testgroups," + getLdapBaseDn(), null, "ldap"));
+        request.setPsoID(new PSOIdentifier("cn=UnknownGroup,ou=edu,ou=groups," + getLdapBaseDn(), null, "ldap"));
         Response response = psp.execute(request);
         assertTrue(response instanceof LookupResponse);
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testLookupNoSuchIdentifier.response.xml");
@@ -573,7 +572,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         Query query = new Query();
         query.setTargetID("ldap");
         PSOIdentifier basePsoID = new PSOIdentifier();
-        basePsoID.setID("ou=testgroups," + getLdapBaseDn());
+        basePsoID.setID("ou=groups," + getLdapBaseDn());
         basePsoID.setTargetID("ldap");
         query.setBasePsoID(basePsoID);
         query.addQueryClause(new Filter(new EqualityMatch("cn", "groupB")));
@@ -593,7 +592,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         Query query = new Query();
         query.setTargetID("ldap");
         PSOIdentifier basePsoID = new PSOIdentifier();
-        basePsoID.setID("ou=testgroups," + getLdapBaseDn());
+        basePsoID.setID("ou=groups," + getLdapBaseDn());
         basePsoID.setTargetID("ldap");
         query.setBasePsoID(basePsoID);
         query.addQueryClause(new Filter(new EqualityMatch("cn", "groupB")));
@@ -614,7 +613,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         Query query = new Query();
         query.setTargetID("ldap");
         PSOIdentifier basePsoID = new PSOIdentifier();
-        basePsoID.setID("ou=testgroups," + getLdapBaseDn());
+        basePsoID.setID("ou=groups," + getLdapBaseDn());
         basePsoID.setTargetID("ldap");
         query.setBasePsoID(basePsoID);
         query.addQueryClause(new Filter(new EqualityMatch("cn", "groupB")));
@@ -635,7 +634,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         Query query = new Query();
         query.setTargetID("ldap");
         PSOIdentifier basePsoID = new PSOIdentifier();
-        basePsoID.setID("ou=testgroups," + getLdapBaseDn());
+        basePsoID.setID("ou=groups," + getLdapBaseDn());
         basePsoID.setTargetID("ldap");
         query.setBasePsoID(basePsoID);
         query.addQueryClause(new Filter(new EqualityMatch("cn", "groupB")));
@@ -656,7 +655,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         Query query = new Query();
         query.setTargetID("ldap");
         PSOIdentifier basePsoID = new PSOIdentifier();
-        basePsoID.setID("ou=testgroups," + getLdapBaseDn());
+        basePsoID.setID("ou=groups," + getLdapBaseDn());
         basePsoID.setTargetID("ldap");
         query.setBasePsoID(basePsoID);
         query.addQueryClause(new Filter(new EqualityMatch("cn", "NOT_FOUND")));
@@ -675,7 +674,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         loadLdif(DATA_PATH + "GrouperToLdapTest.testSearchRequestHasReference.before.ldif");
 
         PSOIdentifier memberID = new PSOIdentifier();
-        memberID.setID("cn=test.subject.0,ou=testpeople," + getLdapBaseDn());
+        memberID.setID("cn=test.subject.0,ou=people," + getLdapBaseDn());
 
         HasReference hasReference = new HasReference();
         hasReference.setToPsoID(memberID);
@@ -683,7 +682,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
 
         Query query = new Query();
         PSOIdentifier groupID = new PSOIdentifier();
-        groupID.setID("cn=groupB,ou=testgroups," + getLdapBaseDn());
+        groupID.setID("cn=groupB,ou=groups," + getLdapBaseDn());
         // TODO not necessary ? groupID.setTargetID("ldap");
         query.setBasePsoID(groupID);
         query.setTargetID("ldap");
@@ -738,7 +737,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         // }
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
-        groupF.addMember(SubjectTestHelper.SUBJ0);
+        groupF.addMember(LdapSubjectTestHelper.SUBJ0);
 
         loadLdif(DATA_PATH + "GrouperToLdapTest.testModifyMemberBushyForwardSlash.before.ldif");
 

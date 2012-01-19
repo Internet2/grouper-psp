@@ -1,8 +1,8 @@
-dn: cn=groupB,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
-objectclass: ${groupObjectClass}
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 objectclass: eduMember
 cn: groupB
-member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 description: descriptionB
 hasMember: test.subject.1

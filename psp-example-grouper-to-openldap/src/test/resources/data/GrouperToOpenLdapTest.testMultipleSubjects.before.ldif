@@ -1,4 +1,4 @@
-dn: cn=test.subject.10,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.10,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson

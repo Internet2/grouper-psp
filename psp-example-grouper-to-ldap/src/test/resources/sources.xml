@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-Grouper's subject resolver configuration
-$Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
+Grouper subject resolver configuration
 -->
 
 <sources>
@@ -70,16 +69,15 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
     </init-param>
     <internal-attribute>searchAttribute0</internal-attribute>
   </source>
-  <!-- Group Subject Resolver -->
 
+  <!-- LDAP Subject Resolver -->
   <source adapterClass="edu.internet2.middleware.subject.provider.LdapSourceAdapter">
     <id>ldap</id>
     <name>LdapSourceAdapter</name>
     <type>person</type>
 
-    <!-- Note that most of the ldap configuration is in the properties file 
-         The filename can be a file in your classpath or an absolute pathname
-      -->
+    <!-- Note that most of the ldap configuration is in the properties file.
+         The filename can be a file in your classpath or an absolute pathname. -->
 
     <init-param>
       <param-name>ldapProperties_file</param-name>
@@ -123,14 +121,11 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
         </param>
         <param>
             <param-name>scope</param-name>
-            <param-value>
-                SUBTREE_SCOPE            
-            </param-value>
+            <param-value>SUBTREE_SCOPE</param-value>
         </param>
         <param>
             <param-name>base</param-name>
-            <param-value>
-            </param-value>
+            <param-value>ou=people,dc=example,dc=edu</param-value>            
         </param>
          
     </search>
@@ -144,14 +139,11 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
         </param>
         <param>
             <param-name>scope</param-name>
-            <param-value>
-                SUBTREE_SCOPE            
-            </param-value>
+            <param-value>SUBTREE_SCOPE</param-value>
         </param>
         <param>
             <param-name>base</param-name>
-            <param-value>
-            </param-value>
+            <param-value>ou=people,dc=example,dc=edu</param-value>
         </param>
     </search>
     
@@ -172,14 +164,11 @@ $Id: sources.example.xml,v 1.8 2009-08-11 20:18:09 mchyzer Exp $
         </param>
         <param>
             <param-name>scope</param-name>
-            <param-value>
-                SUBTREE_SCOPE            
-            </param-value>
+            <param-value>SUBTREE_SCOPE</param-value>
         </param>
          <param>
             <param-name>base</param-name>
-            <param-value>
-            </param-value>
+            <param-value>ou=people,dc=example,dc=edu</param-value>
         </param>
     </search>
     ///Attributes you would like to display when doing a search 

@@ -1,8 +1,8 @@
-dn: ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: organizationalUnit
 ou: edu
 
-dn: ou=stemNEW,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: ou=stemNEW,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: organizationalUnit
 ou: stemNEW
 ou: stemOLD

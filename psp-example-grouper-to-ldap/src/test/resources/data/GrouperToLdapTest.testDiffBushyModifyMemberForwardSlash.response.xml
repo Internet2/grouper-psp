@@ -1,17 +1,17 @@
 <psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
   <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' returnData='everything' requestID='REQUESTID_TEST'>
-    <psoID ID='cn=group/F,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+    <psoID ID='cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
     <modification modificationMode='add'>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </modification>
     <modification modificationMode='delete'>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </modification>

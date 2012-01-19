@@ -6,12 +6,12 @@
 <psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2011/10/28-11:00:01.391_Q4LNLJ31'>
   <psp:id ID='change_log_sequence_number:288'/>
   <psp:pso entityName='group'>
-    <psoID ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+    <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </psp:pso>
 </psp:calcResponse>
 
 <lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2011/10/28-11:00:01.434_Q4LNLJ32' returnData='identifier'>
-  <psoID ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}' targetID='ldap'/>
+  <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
 </lookupRequest>
 
 <lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='failure' requestID='2011/10/28-11:00:01.434_Q4LNLJ32' error='noSuchIdentifier'/>

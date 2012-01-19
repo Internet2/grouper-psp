@@ -18,14 +18,13 @@ package edu.internet2.middleware.psp;
 
 import junit.textui.TestRunner;
 import edu.internet2.middleware.grouper.Group;
-import edu.internet2.middleware.grouper.PSPChangeLogConsumer;
 import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.grouper.helper.StemHelper;
-import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
+import edu.internet2.middleware.psp.grouper.PspChangeLogConsumer;
 import edu.internet2.middleware.psp.helper.LdapTestHelper;
 
-/** Tests for {@link PSPChangeLogConsumer} */
+/** Tests for {@link PspChangeLogConsumer} */
 public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
     /**
@@ -53,7 +52,7 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
      * 
      * This method deletes the test target ldap directory and re-adds the basic test ldif.
      * 
-     * @return true if subtree renames are suppported, false otherwise
+     * @return true if subtree renames are supported, false otherwise
      */
     public boolean isSubtreeRenameSupported() {
 
@@ -68,8 +67,8 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
             fail("An error occured : " + e.getMessage());
         }
 
-        String oldDn = "ou=child1,ou=edu,ou=testgroups," + getLdapBaseDn();
-        String newDn = "ou=newChild1,ou=edu,ou=testgroups," + getLdapBaseDn();
+        String oldDn = "ou=child1,ou=edu,ou=groups," + getLdapBaseDn();
+        String newDn = "ou=newChild1,ou=edu,ou=groups," + getLdapBaseDn();
 
         try {
             ldap.rename(oldDn, newDn);
@@ -246,7 +245,7 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         clearChangeLog();
 
-        groupA.addMember(SubjectTestHelper.SUBJ1);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ1);
 
         ChangeLogTempToEntity.convertRecords();
         runChangeLog();
@@ -270,13 +269,37 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         clearChangeLog();
 
-        groupA.addMember(SubjectTestHelper.SUBJ1);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ1);
 
         ChangeLogTempToEntity.convertRecords();
         runChangeLog();
 
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddAlreadyExists.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddAlreadyExists.after.ldif");
+    }
+    
+    /**
+     * Test provisioning resulting from the adding of a group membership.
+     * 
+     * @throws Exception
+     */
+    public void testMembershipAddGroup() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddGroup.before.ldif");
+
+        edu = setUpEdu();
+        groupA = setUpGroupA();
+        groupB = setUpGroupB();
+
+        clearChangeLog();
+
+        groupB.addMember(groupA.toSubject());
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddGroup.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddGroup.after.ldif");
     }
 
     /**
@@ -290,11 +313,11 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         edu = setUpEdu();
         groupA = setUpGroupA();
-        groupA.addMember(SubjectTestHelper.SUBJ1);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ1);
 
         clearChangeLog();
 
-        groupA.deleteMember(SubjectTestHelper.SUBJ1);
+        groupA.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         ChangeLogTempToEntity.convertRecords();
         runChangeLog();
@@ -315,17 +338,42 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         edu = setUpEdu();
         groupA = setUpGroupA();
-        groupA.addMember(SubjectTestHelper.SUBJ1);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ1);
 
         clearChangeLog();
 
-        groupA.deleteMember(SubjectTestHelper.SUBJ1);
+        groupA.deleteMember(LdapSubjectTestHelper.SUBJ1);
 
         ChangeLogTempToEntity.convertRecords();
         runChangeLog();
 
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteAlreadyDeleted.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteAlreadyDeleted.after.ldif");
+    }
+    
+    /**
+     * Test provisioning resulting from the deletion of a group membership.
+     * 
+     * @throws Exception
+     */
+    public void testMembershipDeleteGroup() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteGroup.before.ldif");
+
+        edu = setUpEdu();
+        groupA = setUpGroupA();
+        groupB = setUpGroupB();
+        groupB.addMember(groupA.toSubject());
+
+        clearChangeLog();
+
+        groupB.deleteMember(groupA.toSubject());
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteGroup.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteGroup.after.ldif");
     }
 
     /**
@@ -360,10 +408,10 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
         Stem child1 = StemHelper.addChildStem(edu, "child1", "Child 1");
 
         Group group1 = child1.addChildGroup("group1", "Group1");
-        group1.addMember(SubjectTestHelper.SUBJ0);
+        group1.addMember(LdapSubjectTestHelper.SUBJ0);
 
         Group group2 = child1.addChildGroup("group2", "Group2");
-        group2.addMember(SubjectTestHelper.SUBJ1);
+        group2.addMember(LdapSubjectTestHelper.SUBJ1);
 
         Stem child2 = StemHelper.addChildStem(edu, "child2", "Child 2");
 
@@ -439,10 +487,10 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
         Stem child1 = StemHelper.addChildStem(edu, "child1", "Child 1");
 
         Group group1 = child1.addChildGroup("group1", "Group1");
-        group1.addMember(SubjectTestHelper.SUBJ0);
+        group1.addMember(LdapSubjectTestHelper.SUBJ0);
 
         Group group2 = child1.addChildGroup("group2", "Group2");
-        group2.addMember(SubjectTestHelper.SUBJ1);
+        group2.addMember(LdapSubjectTestHelper.SUBJ1);
 
         Stem child2 = StemHelper.addChildStem(edu, "child2", "Child 2");
 
@@ -502,15 +550,15 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
         Stem child1 = StemHelper.addChildStem(edu, "child1", "Child 1");
 
         Group group1 = child1.addChildGroup("group1", "Group1");
-        group1.addMember(SubjectTestHelper.SUBJ0);
+        group1.addMember(LdapSubjectTestHelper.SUBJ0);
 
         Group group2 = child1.addChildGroup("group2", "Group2");
-        group2.addMember(SubjectTestHelper.SUBJ1);
+        group2.addMember(LdapSubjectTestHelper.SUBJ1);
 
         Stem child2 = StemHelper.addChildStem(child1, "child2", "Child 2");
 
         Group group3 = child2.addChildGroup("group3", "Group3");
-        group3.addMember(SubjectTestHelper.SUBJ2);
+        group3.addMember(LdapSubjectTestHelper.SUBJ2);
 
         clearChangeLog();
 

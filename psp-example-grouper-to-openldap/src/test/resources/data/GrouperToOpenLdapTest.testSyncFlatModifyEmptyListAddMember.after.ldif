@@ -1,87 +1,87 @@
-dn: cn=groupB,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
-objectclass: ${groupObjectClass}
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 objectclass: eduMember
 cn: groupB
-member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 description: descriptionB
 hasMember: test.subject.1
 
-dn: ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: ${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
 objectclass: organizationalUnit
-ou: testgroups
+ou: groups
 
-dn: ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: ${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: organizationalUnit
 description: people
-ou: testpeople
+ou: people
 
-dn: cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.0
 sn: subject.0
 
-dn: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.1
 sn: subject.1
 
-dn: cn=test.subject.2,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.2,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.2
 sn: subject.2
 
-dn: cn=test.subject.3,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.3,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.3
 sn: subject.3
 
-dn: cn=test.subject.4,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.4,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.4
 sn: subject.4
 
-dn: cn=test.subject.5,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.5,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.5
 sn: subject.5
 
-dn: cn=test.subject.6,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.6,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.6
 sn: subject.6
 
-dn: cn=test.subject.7,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.7,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.7
 sn: subject.7
 
-dn: cn=test.subject.8,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.8,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
 cn: test.subject.8
 sn: subject.8
 
-dn: cn=test.subject.9,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.9,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson

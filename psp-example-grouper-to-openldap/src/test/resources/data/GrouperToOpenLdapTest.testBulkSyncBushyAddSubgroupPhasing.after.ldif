@@ -1,9 +1,9 @@
-dn: ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: ${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: organizationalUnit
 description: people
-ou: testpeople
+ou: people
 
-dn: cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: person
 objectclass: organizationalPerson
 objectclass: eduMember
@@ -11,7 +11,7 @@ cn: test.subject.0
 sn: subject.0
 isMemberOf: edu:groupA
 
-dn: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: person
 objectclass: organizationalPerson
 objectclass: eduMember
@@ -20,32 +20,32 @@ sn: subject.1
 isMemberOf: edu:groupA
 isMemberOf: edu:groupB
 
-dn: ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: ${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: organizationalUnit
-ou: testgroups
+ou: groups
 
-dn: ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: organizationalUnit
 ou: edu
 
-dn: cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
 objectClass: eduMember
-objectclass: ${groupObjectClass}
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupA
 hasMember: my name is test.subject.0
 hasMember: my name is test.subject.1
 hasMember: edu:groupB
-member: cn=test.subject.0,ou=testpeople,${edu.vt.middleware.ldap.base}
-member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
-member: cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 
-dn: cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}
+dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
 objectClass: eduMember
-objectclass: ${groupObjectClass}
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupB
 hasMember: my name is test.subject.1
-member: cn=test.subject.1,ou=testpeople,${edu.vt.middleware.ldap.base}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 description: descriptionB
 isMemberOf: edu:groupA

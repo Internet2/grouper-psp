@@ -35,7 +35,6 @@ import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.grouper.helper.GrouperTest;
 import edu.internet2.middleware.grouper.helper.StemHelper;
-import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.util.GrouperUtil;
 import edu.internet2.middleware.psp.helper.LdapTestHelper;
@@ -50,7 +49,7 @@ import edu.vt.middleware.ldap.Ldap;
 /** Test provisioning Grouper to an LDAP directory target. */
 public abstract class BaseGrouperLdapTest extends GrouperTest {
 
-    /** The name of the vt-ldap properties file. */
+    /** The name of the ldap properties file. */
     public static String PROPERTIES_FILE = "ldap.properties";
 
     /** The Spring id of the Shibboleth Attribute Resolver. */
@@ -71,7 +70,7 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
     /** The ldap connection. */
     protected Ldap ldap;
 
-    /** The vt-ldap properties file. */
+    /** The ldap properties file. */
     private File propertiesFile;
 
     /** The provisioning service provider. */
@@ -109,6 +108,11 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         return SubjectFinder.findById(id, true);
     }
 
+    /**
+     * Delete all ldap entries under the vt-ldap base dn.
+     * 
+     * @throws NamingException
+     */
     public void deleteAllLdapEntries() throws NamingException {
         LdapTestHelper.deleteChildren(ldap.getLdapConfig().getBaseDn(), ldap);
     }
@@ -128,10 +132,20 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         return referenceNames;
     }
 
+    /**
+     * Get the base dn from the vt-ldap configuration.
+     * 
+     * @return the base dn from the vt-ldap configuration
+     */
     public String getLdapBaseDn() {
         return ldap.getLdapConfig().getBaseDn();
     }
 
+    /**
+     * Get the ldap properties file.
+     * 
+     * @return the ldap properties file
+     */
     public File getPropertiesFile() {
         return propertiesFile;
     }
@@ -152,6 +166,9 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         LdapTestHelper.loadLdif(file, propertiesFile, ldap);
     }
 
+    /**
+     * Convert a psp-resolver.xml configuration from bushy to flat dn structure.
+     */
     public void makeGroupDNStructureFlat() {
 
         ShibbolethAttributeResolver AR =
@@ -169,7 +186,7 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
     /**
      * {@inheritDoc}
      * 
-     * Find the vt-ldap properties file {@link PROPERTIES_FILE}.
+     * Find the properties file {@link PROPERTIES_FILE}.
      */
     public void setUp() {
 
@@ -181,6 +198,9 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         }
     }
 
+    /**
+     * Set up stems and groups representing courses.
+     */
     public void setUpCourseTest() {
         Stem courses = edu.addChildStem("courses", "Courses");
 
@@ -188,20 +208,25 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         Stem fall = courses.addChildStem("fall", "Fall");
 
         Group springCourseA = spring.addChildGroup("courseA", "Course A");
-        springCourseA.addMember(SubjectTestHelper.SUBJ0);
-        springCourseA.addMember(SubjectTestHelper.SUBJ1);
+        springCourseA.addMember(LdapSubjectTestHelper.SUBJ0);
+        springCourseA.addMember(LdapSubjectTestHelper.SUBJ1);
 
         Group springCourseB = spring.addChildGroup("courseB", "Course B");
-        springCourseB.addMember(SubjectTestHelper.SUBJ1);
+        springCourseB.addMember(LdapSubjectTestHelper.SUBJ1);
 
         Group fallCourseA = fall.addChildGroup("courseA", "Course A");
-        fallCourseA.addMember(SubjectTestHelper.SUBJ0);
-        fallCourseA.addMember(SubjectTestHelper.SUBJ1);
+        fallCourseA.addMember(LdapSubjectTestHelper.SUBJ0);
+        fallCourseA.addMember(LdapSubjectTestHelper.SUBJ1);
 
         Group fallCourseB = fall.addChildGroup("courseB", "Course B");
-        fallCourseB.addMember(SubjectTestHelper.SUBJ1);
+        fallCourseB.addMember(LdapSubjectTestHelper.SUBJ1);
     }
 
+    /**
+     * Set up the edu stem.
+     * 
+     * @return the edu stem
+     */
     public Stem setUpEdu() {
         GrouperSession.startRootSession();
         Stem root = StemHelper.findRootStem(GrouperSession.staticGrouperSession());
@@ -209,15 +234,25 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         return edu;
     }
 
+    /**
+     * Set up groupA.
+     * 
+     * @return groupA
+     */
     public Group setUpGroupA() {
         groupA = StemHelper.addChildGroup(edu, "groupA", "Group A");
-        groupA.addMember(SubjectTestHelper.SUBJ0);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ0);
         return groupA;
     }
 
+    /**
+     * Set up groupB.
+     * 
+     * @return groupB
+     */
     public Group setUpGroupB() {
         groupB = StemHelper.addChildGroup(edu, "groupB", "Group B");
-        groupB.addMember(SubjectTestHelper.SUBJ1);
+        groupB.addMember(LdapSubjectTestHelper.SUBJ1);
         groupB.setDescription("descriptionB");
         groupB.store();
         return groupB;
@@ -267,6 +302,12 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
                 PSPUtil.getFile(correctXMLFileName), false, propertiesFile);
     }
 
+    /**
+     * Write the xml representation of the spml object.
+     * 
+     * @param testObject the spml object
+     * @param correctXMLFileName the xml representation
+     */
     public void verifySpmlWrite(Marshallable testObject, String correctXMLFileName) {
         PSPTestHelper.verifySpmlWrite(propertiesFile, psp, testObject, correctXMLFileName);
     }

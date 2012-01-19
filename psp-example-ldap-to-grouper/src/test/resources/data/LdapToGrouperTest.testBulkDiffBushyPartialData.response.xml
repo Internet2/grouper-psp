@@ -3,7 +3,7 @@
     <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
       <psp:psoID ID='edu' targetID='grouper'/>
     </psp:synchronizedResponse>
-    <psp:id ID='ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.641'>
@@ -16,7 +16,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.667'>
@@ -29,7 +29,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.693'>
@@ -42,7 +42,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.730'>
@@ -55,7 +55,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.760'>
@@ -71,7 +71,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.810'>
@@ -84,7 +84,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=groupC,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupC,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.830'>
@@ -97,7 +97,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=groupD,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupD,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.853'>
@@ -110,7 +110,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.879'>
@@ -123,7 +123,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.903'>
@@ -136,7 +136,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.923'>
@@ -149,7 +149,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:syncResponse>
   <psp:syncResponse>
     <deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/01-10:53:45.956'/>

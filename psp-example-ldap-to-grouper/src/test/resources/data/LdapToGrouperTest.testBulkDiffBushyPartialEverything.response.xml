@@ -3,25 +3,25 @@
     <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
       <psp:psoID ID='edu' targetID='grouper'/>
     </psp:synchronizedResponse>
-    <psp:id ID='ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.601'>
     <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
       <psp:psoID ID='edu:courses' targetID='grouper'/>
     </psp:synchronizedResponse>
-    <psp:id ID='ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.625'>
     <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
       <psp:psoID ID='edu:courses:fall' targetID='grouper'/>
     </psp:synchronizedResponse>
-    <psp:id ID='ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.648'>
     <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
       <psp:psoID ID='edu:courses:spring' targetID='grouper'/>
     </psp:synchronizedResponse>
-    <psp:id ID='ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.673'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:57.714' returnData='everything'>
@@ -34,7 +34,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=groupA,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.715'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:57.798' returnData='everything'>
@@ -53,7 +53,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=groupB,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.800'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:57.854' returnData='everything'>
@@ -66,7 +66,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=groupC,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupC,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.855'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:57.903' returnData='everything'>
@@ -79,7 +79,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=groupD,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=groupD,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.904'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:57.980' returnData='everything'>
@@ -95,7 +95,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseA,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:57.982'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:58.047' returnData='everything'>
@@ -108,7 +108,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseB,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:58.048'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:58.120' returnData='everything'>
@@ -124,7 +124,7 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseA,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='2012/01/01-11:05:58.121'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/01/01-11:05:58.172' returnData='everything'>
@@ -137,6 +137,6 @@
         </capabilityData>
       </modification>
     </modifyRequest>
-    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,ou=testgroups,${edu.vt.middleware.ldap.base}'/>
+    <psp:id ID='cn=courseB,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
   </psp:diffResponse>
 </psp:bulkDiffResponse>
