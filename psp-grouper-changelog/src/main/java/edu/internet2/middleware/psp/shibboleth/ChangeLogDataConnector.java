@@ -20,6 +20,7 @@ package edu.internet2.middleware.psp.shibboleth;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -28,6 +29,7 @@ import org.opensaml.xml.util.DatatypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.internet2.middleware.grouper.SubjectFinder;
 import edu.internet2.middleware.grouper.audit.AuditEntry;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogEntry;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogType;
@@ -40,6 +42,7 @@ import edu.internet2.middleware.shibboleth.common.attribute.provider.BasicAttrib
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.AttributeResolutionException;
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.ShibbolethResolutionContext;
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.dataConnector.DataConnector;
+import edu.internet2.middleware.subject.Subject;
 
 /** A {@link DataConnector} which returns {@link ChangeLogEntrty} attributes. */
 public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEntry> {
@@ -133,6 +136,67 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
                     attribute.getValues().add(valueString);
                     attributes.put(attribute.getId(), attribute);
                 }
+            }
+        }
+
+        // return subject attributes
+        if (attributes.containsKey("subjectId") && attributes.containsKey("sourceId")) {
+            String sourceId = attributes.get("sourceId").getValues().iterator().next().toString();
+            String subjectId = attributes.get("subjectId").getValues().iterator().next().toString();
+            attributes.putAll(buildSubjectAttributes(sourceId, subjectId));
+        }
+
+        return attributes;
+    }
+
+    /**
+     * Return attributes representing the subject with the given source id and subject id.
+     * 
+     * The subject is found via SubjectFinder.findByIdAndSource();
+     * 
+     * The subject name is returned via the 'subjectName' attribute. The subject description is returned via the
+     * 'subjectDescription' attribute.
+     * 
+     * Subject attributes returned from subject.getAttributes() are named 'subject' + attribute name, for example,
+     * 'subjectdisplayextension'.
+     * 
+     * @param sourceId the source id
+     * @param subjectId the subject id
+     * @return attributes representing the subject
+     */
+    protected Map<String, BaseAttribute> buildSubjectAttributes(String sourceId, String subjectId) {
+
+        // look up subject
+        Subject subject = SubjectFinder.findByIdAndSource(subjectId, sourceId, false);
+        if (subject == null) {
+            return Collections.EMPTY_MAP;
+        }
+
+        Map<String, BaseAttribute> attributes = new LinkedHashMap<String, BaseAttribute>();
+
+        String subjectName = subject.getName();
+        if (!DatatypeHelper.isEmpty(subjectName)) {
+            BasicAttribute<String> attribute = new BasicAttribute<String>();
+            attribute.setId("subjectName");
+            attribute.getValues().add(subjectName);
+            attributes.put(attribute.getId(), attribute);
+        }
+
+        String subjectDescription = subject.getDescription();
+        if (!DatatypeHelper.isEmpty(subjectDescription)) {
+            BasicAttribute<String> attribute = new BasicAttribute<String>();
+            attribute.setId("subjectDescription");
+            attribute.getValues().add(subjectDescription);
+            attributes.put(attribute.getId(), attribute);
+        }
+
+        Map<String, Set<String>> attributeMap = subject.getAttributes();
+        if (attributeMap != null) {
+            for (String attributeName : attributeMap.keySet()) {
+                BasicAttribute<String> attribute = new BasicAttribute<String>();
+                attribute.setId("subject" + attributeName);
+                attribute.getValues().addAll(attributeMap.get(attributeName));
+                attributes.put(attribute.getId(), attribute);
             }
         }
 
