@@ -67,6 +67,8 @@ import org.openspml.v2.profiles.dsml.DSMLModification;
 import org.openspml.v2.profiles.dsml.DSMLProfileException;
 import org.openspml.v2.profiles.dsml.DSMLUnmarshaller;
 import org.openspml.v2.profiles.dsml.DSMLValue;
+import org.openspml.v2.profiles.dsml.EqualityMatch;
+import org.openspml.v2.profiles.dsml.Filter;
 import org.openspml.v2.profiles.spmldsml.AttributeDefinition;
 import org.openspml.v2.profiles.spmldsml.AttributeDefinitionReference;
 import org.openspml.v2.profiles.spmldsml.AttributeDefinitionReferences;
@@ -1834,6 +1836,56 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
     }
 
     /**
+     * Return true if the given {@link PSOIdentifier} has an attribute with the given name and value.
+     * 
+     * @param psoID the pso identifier
+     * @param attributeName the attribute name
+     * @param attributeValue the attribute value
+     * @return true if the pso identifier has the attribute, false otherwise
+     * @throws PspException if the spml search fails
+     * @throws DSMLProfileException if a dsml error occurs
+     */
+    public boolean hasAttribute(PSOIdentifier psoID, String attributeName, String attributeValue) throws PspException,
+            DSMLProfileException {
+
+        LOG.debug("Psp '{}' - Has attribute '{}' name '{}' value '{}'", new Object[] {getId(), PSPUtil.toString(psoID),
+                attributeName, attributeValue,});
+
+        EqualityMatch equalityMatch = new EqualityMatch(attributeName, attributeValue);
+        Filter filter = new Filter();
+        filter.setItem(equalityMatch);
+
+        Query query = new Query();
+        query.setBasePsoID(psoID);
+        query.setTargetID(psoID.getTargetID());
+        query.addQueryClause(filter);
+        query.setScope(Scope.PSO);
+
+        SearchRequest searchRequest = new SearchRequest();
+        searchRequest.setReturnData(ReturnData.IDENTIFIER);
+        searchRequest.setQuery(query);
+        searchRequest.setRequestID(PSPUtil.uniqueRequestId());
+
+        SearchResponse response = execute(searchRequest);
+
+        if (!response.getStatus().equals(StatusCode.SUCCESS)) {
+            String errorMessage = PSPUtil.toString(response);
+            LOG.error(errorMessage);
+            throw new PspException(errorMessage);
+        }
+
+        if (response.getPSOs().length > 0) {
+            LOG.debug("Psp '{}' - Has attribute true '{}' name '{}' value '{}'",
+                    new Object[] {getId(), PSPUtil.toString(psoID), attributeName, attributeValue,});
+            return true;
+        }
+
+        LOG.debug("Psp '{}' - Has attribute false '{}' name '{}' value '{}'",
+                new Object[] {getId(), PSPUtil.toString(psoID), attributeName, attributeValue,});
+        return false;
+    }
+
+    /**
      * Return true if the given {@link PSOIdentifier} has the given {@Reference}.
      * 
      * @param psoID the pso identifier
@@ -1842,6 +1894,9 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
      * @throws PspException if the spml search fails
      */
     public boolean hasReference(PSOIdentifier psoID, Reference reference) throws PspException {
+
+        LOG.debug("Psp '{}' - Has reference from '{}' to '{}'",
+                new Object[] {getId(), PSPUtil.toString(psoID), PSPUtil.toString(reference),});
 
         HasReference hasReference = new HasReference();
         hasReference.setToPsoID(reference.getToPsoID());
@@ -1858,7 +1913,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         // SearchRequest searchRequest = new SearchRequest();
         SearchRequest searchRequest = new SearchRequestWithQueryClauseNamespaces();
 
-        searchRequest.setReturnData(ReturnData.EVERYTHING);
+        searchRequest.setReturnData(ReturnData.IDENTIFIER);
         searchRequest.setQuery(query);
         searchRequest.setRequestID(PSPUtil.uniqueRequestId());
 
@@ -1871,9 +1926,13 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         }
 
         if (response.getPSOs().length > 0) {
+            LOG.debug("Psp '{}' - Has reference true from '{}' to '{}'", new Object[] {getId(),
+                    PSPUtil.toString(psoID), PSPUtil.toString(reference),});
             return true;
         }
 
+        LOG.debug("Psp '{}' - Has reference false from '{}' to '{}'", new Object[] {getId(), PSPUtil.toString(psoID),
+                PSPUtil.toString(reference),});
         return false;
     }
 
