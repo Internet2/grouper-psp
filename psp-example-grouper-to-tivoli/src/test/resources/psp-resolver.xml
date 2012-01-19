@@ -224,12 +224,12 @@
     <!-- Group LDAP objectclass. -->
     <dc:Attribute id="groupObjectclass">
       <dc:Value>top</dc:Value>
-      <dc:Value>${groupObjectClass}</dc:Value>
+      <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
     </dc:Attribute>
     <!-- Group LDAP eduMember objectclass. -->
     <dc:Attribute id="groupObjectclassEduMember">
       <dc:Value>top</dc:Value>
-      <dc:Value>${groupObjectClass}</dc:Value>
+      <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
       <dc:Value>eduMember</dc:Value>
     </dc:Attribute>
     <!-- Stem LDAP objectclass. -->
@@ -250,10 +250,10 @@
   <resolver:AttributeDefinition
     id="stemDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="name"
     rdnAttributeName="ou"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependencies which return a "name" attribute whose value is the stem name. -->
     <resolver:Dependency ref="StemDataConnector" />
     <resolver:Dependency ref="DeleteStemChangeLogDataConnector" />
@@ -264,10 +264,10 @@
   <resolver:AttributeDefinition
     id="stemDnAlternateChangeLog"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="propertyOldValue"
     rdnAttributeName="ou"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old stem name. -->
     <resolver:Dependency ref="UpdateStemChangeLogDataConnector" />
   </resolver:AttributeDefinition>
@@ -302,10 +302,10 @@
   <resolver:AttributeDefinition
     id="groupDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="name"
     rdnAttributeName="cn"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
@@ -316,10 +316,10 @@
   <resolver:AttributeDefinition
     id="groupDnAlternate"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="alternateName"
     rdnAttributeName="cn"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependency which returns an "alternateName" attribute whose value is the old group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
   </resolver:AttributeDefinition>
@@ -328,10 +328,10 @@
   <resolver:AttributeDefinition
     id="groupDnAlternateChangeLog"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="propertyOldValue"
     rdnAttributeName="cn"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old group name. -->
     <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
   </resolver:AttributeDefinition>
@@ -447,25 +447,79 @@
   <resolver:AttributeDefinition
     id="changeLogMembershipGroupDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
-    structure="bushy"
+    structure="flat"
     sourceAttributeID="groupName"
     rdnAttributeName="cn"
-    base="ou=testgroups,${edu.vt.middleware.ldap.base}">
+    base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependencies which return a "groupName" attribute whose value is the name of the group of a membership change log 
       entry. -->
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The value of the "changeLogMembershipSubjectId" attribute is the subject identifier of a membership change log entry. -->
+  <!-- The value of the "changeLogMembershipSubjectId" attribute is the subject identifier of the "ldap" source member 
+    of a membership change log entry. -->
   <resolver:AttributeDefinition
     id="changeLogMembershipSubjectId"
-    xsi:type="ad:Simple"
-    sourceAttributeID="subjectId">
-    <!-- Dependencies which return a "subjectId" attribute whose value is the subject id of the member of a membership change 
-      log entry. -->
+    xsi:type="ad:Script">
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        changeLogMembershipSubjectId = new BasicAttribute("changeLogMembershipSubjectId");
+        if (typeof sourceId != "undefined" && sourceId != null ){            
+            if (sourceId.getValues().contains("ldap")) {
+                if (typeof subjectId != "undefined" && subjectId != null ){
+                    changeLogMembershipSubjectId.getValues().add(subjectId.getValues().get(0));
+                }
+            }
+        }
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "changeLogMembershipGroupName" attribute is the name of the group member of a membership change log 
+    entry. -->
+  <resolver:AttributeDefinition
+    id="changeLogMembershipGroupName"
+    xsi:type="ad:Script">
+    <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        changeLogMembershipGroupName = new BasicAttribute("changeLogMembershipGroupName");
+        if (typeof sourceId != "undefined" && sourceId != null ){            
+            if (sourceId.getValues().contains("g:gsa")) {
+                if (typeof subjectName != "undefined" && subjectName != null ){
+                    changeLogMembershipGroupName.getValues().add(subjectName.getValues().get(0));
+                }
+            }          
+        }
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "changeLogHasMember" attribute is the subject id for subjects from the "ldap" source or the group 
+    name of a membership change log entry. -->
+  <resolver:AttributeDefinition
+    id="changeLogHasMember"
+    xsi:type="ad:Script">
+    <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        changeLogHasMember = new BasicAttribute("changeLogHasMember");
+        if (typeof sourceId != "undefined" && sourceId != null ){            
+            if (sourceId.getValues().contains("g:gsa")) {
+                if (typeof subjectName != "undefined" && subjectName != null ){
+                    changeLogHasMember.getValues().add(subjectName.getValues().get(0));
+                }
+            }
+            if (sourceId.getValues().contains("ldap")) {
+                if (typeof subjectId != "undefined" && subjectId != null ){
+                    changeLogHasMember.getValues().add(subjectId.getValues().get(0));
+                }
+            }      
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
 </AttributeResolver>

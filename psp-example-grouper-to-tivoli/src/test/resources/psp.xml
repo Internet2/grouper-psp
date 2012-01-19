@@ -46,7 +46,7 @@
     <identifier
       ref="stemDn"
       targetId="ldap"
-      containerId="ou=testgroups,${edu.vt.middleware.ldap.base}" />
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
 
     <!-- Identifies stem objects which exist on the target by objectclass attribute value. -->
     <identifyingAttribute
@@ -79,12 +79,12 @@
     <identifier
       ref="groupDn"
       targetId="ldap"
-      containerId="ou=testgroups,${edu.vt.middleware.ldap.base}" />
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
 
     <!-- Identifies ldap group objects which exist on the target by objectClass attribute value. -->
     <identifyingAttribute
       name="objectClass"
-      value="${groupObjectClass}" />
+      value="${edu.internet2.middleware.psp.groupObjectClass}" />
 
     <!-- The "old" ldap group DN if a group has been renamed. -->
     <alternateIdentifier ref="groupDnAlternate" />
@@ -141,7 +141,7 @@
     <identifier
       ref="memberDn"
       targetId="ldap"
-      containerId="ou=testpeople,${edu.vt.middleware.ldap.base}" />
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
 
     <!-- Identifies member objects which exist on the target by objectclass attribute value. -->
     <identifyingAttribute
@@ -168,7 +168,11 @@
     <identifier
       ref="changeLogMembershipGroupDn"
       targetId="ldap"
-      containerId="ou=testgroups,${edu.vt.middleware.ldap.base}" />
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <attribute
+      name="hasMember"
+      ref="changeLogHasMember" />
 
     <!-- The ldap group "member" attribute. -->
     <references name="member">
@@ -176,6 +180,10 @@
       <reference
         ref="changeLogMembershipSubjectId"
         toObject="member" />
+
+      <reference
+        ref="changeLogMembershipGroupName"
+        toObject="group" />
 
     </references>
 
