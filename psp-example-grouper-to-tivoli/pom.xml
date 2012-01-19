@@ -13,7 +13,7 @@
     <relativePath>../psp-parent</relativePath>
   </parent>
 
-  <name>Provisioning Service Provider - Grouper to IBM Tivoli Directory Server Example</name>
+  <name>Provisioning Service Provider - Example - Grouper to IBM Tivoli Directory Server</name>
   <artifactId>psp-example-grouper-to-tivoli</artifactId>
   <packaging>jar</packaging>
 
