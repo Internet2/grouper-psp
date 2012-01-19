@@ -63,7 +63,7 @@ public class AllStemNamesDataConnector extends StemDataConnector {
                     (Map<String, BaseAttribute>) GrouperSession.callbackGrouperSession(getGrouperSession(),
                             new GrouperSessionHandler() {
                                 public Map<String, BaseAttribute> callback(GrouperSession grouperSession) {
-                                    return getAllGroupNames(resolutionContext, grouperSession);
+                                    return getAllStemNames(resolutionContext, grouperSession);
                                 }
                             });
             return attributes;
@@ -82,7 +82,7 @@ public class AllStemNamesDataConnector extends StemDataConnector {
      * @return the map of attributes
      * @throws AttributeResolutionException
      */
-    protected Map<String, BaseAttribute> getAllGroupNames(final ShibbolethResolutionContext resolutionContext,
+    protected Map<String, BaseAttribute> getAllStemNames(final ShibbolethResolutionContext resolutionContext,
             GrouperSession grouperSession) {
 
         String principalName = resolutionContext.getAttributeRequestContext().getPrincipalName();
