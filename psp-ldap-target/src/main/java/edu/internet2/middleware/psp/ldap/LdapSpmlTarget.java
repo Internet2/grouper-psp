@@ -480,6 +480,7 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
             if (modifyRequest.getReturnData().equals(ReturnData.IDENTIFIER)) {
                 PSO responsePSO = new PSO();
                 responsePSO.setPsoID(responseLookupPsoID);
+                // TODO entityName attribute ?
                 modifyResponse.setPso(responsePSO);
             } else {
                 LookupRequest lookupRequest = new LookupRequest();
@@ -582,11 +583,12 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
             returnData = ReturnData.EVERYTHING;
         }
 
+        // attributes to return
+        String[] retAttrs = getPSP().getNames(getId(), returnData).toArray(new String[] {});
+        searchControls.setReturningAttributes(retAttrs);
+
         Ldap ldap = null;
         try {
-            String[] retAttrs = getPSP().getNames(getId(), returnData).toArray(new String[] {});
-            searchControls.setReturningAttributes(retAttrs);
-
             ldap = ldapPool.checkOut();
 
             LOG.debug("Target '{}' - Search will return attributes '{}'", getId(), Arrays.asList(retAttrs));
