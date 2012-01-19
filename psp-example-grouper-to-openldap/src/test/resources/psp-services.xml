@@ -47,8 +47,8 @@
     depends-on="psp.AttributeAuthority"
     authority="psp.AttributeAuthority"
     logSpml="true"
-    writeRequests="true"
-    writeResponses="true"
+    writeRequests="false"
+    writeResponses="false"
     pathToOutputFile="">
     <ConfigurationResource
       file="/psp.xml"
@@ -66,6 +66,7 @@
   <Service
     id="ldap"
     xsi:type="psp-ldap-target:LdapTarget"
+    logSpml="true"
     ldapPoolId="ldap"
     ldapPoolIdSource="grouper">
     <!-- A <ConfigurationResource/> is required to instantiate the <Service/>, so supply a do-nothing resource. -->

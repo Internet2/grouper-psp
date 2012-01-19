@@ -47,8 +47,8 @@
     depends-on="psp.AttributeAuthority"
     authority="psp.AttributeAuthority"
     logSpml="true"
-    writeRequests="true"
-    writeResponses="true"
+    writeRequests="false"
+    writeResponses="false"
     pathToOutputFile="">
     <ConfigurationResource
       file="/psp.xml"
