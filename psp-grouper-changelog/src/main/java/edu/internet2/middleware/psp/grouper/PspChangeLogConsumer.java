@@ -1,5 +1,5 @@
 /*
- *Licensed to the University Corporation for Advanced Internet Development, 
+ * Licensed to the University Corporation for Advanced Internet Development, 
  * Inc. (UCAID) under one or more contributor license agreements.  See the 
  * NOTICE file distributed with this work for additional information regarding
  * copyright ownership. The UCAID licenses this file to You under the Apache 
@@ -39,6 +39,9 @@ import org.openspml.v2.msg.spml.Response;
 import org.openspml.v2.msg.spml.ReturnData;
 import org.openspml.v2.msg.spml.StatusCode;
 import org.openspml.v2.msg.spmlref.Reference;
+import org.openspml.v2.profiles.dsml.DSMLAttr;
+import org.openspml.v2.profiles.dsml.DSMLModification;
+import org.openspml.v2.profiles.dsml.DSMLValue;
 import org.openspml.v2.util.Spml2Exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -268,6 +271,9 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         if (syncResponse.getStatus().equals(StatusCode.SUCCESS)) {
             LOG.info("PSP Consumer '{}' - Change log entry '{}' Sync was successfull '{}'", new Object[] {name,
                     toString(changeLogEntry), PSPUtil.toString(syncResponse),});
+        } else if (syncResponse.getError().equals(ErrorCode.NO_SUCH_IDENTIFIER)) {
+            LOG.info("PSP Consumer '{}' - Change log entry '{}' Sync unable to calculate provisioning '{}'",
+                    new Object[] {name, toString(changeLogEntry), PSPUtil.toString(syncResponse),});
         } else {
             LOG.error("PSP Consumer '{}' - Change log entry '{}' Sync failed '{}'", new Object[] {name,
                     toString(changeLogEntry), PSPUtil.toString(syncResponse),});
@@ -354,7 +360,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
     /**
      * Call the method of the {@link EventType} enum which matches the {@link ChangeLogEntry} category and action (the
-     * {@link ChangeLogType}).
+     * change log type).
      * 
      * @param changeLogEntry the change log entry
      * @throws Exception if an error occurs processing the change log entry
@@ -476,7 +482,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
      */
     public void processStemAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
 
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group add.", name, toString(changeLogEntry));
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem add.", name, toString(changeLogEntry));
 
         executeSync(consumer, changeLogEntry, ChangeLogLabels.STEM_ADD.name);
     }
@@ -598,7 +604,10 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         for (PSO pso : calcResponse.getPSOs()) {
 
             List<Reference> references = processMembershipChangeReferences(pso, modificationMode);
-            if (references.isEmpty()) {
+
+            List<DSMLAttr> attributes = processMembershipChangeData(pso, modificationMode);
+
+            if (references.isEmpty() && attributes.isEmpty()) {
                 continue;
             }
 
@@ -607,12 +616,26 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             modifyRequest.setPsoID(pso.getPsoID());
             modifyRequest.addOpenContentAttr(Pso.ENTITY_NAME_ATTRIBUTE,
                     pso.findOpenContentAttrValueByName(Pso.ENTITY_NAME_ATTRIBUTE));
+            modifyRequest.setReturnData(ReturnData.IDENTIFIER);
 
-            Modification modification = new Modification();
-            modification.setModificationMode(modificationMode);
-            CapabilityData capabilityData = PSPUtil.fromReferences(references);
-            modification.addCapabilityData(capabilityData);
-            modifyRequest.addModification(modification);
+            if (!references.isEmpty()) {
+                Modification modification = new Modification();
+                modification.setModificationMode(modificationMode);
+                CapabilityData capabilityData = PSPUtil.fromReferences(references);
+                modification.addCapabilityData(capabilityData);
+                modifyRequest.addModification(modification);
+            }
+
+            if (!attributes.isEmpty()) {
+                for (DSMLAttr dsmlAttr : attributes) {
+                    Modification modification = new Modification();
+                    modification.setModificationMode(modificationMode);
+                    DSMLModification dsmlMod =
+                            new DSMLModification(dsmlAttr.getName(), dsmlAttr.getValues(), modificationMode);
+                    modification.addOpenContentElement(dsmlMod);
+                    modifyRequest.addModification(modification);
+                }
+            }
 
             modifyRequests.add(modifyRequest);
         }
@@ -621,15 +644,58 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     }
 
     /**
+     * Return the {@link DSMLAttr}s which need to be added or deleted to the {@link PSO}.
+     * 
+     * @param pso the provisioned object
+     * @param modificationMode the modification mode, either add or delete
+     * @return the possibly empty list of attributes
+     * @throws Spml2Exception if an SPML error occurs
+     * @throws PspException if an error occurs searching for attributes
+     */
+    public List<DSMLAttr> processMembershipChangeData(PSO pso, ModificationMode modificationMode)
+            throws Spml2Exception, PspException {
+
+        // the attributes which need to be modified
+        List<DSMLAttr> attributes = new ArrayList<DSMLAttr>();
+
+        // attributes from the pso
+        Map<String, DSMLAttr> dsmlAttrMap = PSPUtil.getDSMLAttrMap(pso.getData());
+
+        // for every attribute
+        for (String dsmlAttrName : dsmlAttrMap.keySet()) {
+            DSMLAttr dsmlAttr = dsmlAttrMap.get(dsmlAttrName);
+
+            // for every attribute value
+            for (DSMLValue dsmlValue : dsmlAttr.getValues()) {
+
+                // perform a search to determine if the attribute exists
+                boolean hasAttribute = psp.hasAttribute(pso.getPsoID(), dsmlAttr.getName(), dsmlValue.getValue());
+
+                // if adding attribute and attribute does not exist, modify
+                if (modificationMode.equals(ModificationMode.ADD) && !hasAttribute) {
+                    attributes.add(dsmlAttr);
+                }
+
+                // if deleting attribute and attribute exists, modify
+                if (modificationMode.equals(ModificationMode.DELETE) && hasAttribute) {
+                    attributes.add(dsmlAttr);
+                }
+            }
+        }
+
+        return attributes;
+    }
+
+    /**
      * Return the {@link Reference}s which need to be added or deleted to the {@link PSO}.
      * 
-     * A {@link HasReference} query is performed to determine if each {@link Reference} exists.
+     * A HasReference query is performed to determine if each {@link Reference} exists.
      * 
      * @param pso the provisioned object
      * @param modificationMode the modification mode, either add or delete
      * @return the possibly empty list of references
      * @throws Spml2Exception if an SPML error occurs
-     * @throws PspException if an error occurs processing the change log entry
+     * @throws PspException if an error occurs searching for references
      */
     public List<Reference> processMembershipChangeReferences(PSO pso, ModificationMode modificationMode)
             throws Spml2Exception, PspException {
