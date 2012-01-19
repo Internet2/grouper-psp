@@ -11,7 +11,7 @@
     <relativePath>../psp-parent</relativePath>
   </parent>
 
-  <name>Provisioning Service Provider - Grouper to LDAP Example</name>
+  <name>Provisioning Service Provider - Example - Grouper to LDAP</name>
   <artifactId>psp-example-grouper-to-ldap</artifactId>
   <packaging>jar</packaging>
 
