@@ -17,7 +17,10 @@
 
 package edu.internet2.middleware.psp.shibboleth;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import junit.textui.TestRunner;
 
@@ -35,486 +38,547 @@ import edu.internet2.middleware.grouper.changeLog.ChangeLogLabels;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTypeBuiltin;
 import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
+import edu.internet2.middleware.grouper.hibernate.HibernateSession;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.shibboleth.dataConnector.BaseDataConnectorTest;
+import edu.internet2.middleware.shibboleth.common.attribute.BaseAttribute;
 
 /**
  * Test for {@link ChangeLogDataConnector}.
  */
 public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
 
-  /** Logger. */
-  private static final Logger LOG = LoggerFactory.getLogger(GrouperChangeLogDataConnectorTest.class);
+    /** Logger. */
+    private static final Logger LOG = LoggerFactory.getLogger(GrouperChangeLogDataConnectorTest.class);
 
-  /** Path to attribute resolver configuration. */
-  public static final String RESOLVER_CONFIG = "GrouperChangeLogDataConnectorTest-resolver.xml";
+    /** Path to attribute resolver configuration. */
+    public static final String RESOLVER_CONFIG = "GrouperChangeLogDataConnectorTest-resolver.xml";
 
-  /** The data connector. */
-  private ChangeLogDataConnector changeLogDataConnector;
+    /** The data connector. */
+    private ChangeLogDataConnector changeLogDataConnector;
 
-  /** The spring context. */
-  private GenericApplicationContext gContext;
+    /** The spring context. */
+    private GenericApplicationContext gContext;
 
-  /**
-   * 
-   * Constructor
-   * 
-   * @param name
-   */
-  public GrouperChangeLogDataConnectorTest(String name) {
-    super(name);
-  }
-
-  /**
-   * Run tests.
-   * 
-   * @param args
-   */
-  public static void main(String[] args) {
-    // TestRunner.run(ChangeLogDataConnectorTest.class);
-    TestRunner.run(new GrouperChangeLogDataConnectorTest("testFilterChangeLogExactAttribute"));
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public void setUp() {
-
-    super.setUp();
-
-    // setup Spring
-    try {
-      gContext = BaseDataConnectorTest.createSpringContext(RESOLVER_CONFIG);
-    } catch (ResourceException e) {
-      e.printStackTrace();
-      throw new RuntimeException(e);
+    /**
+     * 
+     * Constructor
+     * 
+     * @param name
+     */
+    public GrouperChangeLogDataConnectorTest(String name) {
+        super(name);
     }
 
-    // convert temp change log records
-    ChangeLogTempToEntity.convertRecords();
-
-    // delete a group and memberships
-    groupA.delete();
-
-    // convert temp change log records
-    ChangeLogTempToEntity.convertRecords();
-  }
-
-  /**
-   * Assert that the attributes returned from the data connector match the provided attributes.
-   * 
-   * @param dataConnector the data connector
-   * @param sequenceNumber the change log entry identifier
-   * @param correctMap the correct attributes
-   */
-  protected void runResolveTest(ChangeLogDataConnector dataConnector, String sequenceNumber, AttributeMap correctMap) {
-    try {
-      AttributeMap currentMap = new AttributeMap(dataConnector.resolve(getShibContext(sequenceNumber)));
-      LOG.debug("current attributes\n{}", currentMap);
-      LOG.debug("correct attributes\n{}", correctMap);
-      assertEquals(correctMap, currentMap);
-    } catch (Exception e) {
-      throw new RuntimeException(e);
+    /**
+     * Run tests.
+     * 
+     * @param args
+     */
+    public static void main(String[] args) {
+        // TestRunner.run(ChangeLogDataConnectorTest.class);
+        TestRunner.run(new GrouperChangeLogDataConnectorTest("testFilterChangeLogAuditCategory"));
     }
-  }
 
-  /**
-   * Test audit filter by both category and action.
-   */
-  public void testFilterChangeLogAudit() {
+    /**
+     * {@inheritDoc}
+     */
+    public void setUp() {
 
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAudit");
+        super.setUp();
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
-
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
-
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
-
-      // if change log entry matches, build correct map
-      boolean match = false;
-
-      List<AuditEntry> auditEntries = new UserAuditQuery().setExtraCriterion(
-          Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
-
-      for (AuditEntry auditEntry : auditEntries) {
-        if (auditEntry.getAuditType().getActionName().equals("deleteGroup")
-            && auditEntry.getAuditType().getAuditCategory().equals("group")) {
-          match = true;
-          break;
+        // setup Spring
+        try {
+            gContext = BaseDataConnectorTest.createSpringContext(RESOLVER_CONFIG);
+        } catch (ResourceException e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-      }
 
-      if (match) {
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-      }
+        // convert temp change log records
+        ChangeLogTempToEntity.convertRecords();
 
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
+        HibernateSession.byHqlStatic().createQuery("delete from ChangeLogEntryTemp").executeUpdate();
+        HibernateSession.byHqlStatic().createQuery("delete from ChangeLogEntryEntity").executeUpdate();
+
+        // delete a group and memberships
+        groupA.delete();
+
+        // convert temp change log records
+        ChangeLogTempToEntity.convertRecords();
     }
-  }
 
-  /**
-   * Test audit filter by action only.
-   */
-  public void testFilterChangeLogAuditAction() {
+    /**
+     * Assert that the attributes returned from the data connector match the provided attributes.
+     * 
+     * @param dataConnector the data connector
+     * @param sequenceNumber the change log entry identifier
+     * @param correctMap the correct attributes
+     */
+    protected void runResolveTest(ChangeLogDataConnector dataConnector, String sequenceNumber, AttributeMap correctMap) {
+        try {
+            AttributeMap currentMap = new AttributeMap(dataConnector.resolve(getShibContext(sequenceNumber)));
+            LOG.debug("current attributes\n{}", currentMap);
+            LOG.debug("correct attributes\n{}", correctMap);
 
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAuditAction");
-
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
-
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
-
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
-
-      // if change log entry matches, build correct map
-      boolean match = false;
-
-      List<AuditEntry> auditEntries = new UserAuditQuery().setExtraCriterion(
-          Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
-
-      for (AuditEntry auditEntry : auditEntries) {
-        if (auditEntry.getAuditType().getActionName().equals("deleteGroup")) {
-          match = true;
-          break;
-        }
-      }
-
-      if (match) {
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
-    }
-  }
-
-  /**
-   * Test audit filter by category only.
-   */
-  public void testFilterChangeLogAuditCategory() {
-
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAuditCategory");
-
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
-
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
-
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
-
-      // if change log entry matches, build correct map
-      boolean match = false;
-
-      List<AuditEntry> auditEntries = new UserAuditQuery().setExtraCriterion(
-          Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
-
-      for (AuditEntry auditEntry : auditEntries) {
-        if (auditEntry.getAuditType().getAuditCategory().equals("stem")) {
-          match = true;
-          break;
-        }
-      }
-
-      if (match) {
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_ADD)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_ADD.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_UPDATE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_UPDATE.values()) {
-            // a runtime exception is thrown here, see ChangeLogLabels.STEM_UPDATE.displayExtension
-            if (changeLogLabel.name().equals(ChangeLogLabels.STEM_UPDATE.displayExtension.name())) {
-              continue;
+            // remove 'subject* attributes from comparison
+            Map<String, BaseAttribute> map = currentMap.getMap();
+            Set<String> keysToRemove = new HashSet<String>();
+            for (String key : map.keySet()) {
+                if (key.equals("subjectId")) {
+                    continue;
+                }
+                if (key.startsWith("subject")) {
+                    keysToRemove.add(key);
+                }
             }
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-      }
+            for (String key : keysToRemove) {
+                map.remove(key);
+            }
+            LOG.debug("current attributes\n{}", currentMap);
 
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
+            assertEquals(correctMap, currentMap);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
-  }
 
-  /**
-   * Test filter by change log entry category and action.
-   */
-  public void testFilterChangeLogEntry() {
+    /**
+     * Test audit filter by both category and action.
+     */
+    public void testFilterChangeLogAudit() {
 
-    // initialize the data connector
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogEntry");
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAudit");
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
 
-      // if change log entry matches, build correct map
-      if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-        // for every field in the change log entry, add the corresponding attribute to the map
-        for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-          correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
+            // if change log entry matches, build correct map
+            boolean match = false;
+
+            List<AuditEntry> auditEntries =
+                    new UserAuditQuery().setExtraCriterion(
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+
+            for (AuditEntry auditEntry : auditEntries) {
+
+                if (auditEntry.getAuditType().getActionName().equals("deleteGroup")
+                        && auditEntry.getAuditType().getAuditCategory().equals("group")) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
         }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
     }
-  }
 
-  /**
-   * Test filter by change log action only.
-   */
-  public void testFilterChangeLogEntryAction() {
+    /**
+     * Test audit filter by action only.
+     */
+    public void testFilterChangeLogAuditAction() {
 
-    // initialize the data connector
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogEntryAction");
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAuditAction");
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
 
-      // if change log entry matches, build correct map
-      if (changeLogEntry.getChangeLogType().getActionName().equals("deleteMembership")) {
-        // for every field in the change log entry, add the corresponding attribute to the map
-        for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-          correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
+            // if change log entry matches, build correct map
+            boolean match = false;
+
+            List<AuditEntry> auditEntries =
+                    new UserAuditQuery().setExtraCriterion(
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+
+            for (AuditEntry auditEntry : auditEntries) {
+                if (auditEntry.getAuditType().getActionName().equals("deleteGroup")) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
         }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
     }
-  }
 
-  /**
-   * Test filter by change log category only.
-   */
-  public void testFilterChangeLogEntryCategory() {
+    /**
+     * Test audit filter by category only.
+     */
+    public void testFilterChangeLogAuditCategory() {
 
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogEntryCategory");
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAuditCategory");
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
 
-      // if change log entry matches, build correct map
-      if (changeLogEntry.getChangeLogType().getChangeLogCategory().equals("membership")) {
-        // for every field in the change log entry, add the corresponding attribute to the map
-        if (changeLogEntry.getChangeLogType().equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
+            // if change log entry matches, build correct map
+            boolean match = false;
+
+            List<AuditEntry> auditEntries =
+                    new UserAuditQuery().setExtraCriterion(
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+
+            for (AuditEntry auditEntry : auditEntries) {
+                if (auditEntry.getAuditType().getAuditCategory().equals("stem")) {
+                    match = true;
+                    break;
+                }
+            }
+
+            if (match) {
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_ADD)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_ADD.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_UPDATE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_UPDATE.values()) {
+                        // a runtime exception is thrown here, see ChangeLogLabels.STEM_UPDATE.displayExtension
+                        if (changeLogLabel.name().equals(ChangeLogLabels.STEM_UPDATE.displayExtension.name())) {
+                            continue;
+                        }
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
         }
-        if (changeLogEntry.getChangeLogType().equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_ADD)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_ADD.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
     }
-  }
 
-  /**
-   * Test filter by change log category and action and audit category and action.
-   */
-  public void testFilterDeleteMembership() {
+    /**
+     * Test filter by change log entry category and action.
+     */
+    public void testFilterChangeLogEntry() {
 
-    groupB.deleteMember(SubjectTestHelper.SUBJ1);
+        // initialize the data connector
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogEntry");
 
-    ChangeLogTempToEntity.convertRecords();
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterDeleteMembership");
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
 
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+            // if change log entry matches, build correct map
+            if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                // for every field in the change log entry, add the corresponding attribute to the map
+                for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                    correctMap
+                            .setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                }
+            }
 
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
-
-      // if change log entry matches, build correct map
-      boolean match = false;
-
-      List<AuditEntry> auditEntries = new UserAuditQuery().setExtraCriterion(
-          Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
-
-      if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-        for (AuditEntry auditEntry : auditEntries) {
-          if (!(auditEntry.getAuditType().getActionName().equals("deleteGroup") && auditEntry.getAuditType()
-              .getAuditCategory().equals("group"))) {
-            match = true;
-            break;
-          }
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
         }
-      }
-
-      if (match) {
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
     }
-  }
 
-  /**
-   * Test filter by change log category and action and audit category and action. Should not match any entries.
-   */
-  public void testFilterDeleteMembershipNoMatch() {
+    /**
+     * Test filter by change log action only.
+     */
+    public void testFilterChangeLogEntryAction() {
 
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterDeleteMembership");
+        // initialize the data connector
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogEntryAction");
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
 
-      // if change log entry matches, build correct map
-      boolean match = false;
+            // if change log entry matches, build correct map
+            if (changeLogEntry.getChangeLogType().getActionName().equals("deleteMembership")) {
+                // for every field in the change log entry, add the corresponding attribute to the map
+                for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                    correctMap
+                            .setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                }
+            }
 
-      List<AuditEntry> auditEntries = new UserAuditQuery().setExtraCriterion(
-          Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
-
-      if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-        for (AuditEntry auditEntry : auditEntries) {
-          if (!(auditEntry.getAuditType().getActionName().equals("deleteGroup") && auditEntry.getAuditType()
-              .getAuditCategory().equals("group"))) {
-            match = true;
-            break;
-          }
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
         }
-      }
-
-      if (match) {
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-        if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
-          for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          }
-        }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
     }
-  }
 
-  /**
-   * Test filter by change log exact attribute.
-   */
-  public void testFilterChangeLogExactAttribute() {
+    /**
+     * Test filter by change log category only.
+     */
+    public void testFilterChangeLogEntryCategory() {
 
-    // initialize the data connector
-    changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogExactAttribute");
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogEntryCategory");
 
-    // retrieve all change log entries
-    List<ChangeLogEntry> changeLogEntryList = GrouperDAOFactory.getFactory().getChangeLogEntry()
-        .retrieveBatch(-1, 1000);
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
-    // for every change log entry
-    for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
-      // the empty map
-      AttributeMap correctMap = new AttributeMap();
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
 
-      // if change log entry matches, build correct map
-      if (changeLogEntry.getChangeLogType().getActionName().equals("updateStem")) {
-        // for every field in the change log entry, add the corresponding attribute to the map
+            // if change log entry matches, build correct map
+            if (changeLogEntry.getChangeLogType().getChangeLogCategory().equals("membership")) {
+                // for every field in the change log entry, add the corresponding attribute to the map
+                if (changeLogEntry.getChangeLogType().equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.getChangeLogType().equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_ADD)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_ADD.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+            }
 
-        for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_UPDATE.values()) {
-          try {
-            correctMap.setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
-          } catch (RuntimeException e) {
-            // do not blame me
-          }
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
         }
-      }
-
-      // verify that the correct attributes are returned from the data connector for every change log entry
-      runResolveTest(changeLogDataConnector, ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()),
-          correctMap);
     }
-  }
+
+    /**
+     * Test filter by change log category and action and audit category and action.
+     */
+    public void testFilterDeleteMembership() {
+
+        groupB.deleteMember(SubjectTestHelper.SUBJ1);
+
+        ChangeLogTempToEntity.convertRecords();
+
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterDeleteMembership");
+
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
+
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
+
+            // if change log entry matches, build correct map
+            boolean match = false;
+
+            List<AuditEntry> auditEntries =
+                    new UserAuditQuery().setExtraCriterion(
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+
+            if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                for (AuditEntry auditEntry : auditEntries) {
+                    if (!(auditEntry.getAuditType().getActionName().equals("deleteGroup") && auditEntry.getAuditType()
+                            .getAuditCategory().equals("group"))) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+
+            if (match) {
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+        }
+    }
+
+    /**
+     * Test filter by change log category and action and audit category and action. Should not match any entries.
+     */
+    public void testFilterDeleteMembershipNoMatch() {
+
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterDeleteMembership");
+
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
+
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
+
+            // if change log entry matches, build correct map
+            boolean match = false;
+
+            List<AuditEntry> auditEntries =
+                    new UserAuditQuery().setExtraCriterion(
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+
+            if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                for (AuditEntry auditEntry : auditEntries) {
+                    if (!(auditEntry.getAuditType().getActionName().equals("deleteGroup") && auditEntry.getAuditType()
+                            .getAuditCategory().equals("group"))) {
+                        match = true;
+                        break;
+                    }
+                }
+            }
+
+            if (match) {
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+                if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+        }
+    }
+
+    /**
+     * Test filter by change log exact attribute.
+     */
+    public void testFilterChangeLogExactAttribute() {
+
+        // initialize the data connector
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogExactAttribute");
+
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
+
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
+
+            // if change log entry matches, build correct map
+            if (changeLogEntry.getChangeLogType().getActionName().equals("updateStem")) {
+                // for every field in the change log entry, add the corresponding attribute to the map
+
+                for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_UPDATE.values()) {
+                    try {
+                        correctMap.setAttribute(changeLogLabel.name(),
+                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    } catch (RuntimeException e) {
+                        // do not blame me
+                    }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+        }
+    }
 
 }
