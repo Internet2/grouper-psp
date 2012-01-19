@@ -1,0 +1,74 @@
+<assembly>
+  <id>bin</id>
+  <formats>
+    <!-- <format>tar.gz</format> -->
+    <format>zip</format>
+  </formats>
+
+  <dependencySets>
+
+    <dependencySet>
+      <outputDirectory>/lib/custom/</outputDirectory>
+      <includes>
+        <include>edu.internet2.middleware.grouper:grouper-shib</include>
+      </includes>
+    </dependencySet>
+
+    <dependencySet>
+      <outputDirectory>/lib/custom/</outputDirectory>
+      <excludes>
+        <exclude>edu.internet2.middleware.grouper:*</exclude>
+        <exclude>ant-contrib:ant-contrib</exclude>
+        <exclude>c3p0:c3p0</exclude>
+        <exclude>commons-cli:commons-cli</exclude>
+        <exclude>commons-codec:commons-codec</exclude>
+        <exclude>commons-lang:commons-lang</exclude>
+        <exclude>log4j:log4j</exclude>
+        <exclude>net.sf.ehcache:ehcache-core</exclude>
+      </excludes>
+
+      <useProjectArtifact>false</useProjectArtifact>
+      <useTransitiveDependencies>true</useTransitiveDependencies>
+      <useTransitiveFiltering>true</useTransitiveFiltering>
+    </dependencySet>
+
+  </dependencySets>
+
+
+  <fileSets>
+
+    <fileSet>
+      <directory>../psp-example-grouper-to-openldap/src/test/resources</directory>
+      <outputDirectory>/conf/grouper-to-openldap</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+
+    <fileSet>
+      <directory>../psp-example-grouper-to-ldap/src/test/resources</directory>
+      <outputDirectory>/conf/grouper-to-ldap</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+
+    <fileSet>
+      <directory>../psp-example-grouper-to-tivoli/src/test/resources</directory>
+      <outputDirectory>/conf/grouper-to-tivoli</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+
+    <fileSet>
+      <directory>../psp-example-ldap-to-grouper/src/test/resources</directory>
+      <outputDirectory>/conf/ldap-to-grouper</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+
+  </fileSets>
+
+</assembly>
