@@ -1,7 +1,7 @@
 <assembly>
   <id>bin</id>
   <formats>
-    <!-- <format>tar.gz</format> -->
+    <format>tar.gz</format>
     <format>zip</format>
   </formats>
 
@@ -34,41 +34,35 @@
 
   </dependencySets>
 
-
   <fileSets>
-
-    <fileSet>
-      <directory>../psp-example-grouper-to-openldap/src/test/resources</directory>
-      <outputDirectory>/conf/grouper-to-openldap</outputDirectory>
-      <excludes>
-        <exclude>**/data/</exclude>
-      </excludes>
-    </fileSet>
-
     <fileSet>
       <directory>../psp-example-grouper-to-ldap/src/test/resources</directory>
-      <outputDirectory>/conf/grouper-to-ldap</outputDirectory>
+      <outputDirectory>/conf/psp-example-grouper-to-ldap</outputDirectory>
       <excludes>
         <exclude>**/data/</exclude>
       </excludes>
     </fileSet>
-
+    <fileSet>
+      <directory>../psp-example-grouper-to-openldap/src/test/resources</directory>
+      <outputDirectory>/conf/psp-example-grouper-to-openldap</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
     <fileSet>
       <directory>../psp-example-grouper-to-tivoli/src/test/resources</directory>
-      <outputDirectory>/conf/grouper-to-tivoli</outputDirectory>
+      <outputDirectory>/conf/psp-example-grouper-to-tivoli</outputDirectory>
       <excludes>
         <exclude>**/data/</exclude>
       </excludes>
     </fileSet>
-
     <fileSet>
       <directory>../psp-example-ldap-to-grouper/src/test/resources</directory>
-      <outputDirectory>/conf/ldap-to-grouper</outputDirectory>
+      <outputDirectory>/conf/psp-example-ldap-to-grouper</outputDirectory>
       <excludes>
         <exclude>**/data/</exclude>
       </excludes>
     </fileSet>
-
   </fileSets>
 
 </assembly>

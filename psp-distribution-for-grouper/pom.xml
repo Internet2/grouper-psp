@@ -15,6 +15,8 @@
   <name>Provisioning Service Provider - Distribution For Grouper</name>
   <artifactId>psp-distribution-for-grouper</artifactId>
 
+  <packaging>pom</packaging>
+
   <dependencies>
 
     <dependency>
@@ -71,6 +73,10 @@
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <finalName>grouper.psp-${project.version}</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+        </configuration>
       </plugin>
     </plugins>
   </build>
