@@ -304,10 +304,13 @@ public class PSPTestHelper {
       for (String string : strings) {
 
         if (!DatatypeHelper.isEmpty(string)) {
-          string = string.replace(props.getProperty("edu.vt.middleware.ldap.base"), "${edu.vt.middleware.ldap.base}");
+          // string = string.replace(props.getProperty("edu.vt.middleware.ldap.base"), "${edu.vt.middleware.ldap.base}");
+          
+          string = string.replace(props.getProperty("edu.internet2.middleware.psp.groupsBaseDn"), "${edu.internet2.middleware.psp.groupsBaseDn}");
+          string = string.replace(props.getProperty("edu.internet2.middleware.psp.peopleBaseDn"), "${edu.internet2.middleware.psp.peopleBaseDn}");
 
           string = string.replace("<dsml:value>" + props.getProperty("groupObjectClass") + "</dsml:value>",
-              "<dsml:value>${groupObjectClass}</dsml:value>");
+              "<dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>");
 
           // xml = xml.replaceAll("requestID='2.*?'", "requestID='REQUEST_ID'");
 
