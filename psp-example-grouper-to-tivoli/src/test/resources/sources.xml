@@ -98,7 +98,7 @@ Grouper subject resolver configuration
       <param-value>cn</param-value>
     </init-param>     
     
-     <init-param>
+    <init-param>
       <param-name>SubjectID_AttributeType</param-name>
       <param-value>uid</param-value>
     </init-param>
