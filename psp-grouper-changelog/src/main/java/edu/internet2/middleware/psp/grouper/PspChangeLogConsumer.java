@@ -47,6 +47,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.internet2.middleware.grouper.app.loader.GrouperLoaderConfig;
+import edu.internet2.middleware.grouper.changeLog.ChangeLogConsumer;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogConsumerBase;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogEntry;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogLabel;
@@ -667,6 +668,20 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
             // for every attribute value
             for (DSMLValue dsmlValue : dsmlAttr.getValues()) {
+
+                // if modification mode is delete, do not delete value if retain all values is true
+                if (modificationMode.equals(ModificationMode.DELETE)) {
+                    String entityName = pso.findOpenContentAttrValueByName(Pso.ENTITY_NAME_ATTRIBUTE);
+                    if (entityName != null) {
+                        Pso psoDefinition = psp.getPso(pso.getPsoID().getTargetID(), entityName);
+                        if (psoDefinition != null) {
+                            boolean retainAll = psoDefinition.getPsoAttribute(dsmlAttrName).isRetainAll();
+                            if (retainAll) {
+                                continue;
+                            }
+                        }
+                    }
+                }
 
                 // perform a search to determine if the attribute exists
                 boolean hasAttribute = psp.hasAttribute(pso.getPsoID(), dsmlAttr.getName(), dsmlValue.getValue());
