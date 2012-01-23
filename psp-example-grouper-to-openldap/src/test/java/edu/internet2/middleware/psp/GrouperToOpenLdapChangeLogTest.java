@@ -52,6 +52,7 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     public void testMembershipAdd() throws Exception {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAdd.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject0.before.ldif");
 
         edu = setUpEdu();
         groupA = setUpGroupA();
@@ -76,6 +77,8 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     public void testMembershipAddAlreadyExists() throws Exception {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddAlreadyExists.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject0.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddAlreadyExists.subject1.before.ldif");
 
         edu = setUpEdu();
         groupA = setUpGroupA();
@@ -99,6 +102,8 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     public void testMembershipAddGroup() throws Exception {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddGroup.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject0.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject1.before.ldif");
 
         edu = setUpEdu();
         groupA = setUpGroupA();
@@ -123,6 +128,8 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     public void testMembershipDelete() throws Exception {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipDelete.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject0.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddAlreadyExists.subject1.before.ldif");
 
         edu = setUpEdu();
         groupA = setUpGroupA();
@@ -148,6 +155,7 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     public void testMembershipDeleteAlreadyDeleted() throws Exception {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipDeleteAlreadyDeleted.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject0.before.ldif");
 
         edu = setUpEdu();
         groupA = setUpGroupA();
@@ -172,6 +180,8 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     public void testMembershipDeleteGroup() throws Exception {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipDeleteGroup.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject0.before.ldif");
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.subject1.before.ldif");
 
         edu = setUpEdu();
         groupA = setUpGroupA();

@@ -441,7 +441,7 @@
   </resolver:AttributeDefinition>
 
 
-  <!-- Group membership identifiers. -->
+  <!-- Change log group membership object. -->
 
   <!-- The value of the "changeLogMembershipGroupDn" attribute is the LDAP DN of the group of a membership change log entry. -->
   <resolver:AttributeDefinition
@@ -457,8 +457,8 @@
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The value of the "changeLogMembershipSubjectId" attribute is the subject identifier of the "ldap" source member 
-    of a membership change log entry. -->
+  <!-- The value of the "changeLogMembershipSubjectId" attribute is the subject identifier of the "ldap" source member of 
+    a membership change log entry. -->
   <resolver:AttributeDefinition
     id="changeLogMembershipSubjectId"
     xsi:type="ad:Script">
@@ -520,6 +520,46 @@
             }      
         }
     ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+
+  <!-- Change log member membership object. -->
+
+  <!-- The LDAP DN of a member. The value of this attribute is the "dn" of subjects whose source id is "ldap". -->
+  <resolver:AttributeDefinition
+    id="changeLogMembershipMemberDn"
+    xsi:type="psp:PSOIdentifier"
+    sourceAttributeID="changeLogLdapSubjectDn">
+    <resolver:Dependency ref="changeLogLdapSubjectDn" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "changeLogLdapSubjectDn" attribute is the value of the "subjectdn" attribute for subjects from the 
+    "ldap" source. The "subjectdn" attribute value is the "dn" of subjects from the "ldap" source. -->
+  <resolver:AttributeDefinition
+    id="changeLogLdapSubjectDn"
+    xsi:type="ad:Script">
+    <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        changeLogLdapSubjectDn = new BasicAttribute("changeLogLdapSubjectDn");
+        if (typeof sourceId != "undefined" && sourceId != null ){
+            if (sourceId.getValues().contains("ldap")) {
+                if (typeof subjectdn != "undefined" && subjectdn != null ){
+                    changeLogLdapSubjectDn.getValues().add(subjectdn.getValues().get(0));
+                }
+            }      
+        }
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the member "changeLogMemberIsMemberOf" attribute is the name of the group from the change log entry. -->
+  <resolver:AttributeDefinition
+    id="changeLogMemberIsMemberOf"
+    xsi:type="ad:Simple"
+    sourceAttributeID="groupName">
+    <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
 </AttributeResolver>

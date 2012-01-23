@@ -1,5 +1,5 @@
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/01/17-21:46:06.620' returnData='everything'>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/01/23-17:06:04.134' returnData='everything'>
   <psp:id ID='change_log_sequence_number:341'/>
 </psp:calcRequest>
 
@@ -8,14 +8,14 @@
   <psp:schemaEntity targetID='ldap' entityName='group'/>
 </psp:calcRequest>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/17-21:46:06.721'>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/23-17:06:04.231'>
   <psp:id ID='edu:groupA'/>
   <psp:pso entityName='group'>
     <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </psp:pso>
 </psp:calcResponse>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/17-21:46:06.620'>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/23-17:06:04.134'>
   <psp:id ID='change_log_sequence_number:341'/>
   <psp:pso entityName='groupMembership'>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -32,7 +32,7 @@
   </psp:pso>
 </psp:calcResponse>
 
-<spmlsearch:SearchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/17-21:46:06.804' returnData='identifier'>
+<spmlsearch:SearchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/23-17:06:04.299' returnData='identifier'>
   <spmlsearch:query targetID='ldap' scope='pso'>
     <spmlref:hasReference typeOfReference='member'>
       <spmlref:toPsoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -41,13 +41,13 @@
   </spmlsearch:query>
 </spmlsearch:SearchRequest>
 
-<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/17-21:46:06.804'>
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/23-17:06:04.299'>
   <spmlsearch:pso entityName='group'>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </spmlsearch:pso>
 </spmlsearch:searchResponse>
 
-<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/17-21:46:06.818' returnData='identifier'>
+<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/23-17:06:04.328' returnData='identifier'>
   <spmlsearch:query targetID='ldap' scope='pso'>
     <dsml:filter xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core'>
       <dsml:equalityMatch name='hasMember'>
@@ -58,13 +58,13 @@
   </spmlsearch:query>
 </spmlsearch:searchRequest>
 
-<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/17-21:46:06.818'>
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/23-17:06:04.328'>
   <spmlsearch:pso entityName='group'>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </spmlsearch:pso>
 </spmlsearch:searchResponse>
 
-<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='groupMembership' requestID='2012/01/17-21:46:06.825' returnData='identifier'>
+<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='groupMembership' requestID='2012/01/23-17:06:04.339' returnData='identifier'>
   <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   <modification modificationMode='delete'>
     <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
@@ -80,13 +80,13 @@
   </modification>
 </modifyRequest>
 
-<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/17-21:46:06.825'>
+<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/23-17:06:04.339'>
   <pso>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </pso>
 </modifyResponse>
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/01/17-21:46:06.840' returnData='everything'>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/01/23-17:06:04.354' returnData='everything'>
   <psp:id ID='change_log_sequence_number:342'/>
 </psp:calcRequest>
 
@@ -95,14 +95,14 @@
   <psp:schemaEntity targetID='ldap' entityName='member'/>
 </psp:calcRequest>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/17-21:46:06.876'>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/23-17:06:04.398'>
   <psp:id ID='test.subject.0'/>
   <psp:pso entityName='member'>
     <psoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
   </psp:pso>
 </psp:calcResponse>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/17-21:46:06.840'>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/01/23-17:06:04.354'>
   <psp:id ID='change_log_sequence_number:342'/>
   <psp:pso entityName='groupMembership'>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -117,9 +117,20 @@
       </spmlref:reference>
     </capabilityData>
   </psp:pso>
+  <psp:pso entityName='memberMembership'>
+    <psoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+    <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+        <dsml:value>eduMember</dsml:value>
+      </dsml:attr>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+        <dsml:value>edu:groupB</dsml:value>
+      </dsml:attr>
+    </data>
+  </psp:pso>
 </psp:calcResponse>
 
-<spmlsearch:SearchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/17-21:46:06.919' returnData='identifier'>
+<spmlsearch:SearchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/23-17:06:04.444' returnData='identifier'>
   <spmlsearch:query targetID='ldap' scope='pso'>
     <spmlref:hasReference typeOfReference='member'>
       <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
@@ -128,13 +139,13 @@
   </spmlsearch:query>
 </spmlsearch:SearchRequest>
 
-<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/17-21:46:06.919'>
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/23-17:06:04.444'>
   <spmlsearch:pso entityName='group'>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </spmlsearch:pso>
 </spmlsearch:searchResponse>
 
-<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/17-21:46:06.927' returnData='identifier'>
+<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/23-17:06:04.455' returnData='identifier'>
   <spmlsearch:query targetID='ldap' scope='pso'>
     <dsml:filter xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core'>
       <dsml:equalityMatch name='hasMember'>
@@ -145,13 +156,26 @@
   </spmlsearch:query>
 </spmlsearch:searchRequest>
 
-<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/17-21:46:06.927'>
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/23-17:06:04.455'>
   <spmlsearch:pso entityName='group'>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </spmlsearch:pso>
 </spmlsearch:searchResponse>
 
-<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='groupMembership' requestID='2012/01/17-21:46:06.934' returnData='identifier'>
+<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/01/23-17:06:04.471' returnData='identifier'>
+  <spmlsearch:query targetID='ldap' scope='pso'>
+    <dsml:filter xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core'>
+      <dsml:equalityMatch name='isMemberOf'>
+        <dsml:value>edu:groupB</dsml:value>
+      </dsml:equalityMatch>
+    </dsml:filter>
+    <spmlsearch:basePsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+  </spmlsearch:query>
+</spmlsearch:searchRequest>
+
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/01/23-17:06:04.471'/>
+
+<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='groupMembership' requestID='2012/01/23-17:06:04.470' returnData='identifier'>
   <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   <modification modificationMode='delete'>
     <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
@@ -167,7 +191,7 @@
   </modification>
 </modifyRequest>
 
-<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/17-21:46:06.934'>
+<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/23-17:06:04.470'>
   <pso>
     <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   </pso>

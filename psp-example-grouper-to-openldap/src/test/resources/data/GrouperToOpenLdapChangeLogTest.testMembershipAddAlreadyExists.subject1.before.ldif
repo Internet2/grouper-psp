@@ -1,0 +1,8 @@
+dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+changetype: modify
+add: objectClass
+objectClass: eduMember
+-
+add: isMemberOf
+isMemberOf: edu:groupA
+-

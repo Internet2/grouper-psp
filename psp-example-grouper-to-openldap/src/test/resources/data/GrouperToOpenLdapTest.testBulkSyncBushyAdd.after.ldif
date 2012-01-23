@@ -36,6 +36,7 @@ objectclass: organizationalPerson
 cn: test.subject.0
 sn: subject.0
 objectClass: eduMember
+isMemberOf: edu:groupA
 
 dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
@@ -44,6 +45,7 @@ objectclass: organizationalPerson
 cn: test.subject.1
 sn: subject.1
 objectClass: eduMember
+isMemberOf: edu:groupB
 
 dn: cn=test.subject.2,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top

@@ -33,17 +33,21 @@ ou: people
 
 dn: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 cn: test.subject.0
+objectClass: eduMember
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
 sn: subject.0
+isMemberOf: edu:groupA
 
 dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 cn: test.subject.1
+objectClass: eduMember
 objectClass: organizationalPerson
 objectClass: person
 objectClass: top
 sn: subject.1
+isMemberOf: edu:groupB
 
 dn: cn=test.subject.2,${edu.internet2.middleware.psp.peopleBaseDn}
 cn: test.subject.2
