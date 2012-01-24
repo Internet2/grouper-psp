@@ -505,7 +505,7 @@ public class PspOptions {
     }
 
     /** Program name. */
-    public static final String NAME = "ldappcng";
+    public static final String NAME = "psp";
 
     /** Command line arguments. */
     private String[] args;
