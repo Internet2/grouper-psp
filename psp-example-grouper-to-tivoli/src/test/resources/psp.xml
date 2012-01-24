@@ -156,6 +156,28 @@
 
   </pso>
 
+  <!-- Provision a member's membership triggered by the grouper change log. -->
+  <pso id="memberMembership">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipMemberDn"
+      targetId="ldap"
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="changeLogMemberIsMemberOf" />
+
+  </pso>
+
 </psp>
  
 
