@@ -36,39 +36,6 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://grouper.internet2.edu/psp classpath:/schema/psp.xsd">
 
-  <!-- Provision a grouper stem as an ldap organizational unit. -->
-  <pso
-    id="stem"
-    authoritative="true"
-    allSourceIdentifiersRef="stemNames">
-
-    <!-- The ldap organizational unit DN. -->
-    <identifier
-      ref="stemDn"
-      targetId="ldap"
-      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
-
-    <!-- Identifies stem objects which exist on the target by objectclass attribute value. -->
-    <identifyingAttribute
-      name="objectclass"
-      value="organizationalUnit" />
-
-    <!-- The "old" ldap organizational unit DN calculated from stem update change log events. -->
-    <alternateIdentifier ref="stemDnAlternateChangeLog" />
-
-
-    <!-- The ldap organizational unit "objectClass" attribute. -->
-    <attribute
-      name="objectClass"
-      ref="stemObjectclass" />
-
-    <!-- The ldap organizational unit "ou" attribute. -->
-    <attribute
-      name="ou"
-      ref="stemOu" />
-
-  </pso>
-
   <!-- Provision a grouper group as an ldap group. -->
   <pso
     id="group"
