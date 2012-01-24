@@ -291,6 +291,11 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         LOG.info("PSP Consumer '{}' - Starting full sync", name);
 
+        if (fullSyncIsRunning) {
+            LOG.info("PSP Consumer '{}' - Full sync is already running, will defer to next scheduled trigger.", name);
+            return null;
+        }
+
         fullSyncIsRunning = true;
 
         BulkSyncResponse response = psp.execute(new BulkSyncRequest());
