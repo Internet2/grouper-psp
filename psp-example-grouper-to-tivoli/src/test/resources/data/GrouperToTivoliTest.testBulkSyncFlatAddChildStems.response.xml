@@ -1,0 +1,243 @@
+<psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:53.892'>
+      <pso entityName='group'>
+        <psoID ID='cn=edu:courses:fall:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>edu:courses:fall:courseA</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>my name is test.subject.0</dsml:value>
+            <dsml:value>my name is test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:courses:fall:courseA'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:53.957'>
+      <pso entityName='group'>
+        <psoID ID='cn=edu:courses:fall:courseB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>edu:courses:fall:courseB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>my name is test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:courses:fall:courseB'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.028'>
+      <pso entityName='group'>
+        <psoID ID='cn=edu:courses:spring:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>edu:courses:spring:courseA</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>my name is test.subject.0</dsml:value>
+            <dsml:value>my name is test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:courses:spring:courseA'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.081'>
+      <pso entityName='group'>
+        <psoID ID='cn=edu:courses:spring:courseB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>edu:courses:spring:courseB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>my name is test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:courses:spring:courseB'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.140'>
+      <pso entityName='group'>
+        <psoID ID='cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>edu:groupA</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>my name is test.subject.0</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:groupA'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.189'>
+      <pso entityName='group'>
+        <psoID ID='cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>edu:groupB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>descriptionB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>my name is test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:groupB'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.287'>
+      <pso entityName='member'>
+        <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+            <dsml:value>edu:courses:fall:courseA</dsml:value>
+            <dsml:value>edu:courses:spring:courseA</dsml:value>
+            <dsml:value>edu:groupA</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:courses:fall:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:courses:spring:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </modifyResponse>
+    <psp:id ID='test.subject.0'/>
+  </psp:syncResponse>
+  <psp:syncResponse>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.432'>
+      <pso entityName='member'>
+        <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+            <dsml:value>edu:courses:fall:courseA</dsml:value>
+            <dsml:value>edu:courses:fall:courseB</dsml:value>
+            <dsml:value>edu:courses:spring:courseA</dsml:value>
+            <dsml:value>edu:courses:spring:courseB</dsml:value>
+            <dsml:value>edu:groupB</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:courses:fall:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:courses:fall:courseB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:courses:spring:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:courses:spring:courseB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </modifyResponse>
+    <psp:id ID='test.subject.1'/>
+  </psp:syncResponse>
+</psp:bulkSyncResponse>
