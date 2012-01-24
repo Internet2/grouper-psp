@@ -96,6 +96,16 @@
         toObject="group" />
 
     </references>
+    
+    <!-- The ldap group "memberOf" attribute. -->
+    <references
+      name="memberOf">
+
+      <reference
+        ref="groupIsMemberOf"
+        toObject="group" />
+
+    </references>
 
   </pso>
 
@@ -125,6 +135,16 @@
     <attribute
       name="isMemberOf"
       ref="memberIsMemberOf" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references
+      name="memberOf">
+
+      <reference
+        ref="memberIsMemberOf"
+        toObject="group" />
+
+    </references>
 
   </pso>
 
