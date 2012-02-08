@@ -17,6 +17,11 @@
 
   <packaging>pom</packaging>
 
+  <!-- The name of the package produced for the Grouper installer should not have a qualifier. -->
+  <properties>
+    <my.finalName>grouper.psp-2.1.0</my.finalName>
+  </properties>
+
   <dependencies>
 
     <dependency>
@@ -74,7 +79,7 @@
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-          <finalName>grouper.psp-${project.version}</finalName>
+          <finalName>${my.finalName}</finalName>
           <appendAssemblyId>false</appendAssemblyId>
         </configuration>
       </plugin>
