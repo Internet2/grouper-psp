@@ -18,6 +18,10 @@
 package edu.internet2.middleware.psp;
 
 import junit.textui.TestRunner;
+import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.GrouperSession;
+import edu.internet2.middleware.grouper.Stem;
+import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.psp.grouper.PspChangeLogConsumer;
 
@@ -31,7 +35,7 @@ public class GrouperToTivoliChangeLogTest extends BaseGrouperToLdapChangeLogTest
      */
     public static void main(String[] args) {
         // TestRunner.run(GrouperToTivoliChangeLogTest.class);
-        TestRunner.run(new GrouperToTivoliChangeLogTest("testMembershipDeleteGroup"));
+        TestRunner.run(new GrouperToTivoliChangeLogTest("testChangeLogMembershipGroupName"));
     }
 
     /**
@@ -145,6 +149,26 @@ public class GrouperToTivoliChangeLogTest extends BaseGrouperToLdapChangeLogTest
 
         verifySpml(DATA_PATH + "GrouperToTivoliChangeLogTest.testMembershipDeleteGroup.xml");
         verifyLdif(DATA_PATH + "GrouperToTivoliChangeLogTest.testMembershipDeleteGroup.after.ldif");
+    }
+
+    /**
+     * Test provisioning resulting from the adding of a membership to a group outside of the stem to be provisioned.
+     * 
+     * @throws Exception
+     */
+    public void testChangeLogMembershipGroupName() throws Exception {
+
+        clearChangeLog();
+
+        Stem root = StemFinder.findRootStem(GrouperSession.staticGrouperSession());
+        Stem child = root.addChildStem("childStem", "childStem");
+        Group group = child.addChildGroup("childGroup", "childGroup");
+        group.addMember(LdapSubjectTestHelper.SUBJ0);
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToTivoliChangeLogTest.testChangeLogMembershipGroupName.xml");
     }
 
 }

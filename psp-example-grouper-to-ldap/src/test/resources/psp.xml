@@ -36,14 +36,13 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://grouper.internet2.edu/psp classpath:/schema/psp.xsd">
 
-  <!-- Provision a grouper stem as an ldap organizationalUnit. -->
-  <!-- If authoritative="true", orphan objects under the baseId matching the identifyingAttribute will be deleted. -->
+  <!-- Provision a grouper stem as an ldap organizational unit. -->
   <pso
     id="stem"
     authoritative="true"
     allSourceIdentifiersRef="stemNames">
 
-    <!-- The OU DN. -->
+    <!-- The ldap organizational unit DN. -->
     <identifier
       ref="stemDn"
       targetId="ldap"
@@ -54,64 +53,64 @@
       name="objectclass"
       value="organizationalUnit" />
 
-    <!-- The "old" OU DN calculated from stem update change log events. -->
+    <!-- The "old" ldap organizational unit DN calculated from stem update change log events. -->
     <alternateIdentifier ref="stemDnAlternateChangeLog" />
 
-    <!-- The OU "objectClass" attribute. -->
+
+    <!-- The ldap organizational unit "objectClass" attribute. -->
     <attribute
       name="objectClass"
       ref="stemObjectclass" />
     <!-- The OU "ou" attribute. -->
 
+    <!-- The ldap organizational unit "ou" attribute. -->
     <attribute
       name="ou"
       ref="stemOu" />
-    <!-- TODO tests fail because of ordering <attribute name="description" ref="stemDescription" /> -->
 
   </pso>
 
   <!-- Provision a grouper group as an ldap group. -->
-  <!-- If authoritative="true", orphan objects under the baseId matching the identifyingAttribute will be deleted. -->
   <pso
     id="group"
     authoritative="true"
     allSourceIdentifiersRef="groupNames">
 
-    <!-- The group DN. -->
+    <!-- The ladp group DN. -->
     <identifier
       ref="groupDn"
       targetId="ldap"
       containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
 
-    <!-- Identifies group objects which exist on the target by objectClass attribute value. -->
+    <!-- Identifies ldap group objects which exist on the target by objectClass attribute value. -->
     <identifyingAttribute
       name="objectClass"
       value="${edu.internet2.middleware.psp.groupObjectClass}" />
 
-    <!-- The "old" group DN if a group has been renamed. -->
+    <!-- The "old" ldap group DN if a group has been renamed. -->
     <alternateIdentifier ref="groupDnAlternate" />
 
-    <!-- The "old" group DN calculated from group update change log events. -->
+    <!-- The "old" ldap group DN calculated from group update change log events. -->
     <alternateIdentifier ref="groupDnAlternateChangeLog" />
 
-    <!-- The group "objectClass" attribute. -->
+    <!-- The ldap group "objectClass" attribute. -->
     <attribute
       name="objectClass"
       ref="groupObjectclass" />
 
-    <!-- The group "cn" attribute. -->
+    <!-- The ldap group "cn" attribute. -->
     <attribute name="cn" />
 
-    <!-- The group "description" attribute. -->
+    <!-- The ldap group "description" attribute. -->
     <attribute name="description" />
 
-    <!-- The group "member" attribute. -->
+    <!-- The ldap group "member" attribute. -->
     <references name="member">
 
-      <!-- Each <resolver:AttributeDefinition/> value referred to is resolved to an <psp:identifier/>. -->
       <reference
         ref="membersLdap"
         toObject="member" />
+        
       <reference
         ref="membersGsa"
         toObject="group" />
@@ -123,7 +122,7 @@
   <!-- Do not provision grouper members, but enable lookup. -->
   <pso id="member">
 
-    <!-- The member DN. -->
+    <!-- The ldap member DN. -->
     <identifier
       ref="memberDn"
       targetId="ldap"
@@ -139,23 +138,21 @@
   <!-- Provision a group membership triggered by the grouper change log. -->
   <pso id="groupMembership">
 
-    <!-- The group DN calculated from membership change log events. -->
+    <!-- The ldap group DN calculated from membership change log events. -->
     <identifier
       ref="changeLogMembershipGroupDn"
       targetId="ldap"
       containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
 
-    <!-- The group "member" attribute. -->
+    <!-- The ldap group "member" attribute. -->
     <references name="member">
 
-      <!-- Each <resolver:AttributeDefinition/> value is resolved to an <psp:identifier/>. -->
       <reference
-        ref="changeLogMembershipSubjectId"
+        ref="changeLogMembershipLdapSubjectId"
         toObject="member" />
 
-      <!-- Each <resolver:AttributeDefinition/> value is resolved to an <psp:identifier/>. -->
       <reference
-        ref="changeLogMembershipGroupName"
+        ref="changeLogMembershipGroupSubjectName"
         toObject="group" />
 
     </references>

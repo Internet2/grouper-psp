@@ -10,6 +10,7 @@ objectClass: eduMember
 cn: groupA
 member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 hasMember: test.subject.0
+isMemberOf: edu:groupB
 
 dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
