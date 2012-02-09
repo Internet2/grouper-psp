@@ -1844,9 +1844,10 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
      * @return true if the pso identifier has the attribute, false otherwise
      * @throws PspException if the spml search fails
      * @throws DSMLProfileException if a dsml error occurs
+     * @throws PspNoSuchIdentifierException if the psoID can not be found
      */
     public boolean hasAttribute(PSOIdentifier psoID, String attributeName, String attributeValue) throws PspException,
-            DSMLProfileException {
+            DSMLProfileException, PspNoSuchIdentifierException {
 
         LOG.debug("Psp '{}' - Has attribute '{}' name '{}' value '{}'", new Object[] {getId(), PSPUtil.toString(psoID),
                 attributeName, attributeValue,});
@@ -1871,6 +1872,12 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         if (!response.getStatus().equals(StatusCode.SUCCESS)) {
             String errorMessage = PSPUtil.toString(response);
             LOG.error(errorMessage);
+
+            if (response.getStatus().equals(StatusCode.FAILURE)
+                    && response.getError().equals(ErrorCode.NO_SUCH_IDENTIFIER)) {
+                throw new PspNoSuchIdentifierException(errorMessage);
+            }
+
             throw new PspException(errorMessage);
         }
 
@@ -1892,8 +1899,10 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
      * @param reference the reference
      * @return true if the pso identifier has the reference, false otherwise
      * @throws PspException if the spml search fails
+     * @throws PspNoSuchIdentifierException if the psoID can not be found
      */
-    public boolean hasReference(PSOIdentifier psoID, Reference reference) throws PspException {
+    public boolean hasReference(PSOIdentifier psoID, Reference reference) throws PspException,
+            PspNoSuchIdentifierException {
 
         LOG.debug("Psp '{}' - Has reference from '{}' to '{}'",
                 new Object[] {getId(), PSPUtil.toString(psoID), PSPUtil.toString(reference),});
@@ -1920,8 +1929,16 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         SearchResponse response = execute(searchRequest);
 
         if (!response.getStatus().equals(StatusCode.SUCCESS)) {
-            String errorMessage = PSPUtil.toString(response);
+            String errorMessage =
+                    "Psp '" + getId() + "' - Has reference from '" + PSPUtil.toString(psoID) + "' to '"
+                            + PSPUtil.toString(reference) + "' " + PSPUtil.toString(response);
             LOG.error(errorMessage);
+
+            if (response.getStatus().equals(StatusCode.FAILURE)
+                    && response.getError().equals(ErrorCode.NO_SUCH_IDENTIFIER)) {
+                throw new PspNoSuchIdentifierException(errorMessage);
+            }
+
             throw new PspException(errorMessage);
         }
 
