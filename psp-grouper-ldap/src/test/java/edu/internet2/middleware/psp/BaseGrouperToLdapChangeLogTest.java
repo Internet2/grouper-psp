@@ -158,12 +158,12 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
 
         Hib3GrouperLoaderLog hib3GrouploaderLog = new Hib3GrouperLoaderLog();
         hib3GrouploaderLog.setHost(GrouperUtil.hostname());
-        hib3GrouploaderLog.setJobName("ldappcng");
+        hib3GrouploaderLog.setJobName("psp");
         hib3GrouploaderLog.setStatus(GrouperLoaderStatus.RUNNING.name());
         hib3GrouploaderLog.store();
 
         try {
-            ChangeLogHelper.processRecords("ldappcng", hib3GrouploaderLog, pspConsumer);
+            ChangeLogHelper.processRecords("psp", hib3GrouploaderLog, pspConsumer);
             hib3GrouploaderLog.setStatus(GrouperLoaderStatus.SUCCESS.name());
         } catch (Exception e) {
             LOG.error("Error processing records", e);
