@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.time.StopWatch;
 import org.opensaml.util.resource.ResourceException;
 import org.openspml.v2.msg.spml.CapabilityData;
 import org.openspml.v2.msg.spml.DeleteRequest;
@@ -54,7 +55,9 @@ import edu.internet2.middleware.grouper.changeLog.ChangeLogLabel;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogLabels;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogProcessorMetadata;
 import edu.internet2.middleware.psp.Psp;
+import edu.internet2.middleware.psp.PspCLI;
 import edu.internet2.middleware.psp.PspException;
+import edu.internet2.middleware.psp.PspNoSuchIdentifierException;
 import edu.internet2.middleware.psp.PspOptions;
 import edu.internet2.middleware.psp.shibboleth.ChangeLogDataConnector;
 import edu.internet2.middleware.psp.spml.config.Pso;
@@ -270,7 +273,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         SyncResponse syncResponse = consumer.getPsp().execute(syncRequest);
 
         if (syncResponse.getStatus().equals(StatusCode.SUCCESS)) {
-            LOG.info("PSP Consumer '{}' - Change log entry '{}' Sync was successfull '{}'", new Object[] {name,
+            LOG.info("PSP Consumer '{}' - Change log entry '{}' Sync was successful '{}'", new Object[] {name,
                     toString(changeLogEntry), PSPUtil.toString(syncResponse),});
         } else if (syncResponse.getError().equals(ErrorCode.NO_SUCH_IDENTIFIER)) {
             LOG.info("PSP Consumer '{}' - Change log entry '{}' Sync unable to calculate provisioning '{}'",
@@ -298,17 +301,28 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         fullSyncIsRunning = true;
 
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
+
         BulkSyncResponse response = psp.execute(new BulkSyncRequest());
+
+        stopWatch.stop();
 
         fullSyncIsRunning = false;
 
         if (response.getStatus().equals(StatusCode.SUCCESS)) {
-            LOG.info("PSP Consumer '{}' - Full sync was successfull '{}'", name, PSPUtil.toString(response));
+            LOG.info("PSP Consumer '{}' - Full sync was successful '{}'", name, PSPUtil.toString(response));
         } else {
-            LOG.error("PSP Consumer '{}' - Full sync was not successfull '{}'", name, PSPUtil.toString(response));
+            LOG.error("PSP Consumer '{}' - Full sync was not successful '{}'", name, PSPUtil.toString(response));
         }
 
-        LOG.info("PSP Consumer '{}' - Finished full sync", name);
+        LOG.info("PSP Consumer '{}' - Finished full sync. Elapsed time {}", name, stopWatch);
+
+        if (LOG.isDebugEnabled()) {
+            for (String stats : PspCLI.getAllCacheStats()) {
+                LOG.debug(stats);
+            }
+        }
 
         return response;
     }
@@ -328,31 +342,31 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         LOG.debug("PSP Consumer '{}' - Processing change log entry list size '{}'", name, changeLogEntryList.size());
 
         // try catch so we can track that we made some progress
-        try {
-            for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
-                // increment the current ids
-                currentId = changeLogEntry.getSequenceNumber();
 
-                // if full sync is running, return the previous sequence number to process this entry on the next run
-                if (fullSyncIsRunning) {
-                    LOG.info("PSP Consumer '{}' - Full sync is running, returning sequence number '{}'", name,
-                            currentId - 1);
-                    return currentId - 1;
-                }
+        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+            // increment the current ids
+            currentId = changeLogEntry.getSequenceNumber();
 
+            // if full sync is running, return the previous sequence number to process this entry on the next run
+            if (fullSyncIsRunning) {
+                LOG.info("PSP Consumer '{}' - Full sync is running, returning sequence number '{}'", name,
+                        currentId - 1);
+                return currentId - 1;
+            }
+            try {
                 // process the change log entry
                 processChangeLogEntry(changeLogEntry);
+            } catch (Exception e) {
+                String message =
+                        "PSP Consumer '" + name + "' - An error occurred processing sequence number " + currentId;
+                LOG.error(message, e);
+                changeLogProcessorMetadata.registerProblem(e, message, currentId);
+                changeLogProcessorMetadata.setHadProblem(true);
+                changeLogProcessorMetadata.setRecordException(e);
+                changeLogProcessorMetadata.setRecordExceptionSequence(currentId);
             }
-        } catch (Exception e) {
-            String message = "PSP Consumer '" + name + "' - An error occurred processing sequence number " + currentId;
-            LOG.error(message, e);
-            changeLogProcessorMetadata.registerProblem(e, message, currentId);
-            changeLogProcessorMetadata.setHadProblem(true);
-            changeLogProcessorMetadata.setRecordException(e);
-            changeLogProcessorMetadata.setRecordExceptionSequence(currentId);
-            // don't retry change log entry, we could loop indefinitely on error
-            return currentId;
         }
+
         if (currentId == -1) {
             LOG.error("PSP Consumer '" + name + "' - Unable to process any records.");
             throw new RuntimeException("PSP Consumer '" + name + "' - Unable to process any records.");
@@ -387,9 +401,20 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             } else {
                 // process the change log event
                 LOG.info("PSP Consumer '{}' - Change log entry '{}'", name, toStringDeep(changeLogEntry));
+                StopWatch stopWatch = new StopWatch();
+                stopWatch.start();
+
                 ldappcEventType.process(this, changeLogEntry);
-                LOG.info("PSP Consumer '{}' - Change log entry '{}' Finished processing.", name,
-                        toString(changeLogEntry));
+
+                stopWatch.stop();
+                LOG.info("PSP Consumer '{}' - Change log entry '{}' Finished processing. Elapsed time {}",
+                        new Object[] {name, toString(changeLogEntry), stopWatch,});
+
+                if (LOG.isDebugEnabled()) {
+                    for (String stats : PspCLI.getAllCacheStats()) {
+                        LOG.debug(stats);
+                    }
+                }
             }
         } catch (IllegalArgumentException e) {
             LOG.debug("PSP Consumer '{}' - Change log entry '{}' Unsupported category and action.", name,
@@ -688,17 +713,25 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
                     }
                 }
 
-                // perform a search to determine if the attribute exists
-                boolean hasAttribute = psp.hasAttribute(pso.getPsoID(), dsmlAttr.getName(), dsmlValue.getValue());
+                try {
+                    // perform a search to determine if the attribute exists
+                    boolean hasAttribute = psp.hasAttribute(pso.getPsoID(), dsmlAttr.getName(), dsmlValue.getValue());
 
-                // if adding attribute and attribute does not exist, modify
-                if (modificationMode.equals(ModificationMode.ADD) && !hasAttribute) {
-                    attributes.add(dsmlAttr);
-                }
+                    // if adding attribute and attribute does not exist, modify
+                    if (modificationMode.equals(ModificationMode.ADD) && !hasAttribute) {
+                        attributes.add(dsmlAttr);
+                    }
 
-                // if deleting attribute and attribute exists, modify
-                if (modificationMode.equals(ModificationMode.DELETE) && hasAttribute) {
-                    attributes.add(dsmlAttr);
+                    // if deleting attribute and attribute exists, modify
+                    if (modificationMode.equals(ModificationMode.DELETE) && hasAttribute) {
+                        attributes.add(dsmlAttr);
+                    }
+                } catch (PspNoSuchIdentifierException e) {
+                    if (modificationMode.equals(ModificationMode.DELETE)) {
+                        // ignore, must be already deleted, do not throw exception
+                    } else {
+                        throw new PspException(e);
+                    }
                 }
             }
         }
@@ -732,17 +765,26 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             for (Reference reference : referenceMap.get(typeOfReference)) {
 
                 // perform a search to determine if the reference exists
-                boolean hasReference = psp.hasReference(pso.getPsoID(), reference);
+                try {
+                    boolean hasReference = psp.hasReference(pso.getPsoID(), reference);
 
-                // if adding reference and reference does not exist, modify
-                if (modificationMode.equals(ModificationMode.ADD) && !hasReference) {
-                    references.add(reference);
+                    // if adding reference and reference does not exist, modify
+                    if (modificationMode.equals(ModificationMode.ADD) && !hasReference) {
+                        references.add(reference);
+                    }
+
+                    // if deleting reference and reference exists, modify
+                    if (modificationMode.equals(ModificationMode.DELETE) && hasReference) {
+                        references.add(reference);
+                    }
+                } catch (PspNoSuchIdentifierException e) {
+                    if (modificationMode.equals(ModificationMode.DELETE)) {
+                        // ignore, must be already deleted, do not throw exception
+                    } else {
+                        throw new PspException(e);
+                    }
                 }
 
-                // if deleting reference and reference exists, modify
-                if (modificationMode.equals(ModificationMode.DELETE) && hasReference) {
-                    references.add(reference);
-                }
             }
         }
 
@@ -815,7 +857,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
                 ModifyResponse modifyResponse = consumer.getPsp().execute(modifyRequest);
 
                 if (modifyResponse.getStatus().equals(StatusCode.SUCCESS)) {
-                    LOG.debug("PSP Consumer '{}' - Change log entry '{}' Rename was successfull '{}'", new Object[] {
+                    LOG.debug("PSP Consumer '{}' - Change log entry '{}' Rename was successful '{}'", new Object[] {
                             name, toString(changeLogEntry), PSPUtil.toString(modifyResponse),});
                 } else {
                     LOG.error("PSP Consumer '{}' - Change log entry '{}' Rename failed '{}'", new Object[] {name,
@@ -850,7 +892,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             throw new PspException(message);
         }
 
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing object update was successfull.", name,
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing object update was successful.", name,
                 toString(changeLogEntry));
     }
 
