@@ -34,7 +34,7 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
      */
     public static void main(String[] args) {
         // TestRunner.run(LdappcngConsumerTest.class);
-        TestRunner.run(new GrouperToLdapChangeLogTest("testGroupAdd"));
+        TestRunner.run(new GrouperToLdapChangeLogTest("testGroupWithMembersDeleteAlreadyDeleted"));
     }
 
     /**
@@ -184,6 +184,35 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
     }
 
     /**
+     * Test provisioning resulting from deleting a group with members which has already been deleted from the
+     * provisioned target.
+     * 
+     * @throws Exception
+     */
+    public void testGroupWithMembersDeleteAlreadyDeleted() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDeleteAlreadyDeleted.before.ldif");
+
+        edu = setUpEdu();
+
+        groupA = StemHelper.addChildGroup(edu, "groupA", "Group A");
+        groupA.addMember(LdapSubjectTestHelper.SUBJ0);
+        groupA.addMember(LdapSubjectTestHelper.SUBJ1);
+
+        clearChangeLog();
+
+        groupA.deleteMember(LdapSubjectTestHelper.SUBJ0);
+        groupA.deleteMember(LdapSubjectTestHelper.SUBJ1);
+        groupA.delete();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupWithMembersDeleteAlreadyDeleted.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDeleteAlreadyDeleted.after.ldif");
+    }
+
+    /**
      * Test provisioning resulting from moving a group.
      * 
      * @throws Exception
@@ -277,7 +306,7 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddAlreadyExists.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipAddAlreadyExists.after.ldif");
     }
-    
+
     /**
      * Test provisioning resulting from the adding of a group membership.
      * 
@@ -350,7 +379,7 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteAlreadyDeleted.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testMembershipDeleteAlreadyDeleted.after.ldif");
     }
-    
+
     /**
      * Test provisioning resulting from the deletion of a group membership.
      * 
