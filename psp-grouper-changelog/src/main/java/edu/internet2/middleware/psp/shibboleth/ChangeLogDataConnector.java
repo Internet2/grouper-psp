@@ -273,6 +273,7 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         toStringBuilder.append("sequence", changeLogEntry.getSequenceNumber());
         toStringBuilder.append("category", changeLogEntry.getChangeLogType().getChangeLogCategory());
         toStringBuilder.append("actionname", changeLogEntry.getChangeLogType().getActionName());
+        toStringBuilder.append("contextId", changeLogEntry.getContextId());
         return toStringBuilder.toString();
     }
 
@@ -292,6 +293,7 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         toStringBuilder.append("sequence", changeLogEntry.getSequenceNumber());
         toStringBuilder.append("category", changeLogEntry.getChangeLogType().getChangeLogCategory());
         toStringBuilder.append("actionname", changeLogEntry.getChangeLogType().getActionName());
+        toStringBuilder.append("contextId", changeLogEntry.getContextId());
 
         ChangeLogType changeLogType = changeLogEntry.getChangeLogType();
 

@@ -331,7 +331,8 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     public long processChangeLogEntries(final List<ChangeLogEntry> changeLogEntryList,
             ChangeLogProcessorMetadata changeLogProcessorMetadata) {
 
-        long currentId = -1;
+        // the change log sequence number to return
+        long sequenceNumber = -1;
 
         // initialize this consumer's name from the change log metadata
         if (name == null) {
@@ -339,43 +340,72 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             LOG.trace("PSP Consumer '{}' - Setting name.", name);
         }
 
+        // time context processing
+        StopWatch stopWatch = new StopWatch();
+        // the last change log sequence number processed
+        String lastContextId = null;
+
         LOG.debug("PSP Consumer '{}' - Processing change log entry list size '{}'", name, changeLogEntryList.size());
 
-        // try catch so we can track that we made some progress
-
+        // process each change log entry
         for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
-            // increment the current ids
-            currentId = changeLogEntry.getSequenceNumber();
+
+            // return the current change log sequence number
+            sequenceNumber = changeLogEntry.getSequenceNumber();
 
             // if full sync is running, return the previous sequence number to process this entry on the next run
             if (fullSyncIsRunning) {
                 LOG.info("PSP Consumer '{}' - Full sync is running, returning sequence number '{}'", name,
-                        currentId - 1);
-                return currentId - 1;
+                        sequenceNumber - 1);
+                return sequenceNumber - 1;
             }
+
+            // if first run, start the stop watch and store the last sequence number
+            if (lastContextId == null) {
+                stopWatch.start();
+                lastContextId = changeLogEntry.getContextId();
+            }
+
             try {
                 // process the change log entry
                 processChangeLogEntry(changeLogEntry);
             } catch (Exception e) {
                 String message =
-                        "PSP Consumer '" + name + "' - An error occurred processing sequence number " + currentId;
+                        "PSP Consumer '" + name + "' - An error occurred processing sequence number " + sequenceNumber;
                 LOG.error(message, e);
-                changeLogProcessorMetadata.registerProblem(e, message, currentId);
+                changeLogProcessorMetadata.registerProblem(e, message, sequenceNumber);
                 changeLogProcessorMetadata.setHadProblem(true);
                 changeLogProcessorMetadata.setRecordException(e);
-                changeLogProcessorMetadata.setRecordExceptionSequence(currentId);
+                changeLogProcessorMetadata.setRecordExceptionSequence(sequenceNumber);
             }
+
+            // if the change log context id has changed, log and restart stop watch
+            if (!lastContextId.equals(changeLogEntry.getContextId())) {
+                stopWatch.stop();
+                LOG.debug("PSP Consumer '{}' - Processed change log context '{}' Elapsed time {}", new Object[] {name,
+                        lastContextId, stopWatch,});
+                stopWatch.reset();
+                stopWatch.start();
+            }
+
+            lastContextId = changeLogEntry.getContextId();
         }
 
-        if (currentId == -1) {
+        // stop the timer and log
+        stopWatch.stop();
+        LOG.debug("PSP Consumer '{}' - Processed change log context '{}' Elapsed time {}", new Object[] {name,
+                lastContextId, stopWatch,});
+
+        if (sequenceNumber == -1) {
             LOG.error("PSP Consumer '" + name + "' - Unable to process any records.");
             throw new RuntimeException("PSP Consumer '" + name + "' - Unable to process any records.");
         }
 
         LOG.debug("PSP Consumer '{}' - Finished processing change log entries. Last sequence number '{}'", name,
-                currentId);
+                sequenceNumber);
 
-        return currentId;
+        // return the change log id
+        return sequenceNumber;
     }
 
     /**
