@@ -1,64 +1,37 @@
 
-<psp:syncRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.648' returnData='everything'>
-  <psp:id ID='childStem'/>
+<psp:syncRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/09-22:44:09.307' returnData='everything'>
+  <psp:id ID='etc:childGroup'/>
 </psp:syncRequest>
 
-<psp:diffRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.660' returnData='everything'>
-  <psp:id ID='childStem'/>
+<psp:diffRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/09-22:44:09.318' returnData='everything'>
+  <psp:id ID='etc:childGroup'/>
 </psp:diffRequest>
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.661' returnData='everything'>
-  <psp:id ID='childStem'/>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/09-22:44:09.319' returnData='everything'>
+  <psp:id ID='etc:childGroup'/>
 </psp:calcRequest>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/08-21:12:25.661' error='noSuchIdentifier'>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/09-22:44:09.319' error='noSuchIdentifier'>
   <errorMessage>Unable to calculate provisioned object.</errorMessage>
-  <psp:id ID='childStem'/>
+  <psp:id ID='etc:childGroup'/>
 </psp:calcResponse>
 
-<psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/08-21:12:25.660' error='noSuchIdentifier'>
+<psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/09-22:44:09.318' error='noSuchIdentifier'>
   <errorMessage>Unable to calculate provisioned object.</errorMessage>
-  <psp:id ID='childStem'/>
+  <psp:id ID='etc:childGroup'/>
 </psp:diffResponse>
 
-<psp:syncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/08-21:12:25.648' error='noSuchIdentifier'>
+<psp:syncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/09-22:44:09.307' error='noSuchIdentifier'>
   <errorMessage>Unable to calculate provisioned object.</errorMessage>
-  <psp:id ID='childStem'/>
+  <psp:id ID='etc:childGroup'/>
 </psp:syncResponse>
 
-<psp:syncRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.806' returnData='everything'>
-  <psp:id ID='childStem:childGroup'/>
-</psp:syncRequest>
-
-<psp:diffRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.807' returnData='everything'>
-  <psp:id ID='childStem:childGroup'/>
-</psp:diffRequest>
-
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.808' returnData='everything'>
-  <psp:id ID='childStem:childGroup'/>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/09-22:44:09.443' returnData='everything'>
+  <psp:id ID='change_log_sequence_number:327'/>
 </psp:calcRequest>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/08-21:12:25.808' error='noSuchIdentifier'>
-  <errorMessage>Unable to calculate provisioned object.</errorMessage>
-  <psp:id ID='childStem:childGroup'/>
-</psp:calcResponse>
-
-<psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/08-21:12:25.807' error='noSuchIdentifier'>
-  <errorMessage>Unable to calculate provisioned object.</errorMessage>
-  <psp:id ID='childStem:childGroup'/>
-</psp:diffResponse>
-
-<psp:syncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/08-21:12:25.806' error='noSuchIdentifier'>
-  <errorMessage>Unable to calculate provisioned object.</errorMessage>
-  <psp:id ID='childStem:childGroup'/>
-</psp:syncResponse>
-
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-21:12:25.881' returnData='everything'>
-  <psp:id ID='change_log_sequence_number:329'/>
-</psp:calcRequest>
-
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/08-21:12:25.881'>
-  <psp:id ID='change_log_sequence_number:329'/>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/09-22:44:09.443'>
+  <psp:id ID='change_log_sequence_number:327'/>
   <psp:pso entityName='memberMembership'>
     <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
     <data>
@@ -69,7 +42,7 @@
   </psp:pso>
 </psp:calcResponse>
 
-<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/02/08-21:12:25.929' returnData='identifier'>
+<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/02/09-22:44:09.484' returnData='identifier'>
   <spmlsearch:query targetID='ldap' scope='pso'>
     <dsml:filter xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core'>
       <dsml:equalityMatch name='objectClass'>
@@ -80,9 +53,9 @@
   </spmlsearch:query>
 </spmlsearch:searchRequest>
 
-<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/02/08-21:12:25.929'/>
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/02/09-22:44:09.484'/>
 
-<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='memberMembership' requestID='2012/02/08-21:12:25.942' returnData='identifier'>
+<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='memberMembership' requestID='2012/02/09-22:44:09.499' returnData='identifier'>
   <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
   <modification modificationMode='add'>
     <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass' operation='add'>
@@ -91,7 +64,7 @@
   </modification>
 </modifyRequest>
 
-<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/08-21:12:25.942'>
+<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/09-22:44:09.499'>
   <pso>
     <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
   </pso>

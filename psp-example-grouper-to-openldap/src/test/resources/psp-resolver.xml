@@ -22,38 +22,55 @@
 
   <!-- Grouper data connectors. -->
 
-  <!-- The GroupDataConnector returns attributes representing the group whose name is the principal name. -->
-  <!-- The returned group must be a child, at any depth, of the "edu" stem. -->
+  <!-- The GroupDataConnector returns attributes representing the group whose name is the principal name. The returned group 
+    must be a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. Groups under the "etc" stem 
+    are omitted. -->
   <resolver:DataConnector
     id="GroupDataConnector"
     xsi:type="grouper:GroupDataConnector">
-    <!-- The GroupInStem filter matches groups which are children of the given stem. -->
-    <grouper:Filter
-      xsi:type="grouper:GroupInStem"
-      name="${edu.internet2.middleware.psp.baseStem}"
-      scope="SUB" />
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The GroupInStem filter matches groups which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
     <!-- The "members" attribute values are equivalent to group.getMembers(). -->
     <grouper:Attribute id="members" />
     <!-- The "groups" attribute values are equivalent to group.getGroups(). -->
     <grouper:Attribute id="groups" />
   </resolver:DataConnector>
 
-  <!-- The StemDataConnector returns attributes representing the stem whose name is the principal name. -->
-  <!-- The returned stem must be the "edu" stem, or at any depth, a child of the "edu" stem. -->
+  <!-- The StemDataConnector returns attributes representing the stem whose name is the principal name. The returned stem 
+    must be a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. The "etc" stem and all children 
+    are omitted. -->
   <resolver:DataConnector
     id="StemDataConnector"
     xsi:type="grouper:StemDataConnector">
-    <!-- The OR filter matches either child filter. -->
-    <grouper:Filter xsi:type="grouper:OR">
-      <!-- The StemNameExact filter matches the stem with the given name. -->
-      <grouper:Filter
-        xsi:type="grouper:StemNameExact"
-        name="edu" />
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
       <!-- The StemInStem filter matches stems which are children of the given stem. -->
       <grouper:Filter
         xsi:type="grouper:StemInStem"
-        name="edu"
+        name="${edu.internet2.middleware.psp.baseStem}"
         scope="SUB" />
+      <!-- The OR filter matches stems which match either the first or second child filter. -->
+      <grouper:Filter xsi:type="grouper:OR">
+        <!-- The StemInStem filter matches stems which are children of the given stem. -->
+        <grouper:Filter
+          xsi:type="grouper:StemInStem"
+          name="etc"
+          scope="SUB" />
+        <!-- The StemNameExact filter matches stems with the given name. -->
+        <grouper:Filter
+          xsi:type="grouper:StemNameExact"
+          name="etc" />
+      </grouper:Filter>
     </grouper:Filter>
   </resolver:DataConnector>
 
@@ -71,15 +88,24 @@
   </resolver:DataConnector>
 
 
-  <!-- Returns a single "groupNames" attribute whose values are the names of all groups matching the filter. -->
+  <!-- Returns a single "groupNames" attribute whose values are the names of all groups matching the filter. The groups returned 
+    are children of the stem whose name is the edu.internet2.middleware.psp.baseStem property. Groups under the "etc" stem are 
+    omitted. -->
   <resolver:DataConnector
     id="AllGroupNamesConnector"
     xsi:type="psp-grouper-source:AllGroupNamesDataConnector">
-    <!-- The GroupInStem filter matches groups which are children of the given stem. -->
-    <grouper:Filter
-      xsi:type="grouper:GroupInStem"
-      name="${edu.internet2.middleware.psp.baseStem}"
-      scope="SUB" />
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The GroupInStem filter matches groups which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
   </resolver:DataConnector>
 
   <!-- The names of all groups matching the data connector filter. -->
@@ -89,21 +115,31 @@
     <resolver:Dependency ref="AllGroupNamesConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- Returns a single "stemNames" attribute whose values are the names of all stems matching the filter. -->
+  <!-- Returns a single "stemNames" attribute whose values are the names of all stems matching the filter. The stems returned 
+    are children of the stem whose name is the edu.internet2.middleware.psp.baseStem property. The "etc" stem and all children 
+    are omitted. -->
   <resolver:DataConnector
     id="AllStemNamesConnector"
     xsi:type="psp-grouper-source:AllStemNamesDataConnector">
-    <!-- The OR filter matches either child filter. -->
-    <grouper:Filter xsi:type="grouper:OR">
-      <!-- The StemNameExact filter matches the stem with the given name. -->
-      <grouper:Filter
-        xsi:type="grouper:StemNameExact"
-        name="edu" />
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
       <!-- The StemInStem filter matches stems which are children of the given stem. -->
       <grouper:Filter
         xsi:type="grouper:StemInStem"
-        name="edu"
+        name="${edu.internet2.middleware.psp.baseStem}"
         scope="SUB" />
+      <!-- The OR filter matches stems which match either the first or second child filter. -->
+      <grouper:Filter xsi:type="grouper:OR">
+        <!-- The StemInStem filter matches stems which are children of the given stem. -->
+        <grouper:Filter
+          xsi:type="grouper:StemInStem"
+          name="etc"
+          scope="SUB" />
+        <!-- The StemNameExact filter matches stems with the given name. -->
+        <grouper:Filter
+          xsi:type="grouper:StemNameExact"
+          name="etc" />
+      </grouper:Filter>
     </grouper:Filter>
   </resolver:DataConnector>
 
@@ -458,8 +494,8 @@
   </resolver:AttributeDefinition>
 
   <!-- The value of the "changeLogMembershipGroupName" attribute is the name of the group of a membership change log entry. 
-    The name of the group is returned only if the group is a child of the stem defined by the edu.internet2.middleware.psp.baseStem 
-    property. -->
+    The name of the group is returned only if the group is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem 
+    property. If the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
   <resolver:AttributeDefinition
     id="changeLogMembershipGroupName"
     xsi:type="ad:Script">
@@ -469,8 +505,15 @@
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
         changeLogMembershipGroupName = new BasicAttribute("changeLogMembershipGroupName")
         if (typeof groupName != "undefined" && groupName != null ) {
-            if (groupName.getValues().get(0).indexOf("${edu.internet2.middleware.psp.baseStem}" + ":") != -1) {
-               changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));                
+            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+            if (scriptBaseStem.length == 0) {
+                if (groupName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
+                    changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));
+                }
+            } else {
+                if (groupName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
+                    changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));                
+                }
             }
         }
     ]]></ad:Script>
