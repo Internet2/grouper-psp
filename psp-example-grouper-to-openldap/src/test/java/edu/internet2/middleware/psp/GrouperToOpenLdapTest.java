@@ -56,6 +56,8 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
     public void setUp() {
 
         super.setUp();
+        
+        setUpMailLocalAddressAttributeDef();
 
         try {
             setUpPSP();

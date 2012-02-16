@@ -29,9 +29,16 @@ import org.opensaml.xml.util.DatatypeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.Member;
+import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.SubjectFinder;
+import edu.internet2.middleware.grouper.attr.assign.AttributeAssign;
+import edu.internet2.middleware.grouper.attr.assign.AttributeAssignType;
+import edu.internet2.middleware.grouper.attr.finder.AttributeAssignFinder;
 import edu.internet2.middleware.grouper.audit.AuditEntry;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogEntry;
+import edu.internet2.middleware.grouper.changeLog.ChangeLogLabels;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogType;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.shibboleth.dataConnector.BaseGrouperDataConnector;
@@ -114,36 +121,183 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
     }
 
     /**
-     * Return attributes for the given {@link ChangeLogEntry}.
+     * Return attributes representing the given {@link ChangeLogEntry}.
      * 
      * @param changeLogEntry the changeLogEntry
      * @return the attributes
      */
     protected Map<String, BaseAttribute> buildAttributes(ChangeLogEntry changeLogEntry) {
 
+        // the attributes to be returned
         Map<String, BaseAttribute> attributes = new LinkedHashMap<String, BaseAttribute>();
 
+        // the change log type
         ChangeLogType changeLogType = changeLogEntry.getChangeLogType();
 
+        // return change log attributes
         for (String label : changeLogType.labels()) {
-            String fieldName = changeLogType.retrieveChangeLogEntryFieldForLabel(label);
-            if (!DatatypeHelper.isEmpty(fieldName)) {
-                Object value = GrouperUtil.fieldValue(changeLogEntry, fieldName);
-                String valueString = DatatypeHelper.safeTrimOrNullString(GrouperUtil.stringValue(value));
-                if (!DatatypeHelper.isEmpty(valueString)) {
-                    BasicAttribute<String> attribute = new BasicAttribute<String>();
-                    attribute.setId(label);
-                    attribute.getValues().add(valueString);
-                    attributes.put(attribute.getId(), attribute);
-                }
+            BasicAttribute<String> attribute = buildAttribute(changeLogEntry, label);
+            if (attribute != null) {
+                attributes.put(attribute.getId(), attribute);
             }
         }
+
+        // return the change log action name
+        BasicAttribute<String> actionNameAttribute = new BasicAttribute<String>("actionName");
+        actionNameAttribute.getValues().add(changeLogType.getActionName());
+        attributes.put(actionNameAttribute.getId(), actionNameAttribute);
+
+        // return the change log category
+        BasicAttribute<String> changeLogCategoryAttribute = new BasicAttribute<String>("changeLogCategory");
+        changeLogCategoryAttribute.getValues().add(changeLogType.getChangeLogCategory());
+        attributes.put(changeLogCategoryAttribute.getId(), changeLogCategoryAttribute);
+
+        // return the change log sequence number
+        BasicAttribute<String> sequenceNumberAttribute = new BasicAttribute<String>("sequenceNumber");
+        sequenceNumberAttribute.getValues().add(changeLogEntry.getSequenceNumber().toString());
+        attributes.put(sequenceNumberAttribute.getId(), sequenceNumberAttribute);
+
+        // return the change log created on timestamp
+        BasicAttribute<String> createdOnAttribute = new BasicAttribute<String>("createdOn");
+        createdOnAttribute.getValues().add(changeLogEntry.getCreatedOn().toString());
+        attributes.put(createdOnAttribute.getId(), createdOnAttribute);
 
         // return subject attributes
         if (attributes.containsKey("subjectId") && attributes.containsKey("sourceId")) {
             String sourceId = attributes.get("sourceId").getValues().iterator().next().toString();
             String subjectId = attributes.get("subjectId").getValues().iterator().next().toString();
             attributes.putAll(buildSubjectAttributes(sourceId, subjectId));
+        }
+
+        // return attributes from the attribute framework
+        attributes.putAll(buildAttributeFrameworkAttributes(changeLogEntry));
+
+        return attributes;
+    }
+
+    /**
+     * Convert a change log entry attribute to a Shibboleth attribute.
+     * 
+     * @param changeLogEntry the change log entry
+     * @param label the attribute name
+     * @return the shibboleth attribute representing the change log attribute
+     */
+    protected BasicAttribute<String> buildAttribute(ChangeLogEntry changeLogEntry, String label) {
+
+        String value = buildValue(changeLogEntry, label);
+
+        if (DatatypeHelper.isEmpty(value)) {
+            return null;
+        }
+
+        BasicAttribute<String> attribute = new BasicAttribute<String>();
+        attribute.setId(label);
+        attribute.getValues().add(value);
+        return attribute;
+    }
+
+    /**
+     * Return the value of a change log entry attribute or null.
+     * 
+     * @param changeLogEntry the change log entry
+     * @param label the attribute name
+     * @return the value of a change log entry attribute or null
+     */
+    protected String buildValue(ChangeLogEntry changeLogEntry, String label) {
+
+        ChangeLogType changeLogType = changeLogEntry.getChangeLogType();
+        if (changeLogType == null) {
+            return null;
+        }
+
+        String fieldName = changeLogType.retrieveChangeLogEntryFieldForLabel(label);
+        if (DatatypeHelper.isEmpty(fieldName)) {
+            return null;
+        }
+
+        Object object = GrouperUtil.fieldValue(changeLogEntry, fieldName);
+        if (object == null) {
+            return null;
+        }
+
+        return object.toString();
+    }
+
+    /**
+     * If the change log entry is an attribute value assignment, return (a) the 'name' of the group or stem that the
+     * attribute value was assigned to or (b) the 'memberSubjectId' of the member that the attribute value was assigned
+     * to as well as (c) an attribute representing the value assignment. Otherwise, return an empty map.
+     * 
+     * @param changeLogEntry the change log entry
+     * @return (a) the 'name' of the group or stem that the attribute value was assigned to or (b) the 'memberSubjectId'
+     *         of the member that the attribute value was assigned to as well as (c) an attribute representing the value
+     *         assignment or null
+     */
+    protected Map<String, BaseAttribute> buildAttributeFrameworkAttributes(ChangeLogEntry changeLogEntry) {
+
+        ChangeLogType changeLogType = changeLogEntry.getChangeLogType();
+
+        // return attributes if this is an attribute assign value change log entry
+        if (!changeLogType.getChangeLogCategory().equals("attributeAssignValue")) {
+            return Collections.EMPTY_MAP;
+        }
+
+        // get the attribute assign id
+        String attributeAssignId = buildValue(changeLogEntry, "attributeAssignId");
+        if (attributeAssignId == null) {
+            return Collections.EMPTY_MAP;
+        }
+
+        // get the attribute assignment
+        AttributeAssign attributeAssign = AttributeAssignFinder.findById(attributeAssignId, false);
+        if (attributeAssign == null) {
+            return Collections.EMPTY_MAP;
+        }
+
+        // the attributes to return
+        Map<String, BaseAttribute> attributes = new LinkedHashMap<String, BaseAttribute>();
+
+        // return an attribute with name attributeDefNameName and value
+        String attributeDefNameName = buildValue(changeLogEntry, "attributeDefNameName");
+        String value = buildValue(changeLogEntry, "value");
+        if (attributeDefNameName != null && value != null) {
+            BasicAttribute<String> attribute = new BasicAttribute<String>();
+            attribute.setId(attributeDefNameName);
+            attribute.getValues().add(value);
+            attributes.put(attribute.getId(), attribute);
+        }
+
+        // if the attribute was assigned to a group, return the group name
+        if (attributeAssign.getAttributeAssignType() == AttributeAssignType.group) {
+            Group group = attributeAssign.getOwnerGroup();
+            if (group != null) {
+                BasicAttribute<String> attribute = new BasicAttribute<String>();
+                attribute.setId("name");
+                attribute.getValues().add(group.getName());
+                attributes.put(attribute.getId(), attribute);
+            }
+        }
+
+        // if the attribute was assigned to a stem, return the stem name
+        if (attributeAssign.getAttributeAssignType() == AttributeAssignType.stem) {
+            Stem stem = attributeAssign.getOwnerStem();
+            if (stem != null) {
+                BasicAttribute<String> attribute = new BasicAttribute<String>();
+                attribute.setId("name");
+                attribute.getValues().add(stem.getName());
+                attributes.put(attribute.getId(), attribute);
+            }
+        }
+
+        // if the attribute was assigned to a member, return the member subject id
+        if (attributeAssign.getAttributeAssignType() == AttributeAssignType.member) {
+            Member member = attributeAssign.getOwnerMember();
+            if (member != null) {
+                BasicAttribute<String> attribute = new BasicAttribute<String>();
+                attribute.setId("memberSubjectId");
+                attribute.getValues().add(member.getSubjectId());
+                attributes.put(attribute.getId(), attribute);
+            }
         }
 
         return attributes;

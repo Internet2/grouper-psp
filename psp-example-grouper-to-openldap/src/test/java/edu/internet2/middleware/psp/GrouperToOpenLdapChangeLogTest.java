@@ -199,4 +199,51 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
         verifyLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipDeleteGroup.after.ldif");
     }
 
+    /**
+     * Test provisioning resulting from adding an attribute assignment value to a group.
+     * 
+     * @throws Exception
+     */
+    public void testGroupAttributeAssignValueAdd() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testGroupAttributeAssignValueAdd.before.ldif");
+
+        edu = setUpEdu();
+        groupA = setUpGroupA();
+
+        clearChangeLog();
+
+        groupA.getAttributeValueDelegate().assignValue("etc:attribute:mailLocalAddress", "mail@example.edu");
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testGroupAttributeAssignValueAdd.xml");
+        verifyLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testGroupAttributeAssignValueAdd.after.ldif");
+    }
+
+    /**
+     * Test provisioning resulting from deleting an attribute assignment value from a group.
+     * 
+     * @throws Exception
+     */
+    public void testGroupAttributeAssignValueDelete() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testGroupAttributeAssignValueDelete.before.ldif");
+
+        edu = setUpEdu();
+        groupA = setUpGroupA();
+        groupA.getAttributeValueDelegate().assignValue("etc:attribute:mailLocalAddress", "mail@example.edu");
+
+        clearChangeLog();
+
+        groupA.getAttributeValueDelegate().deleteValue("etc:attribute:mailLocalAddress", "mail@example.edu");
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testGroupAttributeAssignValueDelete.xml");
+        verifyLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testGroupAttributeAssignValueDelete.after.ldif");
+    }
+
 }

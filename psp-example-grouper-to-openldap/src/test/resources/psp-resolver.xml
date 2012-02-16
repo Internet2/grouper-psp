@@ -44,6 +44,8 @@
     <grouper:Attribute id="members" />
     <!-- The "groups" attribute values are equivalent to group.getGroups(). -->
     <grouper:Attribute id="groups" />
+    <!-- The "etc:attribute:mailLocalAddress" attribute framework definition. -->
+    <grouper:Attribute id="etc:attribute:mailLocalAddress" />
   </resolver:DataConnector>
 
   <!-- The StemDataConnector returns attributes representing the stem whose name is the principal name. The returned stem 
@@ -252,18 +254,23 @@
       action="deleteMembership" />
   </resolver:DataConnector>
 
+  <!-- Returns change log attributes representing attribute value assignment. -->
+  <resolver:DataConnector
+    id="AttributeAssignValueChangeLogDataConnector"
+    xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <!-- The ChangeLogEntry filter matches change log entries with the given category. -->
+    <grouper:Filter
+      xsi:type="psp-grouper-changelog:ChangeLogEntry"
+      category="attributeAssignValue" />
+  </resolver:DataConnector>
+
 
   <!-- Static data connector. -->
   <resolver:DataConnector
     id="StaticDataConnector"
     xsi:type="dc:Static">
     <!-- Group LDAP objectclass. -->
-    <dc:Attribute id="groupObjectclass">
-      <dc:Value>top</dc:Value>
-      <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
-    </dc:Attribute>
-    <!-- Group LDAP eduMember objectclass. -->
-    <dc:Attribute id="groupObjectclassEduMember">
+    <dc:Attribute id="staticGroupObjectclass">
       <dc:Value>top</dc:Value>
       <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
       <dc:Value>eduMember</dc:Value>
@@ -346,6 +353,7 @@
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
+    <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group. For example, the DN of a group before it is renamed. -->
@@ -372,18 +380,61 @@
     <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The group objectclass attribute. -->
+  <!-- The group objectclass attribute. If an attribute assign value change log entry is being processed, do not return dependencies 
+    from the static data connector. -->
   <resolver:AttributeDefinition
     id="groupObjectclass"
-    xsi:type="ad:Simple">
+    xsi:type="ad:Script">
     <resolver:Dependency ref="StaticDataConnector" />
+    <resolver:Dependency ref="inetLocalMailRecipientObjectclass" />
+    <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        groupObjectclass = new BasicAttribute("groupObjectclass");
+        
+        // Include values from 'staticGroupObjectClass' if the change log category is not 'attributeAssignValue'.
+        if (typeof changeLogCategory != "undefined" && changeLogCategory != null) {
+            if (!changeLogCategory.getValues().contains("attributeAssignValue")) {
+                groupObjectclass.getValues().addAll(staticGroupObjectclass.getValues());
+            }
+        // Include values from 'staticGroupObjectClass' if a change log entry is not being processed.
+        } else {
+            groupObjectclass.getValues().addAll(staticGroupObjectclass.getValues());
+        }
+        
+        // Include values from 'inetLocalMailRecipientObjectclass' attribute.
+        if (typeof inetLocalMailRecipientObjectclass != "undefined" && inetLocalMailRecipientObjectclass != null) {
+            if (!inetLocalMailRecipientObjectclass.getValues().isEmpty()) {
+                groupObjectclass.getValues().addAll(inetLocalMailRecipientObjectclass.getValues());
+            }   
+        }                
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
-  <!-- The group objectclass attribute with eduMember. -->
+  <!-- The value of the "inetLocalMailRecipientObjectclass" attribute is "inetLocalMailRecipient" if the "mailLocalAddress" 
+    attribute is not empty. -->
   <resolver:AttributeDefinition
-    id="groupObjectclassEduMember"
-    xsi:type="ad:Simple">
-    <resolver:Dependency ref="StaticDataConnector" />
+    id="inetLocalMailRecipientObjectclass"
+    sourceAttributeID="mailLocalAddress"
+    xsi:type="ad:Script">
+    <resolver:Dependency ref="mailLocalAddress" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        inetLocalMailRecipientObjectclass = new BasicAttribute("inetLocalMailRecipientObjectclass");
+        
+        // Return value 'inetLocalMailRecipient' if 'mailLocalAddress' is not empty. 
+        if (typeof mailLocalAddress != "undefined" && mailLocalAddress != null) {
+            if (!mailLocalAddress.getValues().isEmpty()) {
+                inetLocalMailRecipientObjectclass.getValues().add("inetLocalMailRecipient");
+            }                
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The value of the group "cn" attribute is the group extension. -->
@@ -425,6 +476,15 @@
     sourceAttributeID="groups">
     <resolver:Dependency ref="GroupDataConnector" />
     <grouper:Attribute id="name" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the group "mailLocalAddress" attribute is the group mailLocalAddress. -->
+  <resolver:AttributeDefinition
+    id="mailLocalAddress"
+    xsi:type="ad:Simple"
+    sourceAttributeID="etc:attribute:mailLocalAddress">
+    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The values of the "membersLdap" attribute are the subject ids of group members from the "ldap" source. -->
@@ -502,14 +562,23 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipGroupName = new BasicAttribute("changeLogMembershipGroupName")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
         if (typeof groupName != "undefined" && groupName != null ) {
+            // The name of the base stem to be provisioned.
             var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
             if (scriptBaseStem.length == 0) {
                 if (groupName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
                     changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));
                 }
+            // Return the group name if it starts with the base stem to be provisioned.
             } else {
                 if (groupName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
                     changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));                
@@ -527,8 +596,13 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipGroupSubjectName = new BasicAttribute("changeLogMembershipGroupSubjectName");
+        
+        // Return 'subjectName' attribute values if the 'sourceId' attribute is 'g:gsa'.
         if (typeof sourceId != "undefined" && sourceId != null ){            
             if (sourceId.getValues().contains("g:gsa")) {
                 if (typeof subjectName != "undefined" && subjectName != null ){
@@ -547,8 +621,13 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipLdapSubjectId = new BasicAttribute("changeLogMembershipLdapSubjectId");
+        
+        // Return 'subjectId' attribute values if the 'sourceId' attribute is 'ldap'.
         if (typeof sourceId != "undefined" && sourceId != null ){            
             if (sourceId.getValues().contains("ldap")) {
                 if (typeof subjectId != "undefined" && subjectId != null ){

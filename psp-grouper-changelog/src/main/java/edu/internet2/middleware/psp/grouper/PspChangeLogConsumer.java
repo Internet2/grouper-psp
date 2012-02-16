@@ -76,15 +76,24 @@ import edu.internet2.middleware.psp.util.PSPUtil;
  */
 public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
-    /** LDAP error returned when a stem/ou is renamed and the DSA does not support subtree renaming. */
-    public static final String ERROR_SUBTREE_RENAME_NOT_SUPPORTED =
-            "[LDAP: error code 66 - subtree rename not supported]";
-
-    /** Boolean used to delay change log processing when a full sync is running. */
-    private static boolean fullSyncIsRunning;
-
     /** Maps change log entry category and action (change log type) to methods. */
     enum EventType {
+
+        /** Process the add attribute assign value change log entry type. */
+        attributeAssignValue__addAttributeAssignValue {
+            /** {@inheritDoc} */
+            public void process(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws Exception {
+                consumer.processAttributeAssignValueAdd(consumer, changeLogEntry);
+            }
+        },
+
+        /** Process the delete attribute assign value change log entry type. */
+        attributeAssignValue__deleteAttributeAssignValue {
+            /** {@inheritDoc} */
+            public void process(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws Exception {
+                consumer.processAttributeAssignValueDelete(consumer, changeLogEntry);
+            }
+        },
 
         /** Process the add group change log entry type. */
         group__addGroup {
@@ -163,11 +172,42 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
     }
 
+    /** LDAP error returned when a stem/ou is renamed and the DSA does not support subtree renaming. */
+    public static final String ERROR_SUBTREE_RENAME_NOT_SUPPORTED =
+            "[LDAP: error code 66 - subtree rename not supported]";
+
+    /** Boolean used to delay change log processing when a full sync is running. */
+    private static boolean fullSyncIsRunning;
+
     /** Logger. */
     private static final Logger LOG = LoggerFactory.getLogger(PspChangeLogConsumer.class);
 
     /** The Provisioning Service Provider. */
     private static Psp psp;
+
+    /**
+     * Gets a simple string representation of the change log entry.
+     * 
+     * @see ChangeLogDataConnector#toString(ChangeLogEntry)
+     * 
+     * @param changeLogEntry the change log entry
+     * @return the simple string representation of the change log entry
+     */
+    public static String toString(ChangeLogEntry changeLogEntry) {
+        return ChangeLogDataConnector.toString(changeLogEntry);
+    }
+
+    /**
+     * Gets a deep string representation of the change log entry.
+     * 
+     * @see ChangeLogDataConnector#toStringDeep(ChangeLogEntry)
+     * 
+     * @param changeLogEntry the change log entry
+     * @return the deep string representation of the change log entry
+     */
+    public static String toStringDeep(ChangeLogEntry changeLogEntry) {
+        return ChangeLogDataConnector.toStringDeep(changeLogEntry);
+    }
 
     /** The change log consumer name from the processor metadata. */
     private String name;
@@ -180,35 +220,6 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
      */
     public PspChangeLogConsumer() throws ResourceException {
         initialize();
-    }
-
-    /**
-     * Return the {@link Psp}.
-     * 
-     * @return the provisioning service provider
-     */
-    public Psp getPsp() {
-        return psp;
-    }
-
-    /**
-     * If the underlying {@link Psp} has not been initialized, instantiate the {@link Psp}. Use the configuration
-     * directory from the 'changeLog.consumer.ldappcng.confDir' property. If this property has not been set, then
-     * configuration resources on the classpath will be used.
-     * 
-     * @throws ResourceException if the configuration cannot be loaded
-     */
-    public void initialize() throws ResourceException {
-
-        if (psp == null) {
-            PspOptions pspOptions = new PspOptions(null);
-            String confDir = GrouperLoaderConfig.getPropertyString("changeLog.consumer.psp.confDir");
-            if (!confDir.isEmpty()) {
-                LOG.info("Configuration directory {} set via property changeLog.consumer.psp.confDir", confDir);
-                pspOptions.setConfDir(confDir);
-            }
-            psp = Psp.getPSP(pspOptions);
-        }
     }
 
     /**
@@ -325,6 +336,75 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         }
 
         return response;
+    }
+
+    /**
+     * Return the {@link Psp}.
+     * 
+     * @return the provisioning service provider
+     */
+    public Psp getPsp() {
+        return psp;
+    }
+
+    /**
+     * If the underlying {@link Psp} has not been initialized, instantiate the {@link Psp}. Use the configuration
+     * directory from the 'changeLog.consumer.ldappcng.confDir' property. If this property has not been set, then
+     * configuration resources on the classpath will be used.
+     * 
+     * @throws ResourceException if the configuration cannot be loaded
+     */
+    public void initialize() throws ResourceException {
+
+        if (psp == null) {
+            PspOptions pspOptions = new PspOptions(null);
+            String confDir = GrouperLoaderConfig.getPropertyString("changeLog.consumer.psp.confDir");
+            if (!confDir.isEmpty()) {
+                LOG.info("Configuration directory {} set via property changeLog.consumer.psp.confDir", confDir);
+                pspOptions.setConfDir(confDir);
+            }
+            psp = Psp.getPSP(pspOptions);
+        }
+    }
+
+    /**
+     * Add an attribute value.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws Spml2Exception if an spml error occurs
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processAttributeAssignValueAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry)
+            throws Spml2Exception, PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing add attribute assign value.", name,
+                toString(changeLogEntry));
+
+        List<ModifyRequest> modifyRequests =
+                consumer.processModification(consumer, changeLogEntry, ModificationMode.ADD, ReturnData.DATA);
+
+        executeModifyRequests(consumer, changeLogEntry, modifyRequests);
+    }
+
+    /**
+     * Delete an attribute value.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws Spml2Exception if an spml error occurs
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processAttributeAssignValueDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry)
+            throws Spml2Exception, PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing delete attribute assign value.", name,
+                toString(changeLogEntry));
+
+        List<ModifyRequest> modifyRequests =
+                consumer.processModification(consumer, changeLogEntry, ModificationMode.DELETE, ReturnData.DATA);
+
+        executeModifyRequests(consumer, changeLogEntry, modifyRequests);
     }
 
     /** {@inheritDoc} */
@@ -453,130 +533,6 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     }
 
     /**
-     * Add a group.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processGroupAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group add.", name, toString(changeLogEntry));
-
-        executeSync(consumer, changeLogEntry, ChangeLogLabels.GROUP_ADD.name);
-    }
-
-    /**
-     * Delete a group.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processGroupDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group delete.", name, toString(changeLogEntry));
-
-        processDelete(consumer, changeLogEntry);
-    }
-
-    /**
-     * Update a group.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processGroupUpdate(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group update.", name, toString(changeLogEntry));
-
-        processUpdate(consumer, changeLogEntry, ChangeLogLabels.GROUP_UPDATE.name);
-    }
-
-    /**
-     * Add a membership.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws Spml2Exception if an spml error occurs
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processMembershipAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry)
-            throws Spml2Exception, PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing membership add.", name,
-                toString(changeLogEntry));
-
-        List<ModifyRequest> modifyRequests =
-                consumer.processMembershipChange(consumer, changeLogEntry, ModificationMode.ADD);
-
-        executeModifyRequests(consumer, changeLogEntry, modifyRequests);
-    }
-
-    /**
-     * Delete a membership.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws Spml2Exception if an spml error occurs
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processMembershipDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry)
-            throws Spml2Exception, PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing membership delete.", name,
-                toString(changeLogEntry));
-
-        List<ModifyRequest> modifyRequests =
-                consumer.processMembershipChange(consumer, changeLogEntry, ModificationMode.DELETE);
-
-        executeModifyRequests(consumer, changeLogEntry, modifyRequests);
-    }
-
-    /**
-     * Add a stem.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processStemAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem add.", name, toString(changeLogEntry));
-
-        executeSync(consumer, changeLogEntry, ChangeLogLabels.STEM_ADD.name);
-    }
-
-    /**
-     * Delete a stem.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processStemDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem delete.", name, toString(changeLogEntry));
-
-        processDelete(consumer, changeLogEntry);
-    }
-
-    /**
-     * Update a stem.
-     * 
-     * @param consumer the change log consumer
-     * @param changeLogEntry the change log entry
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public void processStemUpdate(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
-
-        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem update.", name, toString(changeLogEntry));
-
-        processUpdate(consumer, changeLogEntry, ChangeLogLabels.STEM_UPDATE.name);
-    }
-
-    /**
      * Delete an object. The object identifiers to be deleted are calculated from the change log entry. For every object
      * to be deleted, a lookup is performed on the object identifier to determine if the object exists. If the object
      * exists, it is deleted.
@@ -641,32 +597,118 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     }
 
     /**
+     * Add a group.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processGroupAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group add.", name, toString(changeLogEntry));
+
+        executeSync(consumer, changeLogEntry, ChangeLogLabels.GROUP_ADD.name);
+    }
+
+    /**
+     * Delete a group.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processGroupDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group delete.", name, toString(changeLogEntry));
+
+        processDelete(consumer, changeLogEntry);
+    }
+
+    /**
+     * Update a group.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processGroupUpdate(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing group update.", name, toString(changeLogEntry));
+
+        processUpdate(consumer, changeLogEntry, ChangeLogLabels.GROUP_UPDATE.name);
+    }
+
+    /**
+     * Add a membership.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws Spml2Exception if an spml error occurs
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processMembershipAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry)
+            throws Spml2Exception, PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing membership add.", name,
+                toString(changeLogEntry));
+
+        List<ModifyRequest> modifyRequests =
+                consumer.processModification(consumer, changeLogEntry, ModificationMode.ADD, ReturnData.EVERYTHING);
+
+        executeModifyRequests(consumer, changeLogEntry, modifyRequests);
+    }
+
+    /**
+     * Delete a membership.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws Spml2Exception if an spml error occurs
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processMembershipDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry)
+            throws Spml2Exception, PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing membership delete.", name,
+                toString(changeLogEntry));
+
+        List<ModifyRequest> modifyRequests =
+                consumer.processModification(consumer, changeLogEntry, ModificationMode.DELETE, ReturnData.EVERYTHING);
+
+        executeModifyRequests(consumer, changeLogEntry, modifyRequests);
+    }
+
+    /**
      * Return a {@link ModifyRequest} for every {@link PSO} whose references need to be modified. Each modify request
      * has a single {@link Modification} consisting of the {@link Reference}s which need to be added or deleted.
      * 
      * @param consumer the psp change log consumer
      * @param changeLogEntry the change log entry
      * @param modificationMode the modification mode, either add or delete
+     * @param returnData spmlv2 return data
      * @return the possibly empty list of modify requests
      * @throws Spml2Exception if an SPML error occurs
      * @throws PspException if an error occurs processing the change log entry
      */
-    public List<ModifyRequest> processMembershipChange(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry,
-            ModificationMode modificationMode) throws Spml2Exception, PspException {
+    public List<ModifyRequest> processModification(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry,
+            ModificationMode modificationMode, ReturnData returnData) throws Spml2Exception, PspException {
 
         List<ModifyRequest> modifyRequests = new ArrayList<ModifyRequest>();
 
         CalcRequest calcRequest = new CalcRequest();
         calcRequest.setId(ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()));
         calcRequest.setRequestID(PSPUtil.uniqueRequestId());
+        if (returnData != null) {
+            calcRequest.setReturnData(returnData);
+        }
 
         CalcResponse calcResponse = consumer.getPsp().execute(calcRequest);
 
         for (PSO pso : calcResponse.getPSOs()) {
 
-            List<Reference> references = processMembershipChangeReferences(pso, modificationMode);
+            List<Reference> references = processModificationReferences(pso, modificationMode);
 
-            List<DSMLAttr> attributes = processMembershipChangeData(pso, modificationMode);
+            List<DSMLAttr> attributes = processModificationData(pso, modificationMode);
 
             if (references.isEmpty() && attributes.isEmpty()) {
                 continue;
@@ -713,11 +755,11 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
      * @throws Spml2Exception if an SPML error occurs
      * @throws PspException if an error occurs searching for attributes
      */
-    public List<DSMLAttr> processMembershipChangeData(PSO pso, ModificationMode modificationMode)
-            throws Spml2Exception, PspException {
+    public List<DSMLAttr> processModificationData(PSO pso, ModificationMode modificationMode) throws Spml2Exception,
+            PspException {
 
         // the attributes which need to be modified
-        List<DSMLAttr> attributes = new ArrayList<DSMLAttr>();
+        List<DSMLAttr> attributesToBeModified = new ArrayList<DSMLAttr>();
 
         // attributes from the pso
         Map<String, DSMLAttr> dsmlAttrMap = PSPUtil.getDSMLAttrMap(pso.getData());
@@ -725,6 +767,9 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         // for every attribute
         for (String dsmlAttrName : dsmlAttrMap.keySet()) {
             DSMLAttr dsmlAttr = dsmlAttrMap.get(dsmlAttrName);
+
+            // the dsml values to be added or deleted
+            List<DSMLValue> dsmlValuesToBeModified = new ArrayList<DSMLValue>();
 
             // for every attribute value
             for (DSMLValue dsmlValue : dsmlAttr.getValues()) {
@@ -749,12 +794,12 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
                     // if adding attribute and attribute does not exist, modify
                     if (modificationMode.equals(ModificationMode.ADD) && !hasAttribute) {
-                        attributes.add(dsmlAttr);
+                        dsmlValuesToBeModified.add(dsmlValue);
                     }
 
                     // if deleting attribute and attribute exists, modify
                     if (modificationMode.equals(ModificationMode.DELETE) && hasAttribute) {
-                        attributes.add(dsmlAttr);
+                        dsmlValuesToBeModified.add(dsmlValue);
                     }
                 } catch (PspNoSuchIdentifierException e) {
                     if (modificationMode.equals(ModificationMode.DELETE)) {
@@ -764,9 +809,15 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
                     }
                 }
             }
+
+            // return the dsml values to be added
+            if (!dsmlValuesToBeModified.isEmpty()) {
+                attributesToBeModified.add(new DSMLAttr(dsmlAttr.getName(), dsmlValuesToBeModified
+                        .toArray(new DSMLValue[] {})));
+            }
         }
 
-        return attributes;
+        return attributesToBeModified;
     }
 
     /**
@@ -780,7 +831,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
      * @throws Spml2Exception if an SPML error occurs
      * @throws PspException if an error occurs searching for references
      */
-    public List<Reference> processMembershipChangeReferences(PSO pso, ModificationMode modificationMode)
+    public List<Reference> processModificationReferences(PSO pso, ModificationMode modificationMode)
             throws Spml2Exception, PspException {
 
         // the references which need to be modified
@@ -819,6 +870,48 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         }
 
         return references;
+    }
+
+    /**
+     * Add a stem.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processStemAdd(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem add.", name, toString(changeLogEntry));
+
+        executeSync(consumer, changeLogEntry, ChangeLogLabels.STEM_ADD.name);
+    }
+
+    /**
+     * Delete a stem.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processStemDelete(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem delete.", name, toString(changeLogEntry));
+
+        processDelete(consumer, changeLogEntry);
+    }
+
+    /**
+     * Update a stem.
+     * 
+     * @param consumer the change log consumer
+     * @param changeLogEntry the change log entry
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public void processStemUpdate(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry) throws PspException {
+
+        LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing stem update.", name, toString(changeLogEntry));
+
+        processUpdate(consumer, changeLogEntry, ChangeLogLabels.STEM_UPDATE.name);
     }
 
     /**
@@ -924,29 +1017,5 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing object update was successful.", name,
                 toString(changeLogEntry));
-    }
-
-    /**
-     * Gets a simple string representation of the change log entry.
-     * 
-     * @see ChangeLogDataConnector#toString(ChangeLogEntry)
-     * 
-     * @param changeLogEntry the change log entry
-     * @return the simple string representation of the change log entry
-     */
-    public static String toString(ChangeLogEntry changeLogEntry) {
-        return ChangeLogDataConnector.toString(changeLogEntry);
-    }
-
-    /**
-     * Gets a deep string representation of the change log entry.
-     * 
-     * @see ChangeLogDataConnector#toStringDeep(ChangeLogEntry)
-     * 
-     * @param changeLogEntry the change log entry
-     * @return the deep string representation of the change log entry
-     */
-    public static String toStringDeep(ChangeLogEntry changeLogEntry) {
-        return ChangeLogDataConnector.toStringDeep(changeLogEntry);
     }
 }

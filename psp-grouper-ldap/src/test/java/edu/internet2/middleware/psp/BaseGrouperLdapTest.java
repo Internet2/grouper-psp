@@ -19,8 +19,10 @@ package edu.internet2.middleware.psp;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.naming.NamingException;
 
@@ -32,7 +34,12 @@ import edu.internet2.middleware.grouper.Group;
 import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.RegistrySubject;
 import edu.internet2.middleware.grouper.Stem;
+import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.SubjectFinder;
+import edu.internet2.middleware.grouper.attr.AttributeDef;
+import edu.internet2.middleware.grouper.attr.AttributeDefName;
+import edu.internet2.middleware.grouper.attr.AttributeDefType;
+import edu.internet2.middleware.grouper.attr.AttributeDefValueType;
 import edu.internet2.middleware.grouper.helper.GrouperTest;
 import edu.internet2.middleware.grouper.helper.StemHelper;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
@@ -256,6 +263,25 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         groupB.setDescription("descriptionB");
         groupB.store();
         return groupB;
+    }
+
+    /**
+     * Set up the mailLocalAddress attribute definition.
+     * 
+     * @return the attribute def name, whatever that is
+     */
+    public AttributeDefName setUpMailLocalAddressAttributeDef() {
+
+        Stem etcAttribute = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc:attribute", true);
+
+        AttributeDef attributeDef =
+                etcAttribute.addChildAttributeDef("mailLocalAddressAttributeDef", AttributeDefType.attr);
+        attributeDef.setAssignToGroup(true);
+        attributeDef.setMultiValued(true);
+        attributeDef.setValueType(AttributeDefValueType.string);
+        attributeDef.store();
+
+        return etcAttribute.addChildAttributeDefName(attributeDef, "mailLocalAddress", "mailLocalAddress");
     }
 
     /**

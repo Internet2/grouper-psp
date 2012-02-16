@@ -80,6 +80,8 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
         // GrouperLoaderConfig.testConfig.put("changeLog.consumer.ldappcng.quartzCron", "0 0 8 * * ?");
         // GrouperLoaderConfig.testConfig.put("changeLog.consumer.ldappcng.confDir",
 
+        setUpMailLocalAddressAttributeDef();
+
         try {
 
             setUpLdap();

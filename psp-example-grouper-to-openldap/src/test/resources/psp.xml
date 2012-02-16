@@ -92,10 +92,11 @@
     <!-- The "old" ldap group DN calculated from group update change log events. -->
     <alternateIdentifier ref="groupDnAlternateChangeLog" />
 
-    <!-- The ldap group "objectClass" attribute. -->
+    <!-- The ldap group "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
     <attribute
       name="objectClass"
-      ref="groupObjectclassEduMember" />
+      ref="groupObjectclass"
+      retainAll="true" />
 
     <!-- The ldap group "cn" attribute. -->
     <attribute name="cn" />
@@ -113,6 +114,9 @@
     <attribute
       name="isMemberOf"
       ref="groupIsMemberOf" />
+
+    <!-- The ldap group "mailLocalAddress" attribute. -->
+    <attribute name="mailLocalAddress" />
 
     <!-- The ldap group "member" attribute. -->
     <!-- The value of emptyValue is provisioned when the group has no members. -->
