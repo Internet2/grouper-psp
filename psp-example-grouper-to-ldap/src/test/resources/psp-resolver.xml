@@ -444,14 +444,23 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipGroupName = new BasicAttribute("changeLogMembershipGroupName")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
         if (typeof groupName != "undefined" && groupName != null ) {
+            // The name of the base stem to be provisioned.
             var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
             if (scriptBaseStem.length == 0) {
                 if (groupName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
                     changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));
                 }
+            // Return the group name if it starts with the base stem to be provisioned.
             } else {
                 if (groupName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
                     changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));                
@@ -469,8 +478,13 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipGroupSubjectName = new BasicAttribute("changeLogMembershipGroupSubjectName");
+        
+        // Return 'subjectName' attribute values if the 'sourceId' attribute is 'g:gsa'.
         if (typeof sourceId != "undefined" && sourceId != null ){            
             if (sourceId.getValues().contains("g:gsa")) {
                 if (typeof subjectName != "undefined" && subjectName != null ){
@@ -489,8 +503,13 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipLdapSubjectId = new BasicAttribute("changeLogMembershipLdapSubjectId");
+        
+        // Return 'subjectId' attribute values if the 'sourceId' attribute is 'ldap'.
         if (typeof sourceId != "undefined" && sourceId != null ){            
             if (sourceId.getValues().contains("ldap")) {
                 if (typeof subjectId != "undefined" && subjectId != null ){
