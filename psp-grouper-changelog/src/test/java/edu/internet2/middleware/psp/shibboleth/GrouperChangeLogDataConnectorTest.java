@@ -144,6 +144,19 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
     }
 
     /**
+     * Add common change log entry attributes to the map.
+     * 
+     * @param correctMap the map to add attributes to
+     * @param changeLogEntry the change log entry
+     */
+    protected void addChangeLogAttributesToMap(AttributeMap correctMap, ChangeLogEntry changeLogEntry) {
+        correctMap.setAttribute("actionName", changeLogEntry.getChangeLogType().getActionName());
+        correctMap.setAttribute("changeLogCategory", changeLogEntry.getChangeLogType().getChangeLogCategory());
+        correctMap.setAttribute("sequenceNumber", changeLogEntry.getSequenceNumber().toString());
+        correctMap.setAttribute("createdOn", changeLogEntry.getCreatedOn().toString());
+    }
+
+    /**
      * Test audit filter by both category and action.
      */
     public void testFilterChangeLogAudit() {
@@ -181,18 +194,21 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
             }
@@ -239,18 +255,21 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
             }
@@ -297,12 +316,14 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_ADD.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_UPDATE)) {
@@ -313,12 +334,14 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                         }
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
                     }
                 }
             }
@@ -353,6 +376,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
                     correctMap
                             .setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
             }
 
@@ -386,6 +410,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
                     correctMap
                             .setAttribute(changeLogLabel.name(), changeLogEntry.retrieveValueForLabel(changeLogLabel));
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
             }
 
@@ -420,12 +445,14 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.getChangeLogType().equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_ADD)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_ADD.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
             }
 
@@ -479,6 +506,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
             }
 
@@ -528,12 +556,14 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
                         correctMap.setAttribute(changeLogLabel.name(),
                                 changeLogEntry.retrieveValueForLabel(changeLogLabel));
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
             }
 
