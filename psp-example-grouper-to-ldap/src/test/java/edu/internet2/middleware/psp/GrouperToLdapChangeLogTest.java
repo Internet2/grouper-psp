@@ -184,6 +184,61 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
     }
 
     /**
+     * Test provisioning resulting from adding a description to a group.
+     * 
+     * @throws Exception
+     */
+    public void testGroupDescriptionAdd() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionAdd.before.ldif");
+
+        edu = setUpEdu();
+
+        groupA = StemHelper.addChildGroup(edu, "groupA", "Group A");
+
+        clearChangeLog();
+
+        groupA.setDescription("descriptionA");
+        groupA.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionAdd.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionAdd.after.ldif");
+        
+        // some postgres timing issue ?
+        Thread.sleep(1000);
+    }
+
+    /**
+     * Test provisioning resulting from deleting a description from a group.
+     * 
+     * @throws Exception
+     */
+    public void testGroupDescriptionDelete() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.before.ldif");
+
+        edu = setUpEdu();
+
+        groupA = StemHelper.addChildGroup(edu, "groupA", "Group A");
+        groupA.setDescription("descriptionA");
+        groupA.store();
+
+        clearChangeLog();
+
+        groupA.setDescription("");
+        groupA.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.after.ldif");
+    }
+
+    /**
      * Test provisioning resulting from deleting a group with members which has already been deleted from the
      * provisioned target.
      * 

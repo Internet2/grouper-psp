@@ -102,7 +102,9 @@
     <attribute name="cn" />
 
     <!-- The ldap group "description" attribute. -->
-    <attribute name="description" />
+    <attribute
+      name="description"
+      ref="groupDescription" />
 
     <!-- The ldap group "member" attribute. -->
     <references name="member">
@@ -110,7 +112,7 @@
       <reference
         ref="membersLdap"
         toObject="member" />
-        
+
       <reference
         ref="membersGsa"
         toObject="group" />

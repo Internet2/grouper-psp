@@ -1,5 +1,5 @@
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/11/01-18:34:48.471_Q4RTLT9X' returnData='everything'>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/11/01-18:34:48.471_Q4RTLT9X' returnData='data'>
   <psp:id ID='change_log_sequence_number:285'/>
 </psp:calcRequest>
 

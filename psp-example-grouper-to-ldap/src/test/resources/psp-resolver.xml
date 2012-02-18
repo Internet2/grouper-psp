@@ -195,7 +195,7 @@
 
   <!-- Returns change log attributes representing the changing of a group's name. -->
   <resolver:DataConnector
-    id="UpdateGroupChangeLogDataConnector"
+    id="UpdateGroupNameChangeLogDataConnector"
     xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
     <!-- The AND filter matches both child filters. -->
     <grouper:Filter xsi:type="grouper:AND">
@@ -209,6 +209,25 @@
         xsi:type="psp-grouper-changelog:ChangeLogExactAttribute"
         name="propertyChanged"
         value="name" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
+  <!-- Returns change log attributes representing the changing of a group's description. -->
+  <resolver:DataConnector
+    id="UpdateGroupDescriptionChangeLogDataConnector"
+    xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <!-- The AND filter matches both child filters. -->
+    <grouper:Filter xsi:type="grouper:AND">
+      <!-- The ChangeLogEntry filter matches change log entries with the given category and action. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogEntry"
+        category="group"
+        action="updateGroup" />
+      <!-- The ChangeLogExactAttribute filter matches change log entries with the given attribute and value. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogExactAttribute"
+        name="propertyChanged"
+        value="description" />
     </grouper:Filter>
   </resolver:DataConnector>
 
@@ -234,21 +253,15 @@
       action="deleteMembership" />
   </resolver:DataConnector>
 
-
   <!-- Static data connector. -->
   <resolver:DataConnector
     id="StaticDataConnector"
     xsi:type="dc:Static">
     <!-- Group LDAP objectclass. -->
-    <dc:Attribute id="groupObjectclass">
+    <dc:Attribute id="staticGroupObjectclass">
       <dc:Value>top</dc:Value>
       <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
-    </dc:Attribute>
-    <!-- Group LDAP eduMember objectclass. -->
-    <dc:Attribute id="groupObjectclassEduMember">
-      <dc:Value>top</dc:Value>
-      <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
-      <dc:Value>eduMember</dc:Value>
+      <!-- <dc:Value>eduMember</dc:Value> -->
     </dc:Attribute>
     <!-- Stem LDAP objectclass. -->
     <dc:Attribute id="stemObjectclass">
@@ -327,7 +340,8 @@
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
-    <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group. For example, the DN of a group before it is renamed. -->
@@ -351,14 +365,37 @@
     rdnAttributeName="cn"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old group name. -->
-    <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The group objectclass attribute. -->
+  <!-- The group objectclass attribute. If a change log entry is resolved, do not return dependencies from the static data 
+    connector unless the change log entry is a membership change. -->
   <resolver:AttributeDefinition
     id="groupObjectclass"
-    xsi:type="ad:Simple">
+    xsi:type="ad:Script">
     <resolver:Dependency ref="StaticDataConnector" />
+    <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
+    <!-- <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" /> -->
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        groupObjectclass = new BasicAttribute("groupObjectclass");
+        
+        // Include values from 'staticGroupObjectClass' if the change log category is 'membership'.
+        if (typeof changeLogCategory != "undefined" && changeLogCategory != null) {
+            if (changeLogCategory.getValues().contains("membership")) {          
+                groupObjectclass.getValues().addAll(staticGroupObjectclass.getValues());
+            }
+        // Include values from 'staticGroupObjectClass' if a change log entry is not being processed.
+        } else {
+            groupObjectclass.getValues().addAll(staticGroupObjectclass.getValues());
+        }                       
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The group objectclass attribute with eduMember. -->
@@ -378,11 +415,37 @@
     <resolver:Dependency ref="GroupDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The value of the group "description" attribute is the group description. -->
+  <!-- The value of the group "description" attribute is the group description. If a group update change log entry is being 
+    processed and the new property value is null, return the empty string "". -->
   <resolver:AttributeDefinition
-    id="description"
-    xsi:type="ad:Simple">
+    id="groupDescription"
+    xsi:type="ad:Script">
     <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        groupDescription = new BasicAttribute("groupDescription");
+        
+        // Include values from 'staticGroupObjectClass' if the change log category is 'membership'.        
+        if (typeof actionName != "undefined" && actionName != null) {
+            if (actionName.getValues().contains("updateGroup")) {          
+                if (typeof propertyNewValue == "undefined" || propertyNewValue == null) {
+                    groupDescription.getValues().add("");
+                } else {
+                    groupDescription.getValues().addAll(propertyNewValue.getValues());
+                }
+            }
+                
+        // Return the value of the group data connector 'description' attribute if a change log entry is not being processed.
+        } else {
+            if (typeof description != "undefined" && description != null) {            
+                groupDescription.getValues().addAll(description.getValues());
+            }
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The values of the "membersLdap" attribute are the subject ids of group members from the "ldap" source. -->

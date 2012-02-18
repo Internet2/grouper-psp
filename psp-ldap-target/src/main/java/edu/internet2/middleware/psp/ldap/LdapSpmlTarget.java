@@ -644,7 +644,10 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
 
             DSMLValue[] dsmlValues = dsmlModification.getValues();
             for (DSMLValue dsmlValue : dsmlValues) {
-                attribute.add(dsmlValue.getValue());
+            	// for example, when <dsmlValue><dsmlValue/> and op is a replace
+                if (!DatatypeHelper.isEmpty(dsmlValue.getValue())) {
+                    attribute.add(dsmlValue.getValue());
+                }
             }
 
             int op = -1;

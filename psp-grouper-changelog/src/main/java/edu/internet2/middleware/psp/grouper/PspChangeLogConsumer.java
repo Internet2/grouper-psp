@@ -679,12 +679,11 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     }
 
     /**
-     * Return a {@link ModifyRequest} for every {@link PSO} whose references need to be modified. Each modify request
-     * has a single {@link Modification} consisting of the {@link Reference}s which need to be added or deleted.
+     * Return a {@link ModifyRequest} for every {@link PSO} whose references or attributes need to be modified.
      * 
      * @param consumer the psp change log consumer
      * @param changeLogEntry the change log entry
-     * @param modificationMode the modification mode, either add or delete
+     * @param modificationMode the modification mode
      * @param returnData spmlv2 return data
      * @return the possibly empty list of modify requests
      * @throws Spml2Exception if an SPML error occurs
@@ -706,44 +705,64 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         for (PSO pso : calcResponse.getPSOs()) {
 
-            List<Reference> references = processModificationReferences(pso, modificationMode);
+            ModifyRequest modifyRequest = processModification(pso, modificationMode, returnData);
 
-            List<DSMLAttr> attributes = processModificationData(pso, modificationMode);
-
-            if (references.isEmpty() && attributes.isEmpty()) {
-                continue;
+            if (modifyRequest != null) {
+                modifyRequests.add(modifyRequest);
             }
-
-            ModifyRequest modifyRequest = new ModifyRequest();
-            modifyRequest.setRequestID(PSPUtil.uniqueRequestId());
-            modifyRequest.setPsoID(pso.getPsoID());
-            modifyRequest.addOpenContentAttr(Pso.ENTITY_NAME_ATTRIBUTE,
-                    pso.findOpenContentAttrValueByName(Pso.ENTITY_NAME_ATTRIBUTE));
-            modifyRequest.setReturnData(ReturnData.IDENTIFIER);
-
-            if (!references.isEmpty()) {
-                Modification modification = new Modification();
-                modification.setModificationMode(modificationMode);
-                CapabilityData capabilityData = PSPUtil.fromReferences(references);
-                modification.addCapabilityData(capabilityData);
-                modifyRequest.addModification(modification);
-            }
-
-            if (!attributes.isEmpty()) {
-                for (DSMLAttr dsmlAttr : attributes) {
-                    Modification modification = new Modification();
-                    modification.setModificationMode(modificationMode);
-                    DSMLModification dsmlMod =
-                            new DSMLModification(dsmlAttr.getName(), dsmlAttr.getValues(), modificationMode);
-                    modification.addOpenContentElement(dsmlMod);
-                    modifyRequest.addModification(modification);
-                }
-            }
-
-            modifyRequests.add(modifyRequest);
         }
 
         return modifyRequests;
+    }
+
+    /**
+     * Return a {@link ModifyRequest} for the given {@link PSO} whose references or attributes need to be modified.
+     * 
+     * @param pso the provisioned service object
+     * @param modificationMode the modification mode
+     * @param returnData spmlv2 return data
+     * @return the modify request or null if there are no modifications to be performed
+     * @throws Spml2Exception if an SPML error occurs
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public ModifyRequest processModification(PSO pso, ModificationMode modificationMode, ReturnData returnData)
+            throws Spml2Exception, PspException {
+
+        List<DSMLAttr> attributes = processModificationData(pso, modificationMode);
+
+        List<Reference> references = processModificationReferences(pso, modificationMode);
+
+        if (references.isEmpty() && attributes.isEmpty()) {
+            return null;
+        }
+
+        ModifyRequest modifyRequest = new ModifyRequest();
+        modifyRequest.setRequestID(PSPUtil.uniqueRequestId());
+        modifyRequest.setPsoID(pso.getPsoID());
+        modifyRequest.addOpenContentAttr(Pso.ENTITY_NAME_ATTRIBUTE,
+                pso.findOpenContentAttrValueByName(Pso.ENTITY_NAME_ATTRIBUTE));
+        modifyRequest.setReturnData(ReturnData.IDENTIFIER);
+
+        if (!attributes.isEmpty()) {
+            for (DSMLAttr dsmlAttr : attributes) {
+                Modification modification = new Modification();
+                modification.setModificationMode(modificationMode);
+                DSMLModification dsmlMod =
+                        new DSMLModification(dsmlAttr.getName(), dsmlAttr.getValues(), modificationMode);
+                modification.addOpenContentElement(dsmlMod);
+                modifyRequest.addModification(modification);
+            }
+        }
+
+        if (!references.isEmpty()) {
+            Modification modification = new Modification();
+            modification.setModificationMode(modificationMode);
+            CapabilityData capabilityData = PSPUtil.fromReferences(references);
+            modification.addCapabilityData(capabilityData);
+            modifyRequest.addModification(modification);
+        }
+
+        return modifyRequest;
     }
 
     /**
@@ -792,12 +811,17 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
                     // perform a search to determine if the attribute exists
                     boolean hasAttribute = psp.hasAttribute(pso.getPsoID(), dsmlAttr.getName(), dsmlValue.getValue());
 
-                    // if adding attribute and attribute does not exist, modify
+                    // if adding attribute and it does not exist on target, modify
                     if (modificationMode.equals(ModificationMode.ADD) && !hasAttribute) {
                         dsmlValuesToBeModified.add(dsmlValue);
                     }
 
-                    // if deleting attribute and attribute exists, modify
+                    // if replacing attribute and it does not exist on target, modify
+                    if (modificationMode.equals(ModificationMode.REPLACE) && !hasAttribute) {
+                        dsmlValuesToBeModified.add(dsmlValue);
+                    }
+
+                    // if deleting attribute and it exists on target, modify
                     if (modificationMode.equals(ModificationMode.DELETE) && hasAttribute) {
                         dsmlValuesToBeModified.add(dsmlValue);
                     }
@@ -851,6 +875,11 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
                     // if adding reference and reference does not exist, modify
                     if (modificationMode.equals(ModificationMode.ADD) && !hasReference) {
+                        references.add(reference);
+                    }
+
+                    // if replacing reference and reference does not exist, modify
+                    if (modificationMode.equals(ModificationMode.REPLACE) && !hasReference) {
                         references.add(reference);
                     }
 
@@ -915,8 +944,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     }
 
     /**
-     * Process an object update. If the object should be renamed, attempt to rename, otherwise execute a
-     * {@link SyncRequest}.
+     * Process an object update. If the object should be renamed, attempt to rename, otherwise attempt to modify.
      * 
      * If the attempt to rename the object fails with the {@link ERROR_SUBTREE_RENAME_NOT_SUPPORTED} error, then attempt
      * to sync the object.
@@ -933,7 +961,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         CalcRequest calcRequest = new CalcRequest();
         calcRequest.setId(ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()));
-        calcRequest.setReturnData(ReturnData.EVERYTHING);
+        calcRequest.setReturnData(ReturnData.DATA);
         calcRequest.setRequestID(PSPUtil.uniqueRequestId());
 
         CalcResponse calcResponse = consumer.getPsp().execute(calcRequest);
@@ -963,21 +991,15 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         for (PSO pso : psos) {
 
             // calculate rename
-            ModifyRequest modifyRequest = consumer.getPsp().renameRequest(pso);
+            ModifyRequest renameRequest = consumer.getPsp().renameRequest(pso);
 
-            if (modifyRequest == null) {
-                // not renaming, attempt to sync
-                try {
-                    executeSync(consumer, changeLogEntry, principalNameLabel);
-                } catch (PspException e) {
-                    isError = true;
-                }
-            } else {
+            // rename
+            if (renameRequest != null) {
                 // attempt to rename
                 LOG.debug("PSP Consumer '{}' - Change log entry '{}' Will attempt to rename '{}'", new Object[] {name,
-                        toString(changeLogEntry), PSPUtil.toString(modifyRequest),});
+                        toString(changeLogEntry), PSPUtil.toString(renameRequest),});
 
-                ModifyResponse modifyResponse = consumer.getPsp().execute(modifyRequest);
+                ModifyResponse modifyResponse = consumer.getPsp().execute(renameRequest);
 
                 if (modifyResponse.getStatus().equals(StatusCode.SUCCESS)) {
                     LOG.debug("PSP Consumer '{}' - Change log entry '{}' Rename was successful '{}'", new Object[] {
@@ -997,12 +1019,35 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
                                         name, toString(changeLogEntry));
                                 executeSync(consumer, changeLogEntry, principalNameLabel);
                             } catch (PspException e) {
+                                LOG.error("PSP Consumer '{}' - Change log entry '{}' An exception occurred '{}'",
+                                        new Object[] {name, toString(changeLogEntry), e,});
                                 isError = true;
                             }
                             continue;
                         }
                     }
 
+                    isError = true;
+                }
+            }
+
+            // not renaming, attempt to modify
+            if (renameRequest == null) {
+                try {
+                    // nope, do not sync the entire object, modify insteadF
+                    // executeSync(consumer, changeLogEntry, principalNameLabel);
+                    ModifyRequest modifyRequest = processModification(pso, ModificationMode.REPLACE, ReturnData.DATA);
+                    if (modifyRequest != null) {
+                        executeModifyRequests(consumer, changeLogEntry,
+                                Arrays.asList(new ModifyRequest[] {modifyRequest}));
+                    }
+                } catch (PspException e) {
+                    LOG.error("PSP Consumer '{}' - Change log entry '{}' An exception occurred '{}'", new Object[] {
+                            name, toString(changeLogEntry), e,});
+                    isError = true;
+                } catch (Spml2Exception e) {
+                    LOG.error("PSP Consumer '{}' - Change log entry '{}' An exception occurred '{}'", new Object[] {
+                            name, toString(changeLogEntry), e,});
                     isError = true;
                 }
             }

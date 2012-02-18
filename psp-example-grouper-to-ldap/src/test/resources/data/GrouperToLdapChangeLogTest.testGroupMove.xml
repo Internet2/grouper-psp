@@ -1,5 +1,5 @@
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/11/08-23:11:52.138_Q415P8LZ' returnData='everything'>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/11/08-23:11:52.138_Q415P8LZ' returnData='data'>
   <psp:id ID='change_log_sequence_number:299'/>
 </psp:calcRequest>
 
@@ -8,12 +8,6 @@
   <psp:pso entityName='group'>
     <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
     <psoID ID='cn=groupA,ou=child,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
-    <data>
-      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
-        <dsml:value>top</dsml:value>
-        <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
-      </dsml:attr>
-    </data>
   </psp:pso>
 </psp:calcResponse>
 
@@ -60,7 +54,7 @@
   </pso>
 </modifyResponse>
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/11/08-23:11:52.225_Q415P8L4' returnData='everything'>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/11/08-23:11:52.225_Q415P8L4' returnData='data'>
   <psp:id ID='change_log_sequence_number:300'/>
 </psp:calcRequest>
 

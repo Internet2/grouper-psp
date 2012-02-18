@@ -160,7 +160,7 @@ public class GrouperToTivoliChangeLogTest extends BaseGrouperToLdapChangeLogTest
 
         clearChangeLog();
 
-        Stem etc = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc", true);        
+        Stem etc = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc", true);
         Group group = etc.addChildGroup("childGroup", "childGroup");
         group.addMember(LdapSubjectTestHelper.SUBJ0);
 
