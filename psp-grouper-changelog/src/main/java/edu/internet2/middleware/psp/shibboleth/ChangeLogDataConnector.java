@@ -38,7 +38,6 @@ import edu.internet2.middleware.grouper.attr.assign.AttributeAssignType;
 import edu.internet2.middleware.grouper.attr.finder.AttributeAssignFinder;
 import edu.internet2.middleware.grouper.audit.AuditEntry;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogEntry;
-import edu.internet2.middleware.grouper.changeLog.ChangeLogLabels;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogType;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.shibboleth.dataConnector.BaseGrouperDataConnector;
@@ -184,9 +183,9 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
      */
     protected BasicAttribute<String> buildAttribute(ChangeLogEntry changeLogEntry, String label) {
 
-        String value = buildValue(changeLogEntry, label);
+        String value = changeLogEntry.retrieveValueForLabel(label);
 
-        if (DatatypeHelper.isEmpty(value)) {
+        if (value == null) {
             return null;
         }
 
@@ -194,33 +193,6 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         attribute.setId(label);
         attribute.getValues().add(value);
         return attribute;
-    }
-
-    /**
-     * Return the value of a change log entry attribute or null.
-     * 
-     * @param changeLogEntry the change log entry
-     * @param label the attribute name
-     * @return the value of a change log entry attribute or null
-     */
-    protected String buildValue(ChangeLogEntry changeLogEntry, String label) {
-
-        ChangeLogType changeLogType = changeLogEntry.getChangeLogType();
-        if (changeLogType == null) {
-            return null;
-        }
-
-        String fieldName = changeLogType.retrieveChangeLogEntryFieldForLabel(label);
-        if (DatatypeHelper.isEmpty(fieldName)) {
-            return null;
-        }
-
-        Object object = GrouperUtil.fieldValue(changeLogEntry, fieldName);
-        if (object == null) {
-            return null;
-        }
-
-        return object.toString();
     }
 
     /**
@@ -243,7 +215,7 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         }
 
         // get the attribute assign id
-        String attributeAssignId = buildValue(changeLogEntry, "attributeAssignId");
+        String attributeAssignId = changeLogEntry.retrieveValueForLabel("attributeAssignId");
         if (attributeAssignId == null) {
             return Collections.EMPTY_MAP;
         }
@@ -258,8 +230,8 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         Map<String, BaseAttribute> attributes = new LinkedHashMap<String, BaseAttribute>();
 
         // return an attribute with name attributeDefNameName and value
-        String attributeDefNameName = buildValue(changeLogEntry, "attributeDefNameName");
-        String value = buildValue(changeLogEntry, "value");
+        String attributeDefNameName = changeLogEntry.retrieveValueForLabel("attributeDefNameName");
+        String value = changeLogEntry.retrieveValueForLabel("value");
         if (attributeDefNameName != null && value != null) {
             BasicAttribute<String> attribute = new BasicAttribute<String>();
             attribute.setId(attributeDefNameName);
@@ -452,12 +424,7 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         ChangeLogType changeLogType = changeLogEntry.getChangeLogType();
 
         for (String label : changeLogType.labels()) {
-            String fieldName = changeLogType.retrieveChangeLogEntryFieldForLabel(label);
-            if (!DatatypeHelper.isEmpty(fieldName)) {
-                Object value = GrouperUtil.fieldValue(changeLogEntry, fieldName);
-                String valueString = DatatypeHelper.safeTrimOrNullString(GrouperUtil.stringValue(value));
-                toStringBuilder.append(label, valueString);
-            }
+            toStringBuilder.append(label, changeLogEntry.retrieveValueForLabel(label));
         }
 
         return toStringBuilder.toString();
