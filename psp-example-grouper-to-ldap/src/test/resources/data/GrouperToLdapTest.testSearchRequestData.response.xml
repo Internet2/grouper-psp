@@ -2,15 +2,15 @@
   <spmlsearch:pso entityName='group'>
     <psoID ID='cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
     <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+        <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+        <dsml:value>top</dsml:value>
+      </dsml:attr>
       <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
         <dsml:value>groupB</dsml:value>
       </dsml:attr>
       <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
         <dsml:value>descriptionB</dsml:value>
-      </dsml:attr>
-      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
-        <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
-        <dsml:value>top</dsml:value>
       </dsml:attr>
     </data>
   </spmlsearch:pso>

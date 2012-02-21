@@ -34,7 +34,7 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
      */
     public static void main(String[] args) {
         // TestRunner.run(LdappcngConsumerTest.class);
-        TestRunner.run(new GrouperToLdapChangeLogTest("testGroupWithMembersDeleteAlreadyDeleted"));
+        TestRunner.run(new GrouperToLdapChangeLogTest("testStemDescriptionDelete"));
     }
 
     /**
@@ -206,9 +206,9 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionAdd.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionAdd.after.ldif");
-        
-        // some postgres timing issue ?
-        Thread.sleep(1000);
+
+        // TODO some postgres blocking issue ?
+        Thread.sleep(1500);
     }
 
     /**
@@ -236,6 +236,9 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.after.ldif");
+
+        // TODO some postgres blocking issue ?
+        Thread.sleep(1000);
     }
 
     /**
@@ -553,6 +556,58 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDeleteAlreadyDeleted.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDelete.after.ldif");
+    }
+
+    /**
+     * Test provisioning resulting from adding a description to a stem.
+     * 
+     * @throws Exception
+     */
+    public void testStemDescriptionAdd() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDescriptionAdd.before.ldif");
+
+        edu = setUpEdu();
+
+        clearChangeLog();
+
+        edu.setDescription("The new description.");
+        edu.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDescriptionAdd.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDescriptionAdd.after.ldif");
+
+        // TODO some postgres blocking issue ?
+        Thread.sleep(1500);
+    }
+
+    /**
+     * Test provisioning resulting from deleting a description from a stem.
+     * 
+     * @throws Exception
+     */
+    public void testStemDescriptionDelete() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDescriptionDelete.before.ldif");
+
+        edu = setUpEdu();
+
+        clearChangeLog();
+
+        edu.setDescription("");
+        edu.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDescriptionDelete.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testStemDescriptionDelete.after.ldif");
+
+        // TODO some postgres blocking issue ?
+        Thread.sleep(1000);
     }
 
     /**

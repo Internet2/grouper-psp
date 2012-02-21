@@ -10,6 +10,9 @@
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
           <dsml:value>edu</dsml:value>
         </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+          <dsml:value>The edu stem.</dsml:value>
+        </dsml:attr>
       </data>
     </addRequest>
     <psp:id ID='edu'/>

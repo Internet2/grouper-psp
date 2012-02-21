@@ -67,6 +67,11 @@
       name="ou"
       ref="stemOu" />
 
+    <!-- The ldap organizational unit "description" attribute. -->
+    <attribute
+      name="description"
+      ref="stemDescription" />
+
   </pso>
 
   <!-- Provision a grouper group as an ldap group. -->
@@ -102,7 +107,9 @@
     <attribute name="cn" />
 
     <!-- The ldap group "description" attribute. -->
-    <attribute name="description" />
+    <attribute
+      name="description"
+      ref="groupDescription" />
 
     <!-- The ldap group "hasMember" attribute includes the names of the groups that are members of the group. -->
     <!-- The ldap group "hasMember" attribute includes the ids of the subjects that are members of the group. -->

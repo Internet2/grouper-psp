@@ -1,5 +1,5 @@
 dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
-objectClass: organizationalUnit
 objectClass: top
+objectClass: organizationalUnit
 ou: edu
 description: The edu stem.

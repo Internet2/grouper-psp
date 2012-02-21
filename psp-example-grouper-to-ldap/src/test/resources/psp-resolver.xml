@@ -165,7 +165,7 @@
 
   <!-- Returns change log attributes representing the changing of a stem's name. -->
   <resolver:DataConnector
-    id="UpdateStemChangeLogDataConnector"
+    id="UpdateStemNameChangeLogDataConnector"
     xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
     <!-- The AND filter matches both child filters. -->
     <grouper:Filter xsi:type="grouper:AND">
@@ -179,6 +179,25 @@
         xsi:type="psp-grouper-changelog:ChangeLogExactAttribute"
         name="propertyChanged"
         value="name" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
+  <!-- Returns change log attributes representing the changing of a stem's description. -->
+  <resolver:DataConnector
+    id="UpdateStemDescriptionChangeLogDataConnector"
+    xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <!-- The AND filter matches both child filters. -->
+    <grouper:Filter xsi:type="grouper:AND">
+      <!-- The ChangeLogEntry filter matches change log entries with the given category and action. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogEntry"
+        category="stem"
+        action="updateStem" />
+      <!-- The ChangeLogExactAttribute filter matches change log entries with the given attribute and value. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogExactAttribute"
+        name="propertyChanged"
+        value="description" />
     </grouper:Filter>
   </resolver:DataConnector>
 
@@ -264,7 +283,7 @@
       <!-- <dc:Value>eduMember</dc:Value> -->
     </dc:Attribute>
     <!-- Stem LDAP objectclass. -->
-    <dc:Attribute id="stemObjectclass">
+    <dc:Attribute id="staticStemObjectclass">
       <dc:Value>top</dc:Value>
       <dc:Value>organizationalUnit</dc:Value>
     </dc:Attribute>
@@ -288,7 +307,8 @@
     <!-- Dependencies which return a "name" attribute whose value is the stem name. -->
     <resolver:Dependency ref="StemDataConnector" />
     <resolver:Dependency ref="DeleteStemChangeLogDataConnector" />
-    <resolver:Dependency ref="UpdateStemChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateStemNameChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateStemDescriptionChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a stem via the change log. For example, the DN of a stem before it is renamed. -->
@@ -300,14 +320,32 @@
     rdnAttributeName="ou"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old stem name. -->
-    <resolver:Dependency ref="UpdateStemChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateStemNameChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The stem objectclass attribute. -->
+  <!-- The stem objectclass attribute. If a change log entry is resolved, do not return dependencies from the static data 
+    connector. -->
   <resolver:AttributeDefinition
     id="stemObjectclass"
-    xsi:type="ad:Simple">
+    xsi:type="ad:Script">
     <resolver:Dependency ref="StaticDataConnector" />
+    <resolver:Dependency ref="UpdateStemNameChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateStemDescriptionChangeLogDataConnector" />
+    <!-- <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" /> -->
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        stemObjectclass = new BasicAttribute("stemObjectclass");
+        
+        // Include values from 'staticStemObjectclass' if a change log entry is not being processed.
+        if (typeof changeLogCategory != "undefined" && changeLogCategory != null) {
+            // return nothing        
+        } else {
+            stemObjectclass.getValues().addAll(staticStemObjectclass.getValues());
+        }                       
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The value of stem "stemOu" attribute is the stem extension. -->
@@ -318,12 +356,13 @@
     <resolver:Dependency ref="StemDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The value of stem "stemDescription" attribute is the stem description. -->
+  <!-- The value of the stem "description" attribute is the stem description. -->
   <resolver:AttributeDefinition
     id="stemDescription"
     xsi:type="ad:Simple"
     sourceAttributeID="description">
     <resolver:Dependency ref="StemDataConnector" />
+    <resolver:Dependency ref="UpdateStemDescriptionChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
 
@@ -415,37 +454,13 @@
     <resolver:Dependency ref="GroupDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The value of the group "description" attribute is the group description. If a group update change log entry is being 
-    processed and the new property value is null, return the empty string "". -->
+  <!-- The value of the group "description" attribute is the group description. -->
   <resolver:AttributeDefinition
     id="groupDescription"
-    xsi:type="ad:Script">
+    xsi:type="ad:Simple"
+    sourceAttributeID="description">
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
-    <ad:Script><![CDATA[
-        // Import Shibboleth attribute provider.
-        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
-        
-        // Create the attribute to be returned.
-        groupDescription = new BasicAttribute("groupDescription");
-        
-        // Include values from 'staticGroupObjectClass' if the change log category is 'membership'.        
-        if (typeof actionName != "undefined" && actionName != null) {
-            if (actionName.getValues().contains("updateGroup")) {          
-                if (typeof propertyNewValue == "undefined" || propertyNewValue == null) {
-                    groupDescription.getValues().add("");
-                } else {
-                    groupDescription.getValues().addAll(propertyNewValue.getValues());
-                }
-            }
-                
-        // Return the value of the group data connector 'description' attribute if a change log entry is not being processed.
-        } else {
-            if (typeof description != "undefined" && description != null) {            
-                groupDescription.getValues().addAll(description.getValues());
-            }
-        }
-    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The values of the "membersLdap" attribute are the subject ids of group members from the "ldap" source. -->

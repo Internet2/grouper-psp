@@ -68,6 +68,11 @@
       name="ou"
       ref="stemOu" />
 
+    <!-- The ldap organizational unit "description" attribute. -->
+    <attribute
+      name="description"
+      ref="stemDescription" />
+
   </pso>
 
   <!-- Provision a grouper group as an ldap group. -->

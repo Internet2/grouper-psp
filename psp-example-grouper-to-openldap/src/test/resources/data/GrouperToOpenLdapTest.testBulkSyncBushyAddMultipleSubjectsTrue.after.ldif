@@ -5,6 +5,7 @@ ou: groups
 dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: organizationalUnit
 ou: edu
+description: The edu stem.
 
 dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top

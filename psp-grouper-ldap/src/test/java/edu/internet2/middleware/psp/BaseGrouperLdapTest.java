@@ -238,6 +238,8 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         GrouperSession.startRootSession();
         Stem root = StemHelper.findRootStem(GrouperSession.staticGrouperSession());
         edu = StemHelper.addChildStem(root, "edu", "education");
+        edu.setDescription("The edu stem.");
+        edu.store();
         return edu;
     }
 

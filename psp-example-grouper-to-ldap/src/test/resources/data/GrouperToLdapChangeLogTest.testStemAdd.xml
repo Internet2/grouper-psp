@@ -1,17 +1,17 @@
 
-<psp:syncRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/10/26-11:15:20.999_Q4IS9KQ5' returnData='everything'>
+<psp:syncRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/17-23:59:17.729' returnData='everything'>
   <psp:id ID='edu'/>
 </psp:syncRequest>
 
-<psp:diffRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/10/26-11:15:21.007_Q4IS9KQ6' returnData='everything'>
+<psp:diffRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/17-23:59:17.742' returnData='everything'>
   <psp:id ID='edu'/>
 </psp:diffRequest>
 
-<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/10/26-11:15:21.010_Q4IS9KQ7' returnData='everything'>
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/17-23:59:17.743' returnData='everything'>
   <psp:id ID='edu'/>
 </psp:calcRequest>
 
-<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2011/10/26-11:15:21.010_Q4IS9KQ7'>
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/17-23:59:17.743'>
   <psp:id ID='edu'/>
   <psp:pso entityName='stem'>
     <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -23,18 +23,21 @@
       <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
         <dsml:value>edu</dsml:value>
       </dsml:attr>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+        <dsml:value>The edu stem.</dsml:value>
+      </dsml:attr>
     </data>
   </psp:pso>
 </psp:calcResponse>
 
-<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2011/10/26-11:15:21.054_Q4IS9KQ8' returnData='everything'>
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/17-23:59:17.975' returnData='everything'>
   <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
 </lookupRequest>
 
-<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='failure' requestID='2011/10/26-11:15:21.054_Q4IS9KQ8' error='noSuchIdentifier'/>
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='failure' requestID='2012/02/17-23:59:17.975' error='noSuchIdentifier'/>
 
-<psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2011/10/26-11:15:21.007_Q4IS9KQ6'>
-  <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' requestID='2011/10/26-11:15:21.061_Q4IS9KQ9' targetId='ldap' returnData='everything'>
+<psp:diffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/17-23:59:17.742'>
+  <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' requestID='2012/02/17-23:59:17.986' targetId='ldap' returnData='everything'>
     <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
     <data>
       <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
@@ -44,12 +47,15 @@
       <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
         <dsml:value>edu</dsml:value>
       </dsml:attr>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+        <dsml:value>The edu stem.</dsml:value>
+      </dsml:attr>
     </data>
   </addRequest>
   <psp:id ID='edu'/>
 </psp:diffResponse>
 
-<addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' requestID='2011/10/26-11:15:21.061_Q4IS9KQ9' targetId='ldap' returnData='everything'>
+<addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='stem' requestID='2012/02/17-23:59:17.986' targetId='ldap' returnData='everything'>
   <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
   <data>
     <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
@@ -59,10 +65,13 @@
     <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
       <dsml:value>edu</dsml:value>
     </dsml:attr>
+    <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+      <dsml:value>The edu stem.</dsml:value>
+    </dsml:attr>
   </data>
 </addRequest>
 
-<addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2011/10/26-11:15:21.061_Q4IS9KQ9'>
+<addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/17-23:59:17.986'>
   <pso entityName='stem'>
     <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
     <data>
@@ -73,12 +82,15 @@
       <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
         <dsml:value>edu</dsml:value>
       </dsml:attr>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+        <dsml:value>The edu stem.</dsml:value>
+      </dsml:attr>
     </data>
   </pso>
 </addResponse>
 
-<psp:syncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2011/10/26-11:15:20.999_Q4IS9KQ5'>
-  <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2011/10/26-11:15:21.061_Q4IS9KQ9'>
+<psp:syncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/17-23:59:17.729'>
+  <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/17-23:59:17.986'>
     <pso entityName='stem'>
       <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
@@ -89,8 +101,44 @@
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
           <dsml:value>edu</dsml:value>
         </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+          <dsml:value>The edu stem.</dsml:value>
+        </dsml:attr>
       </data>
     </pso>
   </addResponse>
   <psp:id ID='edu'/>
 </psp:syncResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/17-23:59:18.038' returnData='data'>
+  <psp:id ID='change_log_sequence_number:328'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/17-23:59:18.038'>
+  <psp:id ID='change_log_sequence_number:328'/>
+  <psp:pso entityName='stem'>
+    <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+        <dsml:value>The edu stem.</dsml:value>
+      </dsml:attr>
+    </data>
+  </psp:pso>
+</psp:calcResponse>
+
+<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/02/17-23:59:18.096' returnData='identifier'>
+  <spmlsearch:query targetID='ldap' scope='pso'>
+    <dsml:filter xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core'>
+      <dsml:equalityMatch name='description'>
+        <dsml:value>The edu stem.</dsml:value>
+      </dsml:equalityMatch>
+    </dsml:filter>
+    <spmlsearch:basePsoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </spmlsearch:query>
+</spmlsearch:searchRequest>
+
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/02/17-23:59:18.096'>
+  <spmlsearch:pso entityName='stem'>
+    <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </spmlsearch:pso>
+</spmlsearch:searchResponse>
