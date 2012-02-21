@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -709,8 +710,7 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
 
         PSO pso = new PSO();
 
-        // determine schema entity
-        // throws PSPException
+        // determine schema entity, throws PSPException
         Pso psoDefinition = this.getPSODefinition(entry);
         LOG.debug("{} schema entity '{}'", msg, psoDefinition.getId());
         pso.addOpenContentAttr(Pso.ENTITY_NAME_ATTRIBUTE, psoDefinition.getId());
@@ -736,10 +736,11 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
 
         pso.setPsoID(psoID);
 
-        LdapAttributes ldapAttributes = entry.getLdapAttributes();
-
         if (returnData.equals(ReturnData.DATA) || returnData.equals(ReturnData.EVERYTHING)) {
-            // TODO this is ugly; ldap attribute names are case insensitive
+
+            LdapAttributes ldapAttributes = entry.getLdapAttributes();
+
+            // ldap attribute names are case insensitive
             Map<String, String> attributeNameMap = new TreeMap<String, String>(String.CASE_INSENSITIVE_ORDER);
             for (String attributeName : psoDefinition.getAttributeNames()) {
                 attributeNameMap.put(attributeName, attributeName);
@@ -751,26 +752,45 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
                 }
             }
 
-            Extensible data = new Extensible();
-            List<Reference> references = new ArrayList<Reference>();
+            // the order of the attributes and references in the pso should match the psp configuration
+
+            // map psp attribute names to dsml attr
+            Map<String, DSMLAttr> nameToAttr = new HashMap<String, DSMLAttr>();
+            // map psp reference names to references
+            Map<String, List<Reference>> nameToRefs = new HashMap<String, List<Reference>>();
 
             for (LdapAttribute ldapAttribute : ldapAttributes.getAttributes()) {
                 if (attributeNameMap.containsKey(ldapAttribute.getName())) {
-                    data.addOpenContentElement(this.getDsmlAttr(attributeNameMap.get(ldapAttribute.getName()),
-                            ldapAttribute.getStringValues()));
+                    String pspAttributeName = attributeNameMap.get(ldapAttribute.getName());
+                    nameToAttr.put(pspAttributeName, getDsmlAttr(pspAttributeName, ldapAttribute.getStringValues()));
                 } else if (returnData.equals(ReturnData.EVERYTHING)
                         && referenceNameMap.containsKey(ldapAttribute.getName())) {
-                    references.addAll(this.getReferences(referenceNameMap.get(ldapAttribute.getName()),
-                            ldapAttribute.getStringValues()));
+                    String pspReferenceName = referenceNameMap.get(ldapAttribute.getName());
+                    nameToRefs.put(pspReferenceName, getReferences(pspReferenceName, ldapAttribute.getStringValues()));
                 } else {
                     LOG.trace("{} ignoring attribute '{}'", msg, ldapAttribute.getName());
                 }
+            }
 
-                if (data.getOpenContentElements().length > 0) {
-                    pso.setData(data);
+            // data, in order defined in psp configuration
+            Extensible data = new Extensible();
+            for (String attributeName : psoDefinition.getAttributeNames()) {
+                if (nameToAttr.containsKey(attributeName)) {
+                    data.addOpenContentElement(nameToAttr.get(attributeName));
                 }
             }
+            if (data.getOpenContentElements().length > 0) {
+                pso.setData(data);
+            }
+
+            // references, in order defined in psp configuration
             if (returnData.equals(ReturnData.EVERYTHING)) {
+                List<Reference> references = new ArrayList<Reference>();
+                for (String referenceName : psoDefinition.getReferenceNames()) {
+                    if (nameToRefs.containsKey(referenceName)) {
+                        references.addAll(nameToRefs.get(referenceName));
+                    }
+                }
                 PSPUtil.setReferences(pso, references);
             }
         }
