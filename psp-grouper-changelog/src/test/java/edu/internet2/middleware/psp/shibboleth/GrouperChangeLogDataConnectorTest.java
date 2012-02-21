@@ -77,7 +77,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
      */
     public static void main(String[] args) {
         // TestRunner.run(ChangeLogDataConnectorTest.class);
-        TestRunner.run(new GrouperChangeLogDataConnectorTest("testFilterChangeLogAuditCategory"));
+        TestRunner.run(new GrouperChangeLogDataConnectorTest("testFilterChangeLogAudit"));
     }
 
     /**
@@ -168,7 +168,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -178,7 +178,8 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
 
             List<AuditEntry> auditEntries =
                     new UserAuditQuery().setExtraCriterion(
-                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntryFromList.getContextId()))
+                            .execute();
 
             for (AuditEntry auditEntry : auditEntries) {
 
@@ -190,32 +191,34 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
             }
 
             if (match) {
+                // get change log entry via query
+                ChangeLogEntry changeLogEntry =
+                        GrouperDAOFactory.getFactory().getChangeLogEntry()
+                                .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
+
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
-            }
 
-            // verify that the correct attributes are returned from the data connector for every change log entry
-            runResolveTest(changeLogDataConnector,
-                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+                // verify that the correct attributes are returned from the data connector for every change log entry
+                runResolveTest(changeLogDataConnector,
+                        ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+            }
         }
     }
 
@@ -231,7 +234,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -241,7 +244,8 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
 
             List<AuditEntry> auditEntries =
                     new UserAuditQuery().setExtraCriterion(
-                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntryFromList.getContextId()))
+                            .execute();
 
             for (AuditEntry auditEntry : auditEntries) {
                 if (auditEntry.getAuditType().getActionName().equals("deleteGroup")) {
@@ -251,32 +255,33 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
             }
 
             if (match) {
+                ChangeLogEntry changeLogEntry =
+                        GrouperDAOFactory.getFactory().getChangeLogEntry()
+                                .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
+
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.GROUP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.GROUP_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.MEMBERSHIP_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.MEMBERSHIP_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
-            }
 
-            // verify that the correct attributes are returned from the data connector for every change log entry
-            runResolveTest(changeLogDataConnector,
-                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+                // verify that the correct attributes are returned from the data connector for every change log entry
+                runResolveTest(changeLogDataConnector,
+                        ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+            }
         }
     }
 
@@ -292,7 +297,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -302,7 +307,8 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
 
             List<AuditEntry> auditEntries =
                     new UserAuditQuery().setExtraCriterion(
-                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntry.getContextId())).execute();
+                            Restrictions.eq(AuditEntry.FIELD_CONTEXT_ID, changeLogEntryFromList.getContextId()))
+                            .execute();
 
             for (AuditEntry auditEntry : auditEntries) {
                 if (auditEntry.getAuditType().getAuditCategory().equals("stem")) {
@@ -312,19 +318,21 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
             }
 
             if (match) {
+                ChangeLogEntry changeLogEntry =
+                        GrouperDAOFactory.getFactory().getChangeLogEntry()
+                                .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
+
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_ADD)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_ADD.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.STEM_UPDATE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.STEM_UPDATE.values()) {
@@ -332,23 +340,21 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                         if (changeLogLabel.name().equals(ChangeLogLabels.STEM_UPDATE.displayExtension.name())) {
                             continue;
                         }
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
                 if (changeLogEntry.equalsCategoryAndAction(ChangeLogTypeBuiltin.PRIVILEGE_DELETE)) {
                     for (ChangeLogLabel changeLogLabel : ChangeLogLabels.PRIVILEGE_DELETE.values()) {
-                        correctMap.setAttribute(changeLogLabel.name(),
-                                changeLogEntry.retrieveValueForLabel(changeLogLabel));
-                        addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
                     }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
                 }
-            }
 
-            // verify that the correct attributes are returned from the data connector for every change log entry
-            runResolveTest(changeLogDataConnector,
-                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+                // verify that the correct attributes are returned from the data connector for every change log entry
+                runResolveTest(changeLogDataConnector,
+                        ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+            }
         }
     }
 
@@ -365,7 +371,11 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -399,7 +409,11 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -432,7 +446,11 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -478,7 +496,11 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -528,7 +550,11 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
@@ -586,7 +612,11 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                 GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
 
         // for every change log entry
-        for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
 
             // the empty map
             AttributeMap correctMap = new AttributeMap();
