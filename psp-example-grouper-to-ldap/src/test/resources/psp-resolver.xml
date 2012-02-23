@@ -301,14 +301,49 @@
     id="stemDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
     structure="bushy"
-    sourceAttributeID="name"
+    sourceAttributeID="stemNameInStem"
     rdnAttributeName="ou"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    <!-- Dependencies which return a "stemNameInStem" attribute whose value is the stem name. -->
+    <resolver:Dependency ref="stemNameInStem" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "stemNameInStem" attribute is the name of the stem of a change log entry. The name of the stem is 
+    returned only if the stem is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. If the 
+    edu.internet2.middleware.psp.baseStem property is the root stem, stemss under the "etc" stem are omitted. -->
+  <resolver:AttributeDefinition
+    id="stemNameInStem"
+    xsi:type="ad:Script">
     <!-- Dependencies which return a "name" attribute whose value is the stem name. -->
     <resolver:Dependency ref="StemDataConnector" />
     <resolver:Dependency ref="DeleteStemChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateStemNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateStemDescriptionChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        stemNameInStem = new BasicAttribute("stemNameInStem")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
+        if (typeof name != "undefined" && name != null ) {
+            // The name of the base stem to be provisioned.
+            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
+            if (scriptBaseStem.length == 0) {
+                if (name.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
+                    stemNameInStem.getValues().add(name.getValues().get(0));
+                }
+            // Return the group name if it starts with the base stem to be provisioned.
+            } else {
+                if (name.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
+                    stemNameInStem.getValues().add(name.getValues().get(0));                
+                }
+            }
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a stem via the change log. For example, the DN of a stem before it is renamed. -->
@@ -373,14 +408,49 @@
     id="groupDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
     structure="${edu.internet2.middleware.psp.structure}"
-    sourceAttributeID="name"
+    sourceAttributeID="groupNameInStem"
     rdnAttributeName="cn"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    <!-- Dependencies which return a "groupNameInStem" attribute whose value is the group name. -->
+    <resolver:Dependency ref="groupNameInStem" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "groupNameInStem" attribute is the name of the group of a change log entry. The name of the group 
+    is returned only if the group is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. If 
+    the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
+  <resolver:AttributeDefinition
+    id="groupNameInStem"
+    xsi:type="ad:Script">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        groupNameInStem = new BasicAttribute("groupNameInStem")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
+        if (typeof name != "undefined" && name != null ) {
+            // The name of the base stem to be provisioned.
+            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
+            if (scriptBaseStem.length == 0) {
+                if (name.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
+                    groupNameInStem.getValues().add(name.getValues().get(0));
+                }
+            // Return the group name if it starts with the base stem to be provisioned.
+            } else {
+                if (name.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
+                    groupNameInStem.getValues().add(name.getValues().get(0));                
+                }
+            }
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group. For example, the DN of a group before it is renamed. -->

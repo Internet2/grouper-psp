@@ -62,7 +62,7 @@
     <!-- The ldap group "objectClass" attribute. -->
     <attribute
       name="objectClass"
-      ref="groupObjectclassEduMember" />
+      ref="groupObjectclass" />
 
     <!-- The ldap group "cn" attribute. -->
     <attribute name="cn" />

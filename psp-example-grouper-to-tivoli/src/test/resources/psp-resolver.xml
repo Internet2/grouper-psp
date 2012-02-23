@@ -120,7 +120,7 @@
 
   <!-- Returns change log attributes representing the changing of a group's name. -->
   <resolver:DataConnector
-    id="UpdateGroupChangeLogDataConnector"
+    id="UpdateGroupNameChangeLogDataConnector"
     xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
     <!-- The AND filter matches both child filters. -->
     <grouper:Filter xsi:type="grouper:AND">
@@ -136,6 +136,26 @@
         value="name" />
     </grouper:Filter>
   </resolver:DataConnector>
+
+  <!-- Returns change log attributes representing the changing of a group's description. -->
+  <resolver:DataConnector
+    id="UpdateGroupDescriptionChangeLogDataConnector"
+    xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <!-- The AND filter matches both child filters. -->
+    <grouper:Filter xsi:type="grouper:AND">
+      <!-- The ChangeLogEntry filter matches change log entries with the given category and action. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogEntry"
+        category="group"
+        action="updateGroup" />
+      <!-- The ChangeLogExactAttribute filter matches change log entries with the given attribute and value. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogExactAttribute"
+        name="propertyChanged"
+        value="description" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
 
   <!-- Returns change log attributes representing a membership addition. -->
   <resolver:DataConnector
@@ -159,18 +179,30 @@
       action="deleteMembership" />
   </resolver:DataConnector>
 
+  <!-- Returns change log attributes representing attribute value assignment to a group. -->
+  <resolver:DataConnector
+    id="GroupAttributeAssignValueChangeLogDataConnector"
+    xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <!-- The AND filter matches both child filters. -->
+    <grouper:Filter xsi:type="grouper:AND">
+      <!-- The ChangeLogEntry filter matches change log entries with the given category. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogEntry"
+        category="attributeAssignValue" />
+      <!-- The ChangeLogAttributeAssignType filter matches change log entries with the given attribute assign type. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogAttributeAssignType"
+        attributeAssignType="group" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
 
   <!-- Static data connector. -->
   <resolver:DataConnector
     id="StaticDataConnector"
     xsi:type="dc:Static">
     <!-- Group LDAP objectclass. -->
-    <dc:Attribute id="groupObjectclass">
-      <dc:Value>top</dc:Value>
-      <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
-    </dc:Attribute>
-    <!-- Group LDAP eduMember objectclass. -->
-    <dc:Attribute id="groupObjectclassEduMember">
+    <dc:Attribute id="staticGroupObjectclass">
       <dc:Value>top</dc:Value>
       <dc:Value>${edu.internet2.middleware.psp.groupObjectClass}</dc:Value>
       <dc:Value>eduMember</dc:Value>
@@ -188,13 +220,50 @@
     id="groupDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
     structure="${edu.internet2.middleware.psp.structure}"
-    sourceAttributeID="name"
+    sourceAttributeID="groupNameInStem"
     rdnAttributeName="cn"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    <!-- Dependencies which return a "groupNameInStem" attribute whose value is the group name. -->
+    <resolver:Dependency ref="groupNameInStem" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "groupNameInStem" attribute is the name of the group of a change log entry. The name of the group 
+    is returned only if the group is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. If 
+    the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
+  <resolver:AttributeDefinition
+    id="groupNameInStem"
+    xsi:type="ad:Script">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
-    <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
+    <resolver:Dependency ref="GroupAttributeAssignValueChangeLogDataConnector" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        groupNameInStem = new BasicAttribute("groupNameInStem")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
+        if (typeof name != "undefined" && name != null ) {
+            // The name of the base stem to be provisioned.
+            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
+            if (scriptBaseStem.length == 0) {
+                if (name.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
+                    groupNameInStem.getValues().add(name.getValues().get(0));
+                }
+            // Return the group name if it starts with the base stem to be provisioned.
+            } else {
+                if (name.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
+                    groupNameInStem.getValues().add(name.getValues().get(0));                
+                }
+            }
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group. For example, the DN of a group before it is renamed. -->
@@ -218,21 +287,37 @@
     rdnAttributeName="cn"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old group name. -->
-    <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
-  <!-- The group objectclass attribute. -->
+  <!-- The group objectclass attribute. If a change log entry is resolved, do not return dependencies from the static data 
+    connector unless the change log entry is a membership change. -->
   <resolver:AttributeDefinition
     id="groupObjectclass"
-    xsi:type="ad:Simple">
+    xsi:type="ad:Script">
     <resolver:Dependency ref="StaticDataConnector" />
-  </resolver:AttributeDefinition>
-
-  <!-- The group objectclass attribute with eduMember. -->
-  <resolver:AttributeDefinition
-    id="groupObjectclassEduMember"
-    xsi:type="ad:Simple">
-    <resolver:Dependency ref="StaticDataConnector" />
+    <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
+    <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
+    <!-- <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" /> -->
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        groupObjectclass = new BasicAttribute("groupObjectclass");
+        
+        // Include values from 'staticGroupObjectClass' if the change log category is 'membership'.
+        if (typeof changeLogCategory != "undefined" && changeLogCategory != null) {
+            if (changeLogCategory.getValues().contains("membership")) {          
+                groupObjectclass.getValues().addAll(staticGroupObjectclass.getValues());
+            }
+        // Include values from 'staticGroupObjectClass' if a change log entry is not being processed.
+        } else {
+            groupObjectclass.getValues().addAll(staticGroupObjectclass.getValues());
+        }                       
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- The value of the group "cn" attribute is the group extension. -->
@@ -250,6 +335,7 @@
     id="description"
     xsi:type="ad:Simple">
     <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The values of the group "hasMember" attribute include the names of the groups which are members of the group. -->
@@ -351,14 +437,23 @@
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
     <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
         changeLogMembershipGroupName = new BasicAttribute("changeLogMembershipGroupName")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
         if (typeof groupName != "undefined" && groupName != null ) {
+            // The name of the base stem to be provisioned.
             var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
             if (scriptBaseStem.length == 0) {
                 if (groupName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
                     changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));
                 }
+            // Return the group name if it starts with the base stem to be provisioned.
             } else {
                 if (groupName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
                     changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));                
@@ -425,10 +520,47 @@
     id="changeLogMembershipGroupMemberDn"
     xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
     structure="${edu.internet2.middleware.psp.structure}"
-    sourceAttributeID="changeLogMembershipGroupSubjectName"
+    sourceAttributeID="changeLogMembershipGroupSubjectNameInStem"
     rdnAttributeName="cn"
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    <resolver:Dependency ref="changeLogMembershipGroupSubjectNameInStem" />
+  </resolver:AttributeDefinition>
+  
+    <!-- The value of the "changeLogMembershipGroupSubjectNameInStem" attribute is the name of the group member of a membership 
+    change log entry. The name of the group is returned only if the group is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem 
+    property. If the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
+  <resolver:AttributeDefinition
+    id="changeLogMembershipGroupSubjectNameInStem"
+    xsi:type="ad:Script">
     <resolver:Dependency ref="changeLogMembershipGroupSubjectName" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Create the attribute to be returned.
+        changeLogMembershipGroupSubjectNameInStem = new BasicAttribute("changeLogMembershipGroupSubjectNameInStem")
+        
+        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
+        if (typeof changeLogMembershipGroupSubjectName != "undefined" &&
+            changeLogMembershipGroupSubjectName != null &&
+            !changeLogMembershipGroupSubjectName.getValues().isEmpty()) {
+                
+            // The name of the base stem to be provisioned.
+            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
+
+            // If the base stem is the root stem, ignore groups under the 'etc' stem.
+            if (scriptBaseStem.length == 0) {
+                if (changeLogMembershipGroupSubjectName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
+                    changeLogMembershipGroupSubjectNameInStem.getValues().add(changeLogMembershipGroupSubjectName.getValues().get(0));
+                }
+            // Return the group name if it starts with the base stem to be provisioned.
+            } else {
+                if (changeLogMembershipGroupSubjectName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
+                    changeLogMembershipGroupSubjectNameInStem.getValues().add(changeLogMembershipGroupSubjectName.getValues().get(0));                
+                }
+            }
+        }
+    ]]></ad:Script>
   </resolver:AttributeDefinition>
 
   <!-- Change log member membership. -->

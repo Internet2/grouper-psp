@@ -18,7 +18,9 @@ package edu.internet2.middleware.psp;
 
 import junit.textui.TestRunner;
 import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.GrouperSession;
 import edu.internet2.middleware.grouper.Stem;
+import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.grouper.helper.StemHelper;
 import edu.internet2.middleware.psp.grouper.PspChangeLogConsumer;
@@ -239,6 +241,27 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         // TODO some postgres blocking issue ?
         Thread.sleep(1000);
+    }
+
+    /**
+     * Test provisioning resulting from changing the description of a group which should be ignored.
+     * 
+     * @throws Exception
+     */
+    public void testGroupIgnore() throws Exception {
+
+        Stem etc = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc", true);
+        Group ignoreGroup = etc.addChildGroup("ignoreGroup", "ignoreGroup");
+
+        clearChangeLog();
+
+        ignoreGroup.setDescription("foo");
+        ignoreGroup.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testIgnoreGroup.xml");
     }
 
     /**
@@ -608,6 +631,27 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         // TODO some postgres blocking issue ?
         Thread.sleep(1000);
+    }
+
+    /**
+     * Test provisioning resulting from changing the description of a stem which should be ignored.
+     * 
+     * @throws Exception
+     */
+    public void testStemIgnore() throws Exception {
+
+        Stem etc = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc", true);
+        Stem ignoreStem = etc.addChildStem("ignoreStem", "ignoreStem");
+
+        clearChangeLog();
+
+        ignoreStem.setDescription("foo");
+        ignoreStem.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testIgnoreStem.xml");
     }
 
     /**

@@ -18,6 +18,10 @@
 package edu.internet2.middleware.psp;
 
 import junit.textui.TestRunner;
+import edu.internet2.middleware.grouper.Group;
+import edu.internet2.middleware.grouper.GrouperSession;
+import edu.internet2.middleware.grouper.Stem;
+import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.psp.grouper.PspChangeLogConsumer;
 
@@ -118,6 +122,31 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
 
         verifySpml(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddGroup.xml");
         verifyLdif(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddGroup.after.ldif");
+    }
+
+    /**
+     * Test provisioning resulting from the adding of a group membership.
+     * 
+     * @throws Exception
+     */
+    public void testMembershipAddGroupIgnore() throws Exception {
+
+        edu = setUpEdu();
+        groupA = setUpGroupA();
+        groupB = setUpGroupB();
+
+        Stem etc = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc", true);
+        Group ignoreGroup1 = etc.addChildGroup("ignoreGroup1", "ignoreGroup1");
+        Group ignoreGroup2 = etc.addChildGroup("ignoreGroup2", "ignoreGroup2");
+
+        clearChangeLog();
+
+        ignoreGroup1.addMember(ignoreGroup2.toSubject());
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        verifySpml(DATA_PATH + "GrouperToOpenLdapChangeLogTest.testMembershipAddGroupIgnore.xml");
     }
 
     /**
