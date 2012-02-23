@@ -81,7 +81,7 @@
     authoritative="true"
     allSourceIdentifiersRef="groupNames">
 
-    <!-- The ladp group DN. -->
+    <!-- The ldap group DN. -->
     <identifier
       ref="groupDn"
       targetId="ldap"
