@@ -30,6 +30,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.support.GenericApplicationContext;
 
+import edu.internet2.middleware.grouper.attr.assign.AttributeAssign;
+import edu.internet2.middleware.grouper.attr.assign.AttributeAssignType;
+import edu.internet2.middleware.grouper.attr.finder.AttributeAssignFinder;
 import edu.internet2.middleware.grouper.audit.AuditEntry;
 import edu.internet2.middleware.grouper.audit.UserAuditQuery;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogEntry;
@@ -41,6 +44,7 @@ import edu.internet2.middleware.grouper.helper.SubjectTestHelper;
 import edu.internet2.middleware.grouper.hibernate.HibernateSession;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.shibboleth.dataConnector.BaseDataConnectorTest;
+import edu.internet2.middleware.grouper.util.GrouperUtil;
 import edu.internet2.middleware.shibboleth.common.attribute.BaseAttribute;
 
 /**
@@ -77,7 +81,7 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
      */
     public static void main(String[] args) {
         // TestRunner.run(ChangeLogDataConnectorTest.class);
-        TestRunner.run(new GrouperChangeLogDataConnectorTest("testFilterChangeLogAudit"));
+        TestRunner.run(new GrouperChangeLogDataConnectorTest("testFilterChangeLogAttributeAssignType"));
     }
 
     /**
@@ -632,6 +636,58 @@ public class GrouperChangeLogDataConnectorTest extends BaseDataConnectorTest {
                     } catch (RuntimeException e) {
                         // do not blame me
                     }
+                }
+            }
+
+            // verify that the correct attributes are returned from the data connector for every change log entry
+            runResolveTest(changeLogDataConnector,
+                    ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()), correctMap);
+        }
+    }
+
+    /**
+     * Test filter by change log attribute assign type.
+     */
+    public void testFilterChangeLogAttributeAssignType() {
+
+        groupB.getAttributeValueDelegate().assignValuesString("parentStem:mailAlternateAddress",
+                GrouperUtil.toSet("foo@example.edu"), true);
+
+        childStem.getAttributeValueDelegate().assignValuesString("parentStem:mailAlternateAddress",
+                GrouperUtil.toSet("bar@example.edu"), true);
+
+        ChangeLogTempToEntity.convertRecords();
+
+        // initialize the data connector
+        changeLogDataConnector = (ChangeLogDataConnector) gContext.getBean("testFilterChangeLogAttributeAssignType");
+
+        // retrieve all change log entries
+        List<ChangeLogEntry> changeLogEntryList =
+                GrouperDAOFactory.getFactory().getChangeLogEntry().retrieveBatch(-1, 1000);
+
+        // for every change log entry
+        for (ChangeLogEntry changeLogEntryFromList : changeLogEntryList) {
+
+            ChangeLogEntry changeLogEntry =
+                    GrouperDAOFactory.getFactory().getChangeLogEntry()
+                            .findBySequenceNumber(changeLogEntryFromList.getSequenceNumber(), false);
+
+            // the empty map
+            AttributeMap correctMap = new AttributeMap();
+
+            // if change log entry matches, build correct map
+            if (changeLogEntry.getChangeLogType().getActionName().equals("addAttributeAssignValue")) {
+                String attributeAssignId = changeLogEntry.retrieveValueForLabel("attributeAssignId");
+                AttributeAssign attributeAssign = AttributeAssignFinder.findById(attributeAssignId, false);
+
+                if (attributeAssign.getAttributeAssignType().equals(AttributeAssignType.group)) {
+                    for (ChangeLogLabel changeLogLabel : ChangeLogLabels.ATTRIBUTE_ASSIGN_VALUE_ADD.values()) {
+                        correctMap.setAttribute(changeLogLabel, changeLogEntry);
+                    }
+                    addChangeLogAttributesToMap(correctMap, changeLogEntry);
+                    correctMap.setAttribute("parentStem:mailAlternateAddress", "foo@example.edu");
+                    correctMap.setAttribute("name", "parentStem:groupB");
+                    correctMap.setAttribute("attributeAssignType", "group");
                 }
             }
 

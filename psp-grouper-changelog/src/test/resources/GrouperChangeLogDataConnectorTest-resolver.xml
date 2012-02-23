@@ -47,5 +47,9 @@
       <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogExactAttribute" name="propertyChanged" value="description" />
     </grouper:Filter>
   </resolver:DataConnector>
+  
+  <resolver:DataConnector id="testFilterChangeLogAttributeAssignType" xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <grouper:Filter xsi:type="psp-grouper-changelog:ChangeLogAttributeAssignType" attributeAssignType="group" />
+  </resolver:DataConnector>
    
 </AttributeResolver>

@@ -38,5 +38,8 @@ public class ChangeLogNamespaceHandler extends BaseSpringNamespaceHandler {
 
         registerBeanDefinitionParser(ChangeLogExactAttributeFilterBeanDefinitionParser.TYPE_NAME,
                 new ChangeLogExactAttributeFilterBeanDefinitionParser());
+
+        registerBeanDefinitionParser(ChangeLogAttributeAssignTypeFilterBeanDefinitionParser.TYPE_NAME,
+                new ChangeLogAttributeAssignTypeFilterBeanDefinitionParser());
     }
 }

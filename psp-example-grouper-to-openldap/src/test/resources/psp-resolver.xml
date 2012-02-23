@@ -292,14 +292,37 @@
       action="deleteMembership" />
   </resolver:DataConnector>
 
-  <!-- Returns change log attributes representing attribute value assignment. -->
+  <!-- Returns change log attributes representing attribute value assignment to a group. -->
   <resolver:DataConnector
-    id="AttributeAssignValueChangeLogDataConnector"
+    id="GroupAttributeAssignValueChangeLogDataConnector"
     xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
-    <!-- The ChangeLogEntry filter matches change log entries with the given category. -->
-    <grouper:Filter
-      xsi:type="psp-grouper-changelog:ChangeLogEntry"
-      category="attributeAssignValue" />
+    <!-- The AND filter matches both child filters. -->
+    <grouper:Filter xsi:type="grouper:AND">
+      <!-- The ChangeLogEntry filter matches change log entries with the given category. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogEntry"
+        category="attributeAssignValue" />
+      <!-- The ChangeLogAttributeAssignType filter matches change log entries with the given attribute assign type. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogAttributeAssignType"
+        attributeAssignType="group" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
+  <!-- Returns change log attributes representing attribute value assignment to a stem. -->
+  <resolver:DataConnector
+    id="StemAttributeAssignValueChangeLogDataConnector"
+    xsi:type="psp-grouper-changelog:ChangeLogDataConnector">
+    <!-- The AND filter matches both child filters. -->
+    <grouper:Filter xsi:type="grouper:AND">
+      <!-- The ChangeLogEntry filter matches change log entries with the given category. -->
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogEntry"
+        category="attributeAssignValue" />
+      <grouper:Filter
+        xsi:type="psp-grouper-changelog:ChangeLogAttributeAssignType"
+        attributeAssignType="stem" />
+    </grouper:Filter>
   </resolver:DataConnector>
 
 
@@ -339,6 +362,7 @@
     <resolver:Dependency ref="StemDataConnector" />
     <resolver:Dependency ref="DeleteStemChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateStemNameChangeLogDataConnector" />
+    <resolver:Dependency ref="StemAttributeAssignValueChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a stem via the change log. For example, the DN of a stem before it is renamed. -->
@@ -361,7 +385,7 @@
     <resolver:Dependency ref="StaticDataConnector" />
     <resolver:Dependency ref="UpdateStemNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateStemDescriptionChangeLogDataConnector" />
-    <!-- <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" /> -->
+    <!-- <resolver:Dependency ref="StemAttributeAssignValueChangeLogDataConnector" /> -->
     <ad:Script><![CDATA[
         // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
@@ -411,7 +435,7 @@
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
-    <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" />
+    <resolver:Dependency ref="GroupAttributeAssignValueChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group. For example, the DN of a group before it is renamed. -->
@@ -445,7 +469,7 @@
     xsi:type="ad:Script">
     <resolver:Dependency ref="StaticDataConnector" />
     <resolver:Dependency ref="inetLocalMailRecipientObjectclass" />
-    <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" />
+    <resolver:Dependency ref="GroupAttributeAssignValueChangeLogDataConnector" />
     <ad:Script><![CDATA[
         // Import Shibboleth attribute provider.
         importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
@@ -544,7 +568,7 @@
     xsi:type="ad:Simple"
     sourceAttributeID="etc:attribute:mailLocalAddress">
     <resolver:Dependency ref="GroupDataConnector" />
-    <resolver:Dependency ref="AttributeAssignValueChangeLogDataConnector" />
+    <resolver:Dependency ref="GroupAttributeAssignValueChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The values of the "membersLdap" attribute are the subject ids of group members from the "ldap" source. -->

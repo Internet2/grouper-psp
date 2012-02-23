@@ -121,4 +121,25 @@
     </complexContent>
   </complexType>
 
+  <complexType name="ChangeLogAttributeAssignType">
+    <annotation>
+      <documentation>
+        Filter by attribute assign type.
+      </documentation>
+    </annotation>
+    <complexContent>
+      <extension base="grouper:BaseFilterType">
+        <attribute
+          name="attributeAssignType"
+          type="string">
+          <annotation>
+            <documentation>
+              The attribute assign type.
+            </documentation>
+          </annotation>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
 </schema>

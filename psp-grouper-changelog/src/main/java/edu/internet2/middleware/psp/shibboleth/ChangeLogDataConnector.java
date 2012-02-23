@@ -100,6 +100,7 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
         }
 
         LOG.debug("ChangeLog data connector '{}' - Found change log entry '{}'", getId(), toString(changeLogEntry));
+        LOG.trace("ChangeLog data connector '{}' - Found change log entry '{}'", getId(), toStringDeep(changeLogEntry));
         LOG.trace("ChangeLog data connector '{}' - Found change log entry '{}'", getId(), changeLogEntry.toStringDeep());
 
         Map<String, BaseAttribute> attributes = buildAttributes(changeLogEntry);
@@ -236,6 +237,15 @@ public class ChangeLogDataConnector extends BaseGrouperDataConnector<ChangeLogEn
             BasicAttribute<String> attribute = new BasicAttribute<String>();
             attribute.setId(attributeDefNameName);
             attribute.getValues().add(value);
+            attributes.put(attribute.getId(), attribute);
+        }
+
+        // return an attributeAssignType attribute
+        AttributeAssignType attributeAssignType = attributeAssign.getAttributeAssignType();
+        if (attributeAssignType != null) {
+            BasicAttribute<String> attribute = new BasicAttribute<String>();
+            attribute.setId("attributeAssignType");
+            attribute.getValues().add(attributeAssign.getAttributeAssignType().getName());
             attributes.put(attribute.getId(), attribute);
         }
 
