@@ -3,11 +3,11 @@ objectclass: top
 objectclass: organizationalUnit
 ou: groups
 
-dn: cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}
+dn: cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
 objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 objectclass: eduMember
-cn: groupB
+cn: edu:groupB
 member: 
 description: descriptionB
 

@@ -19,10 +19,8 @@ package edu.internet2.middleware.psp;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.naming.NamingException;
 
@@ -50,6 +48,7 @@ import edu.internet2.middleware.psp.shibboleth.LdapDnFromGrouperNamePSOIdentifie
 import edu.internet2.middleware.psp.spml.config.Pso;
 import edu.internet2.middleware.psp.util.PSPUtil;
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.ShibbolethAttributeResolver;
+import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.attributeDefinition.BaseAttributeDefinition;
 import edu.internet2.middleware.subject.Subject;
 import edu.vt.middleware.ldap.Ldap;
 
@@ -185,9 +184,9 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
                 (LdapDnFromGrouperNamePSOIdentifierAttributeDefinition) AR.getAttributeDefinitions().get("groupDn");
 
         lad.setStructure(GroupDnStructure.flat);
-
-        // TODO really ?
-        lad.setSourceAttributeID("extension");
+        lad.setSourceAttributeID("name");
+        
+        ((BaseAttributeDefinition) AR.getAttributeDefinitions().get("cn")).setSourceAttributeID("name");
     }
 
     /**

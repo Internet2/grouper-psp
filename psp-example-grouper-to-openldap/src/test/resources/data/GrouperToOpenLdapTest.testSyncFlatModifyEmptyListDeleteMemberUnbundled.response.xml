@@ -1,7 +1,7 @@
 <psp:syncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
   <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
     <pso entityName='group'>
-      <psoID ID='cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+      <psoID ID='cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>eduMember</dsml:value>
@@ -9,7 +9,7 @@
           <dsml:value>top</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
-          <dsml:value>groupB</dsml:value>
+          <dsml:value>edu:groupB</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
           <dsml:value>descriptionB</dsml:value>
@@ -24,7 +24,7 @@
   </modifyResponse>
   <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
     <pso entityName='group'>
-      <psoID ID='cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+      <psoID ID='cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>eduMember</dsml:value>
@@ -32,7 +32,7 @@
           <dsml:value>top</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
-          <dsml:value>groupB</dsml:value>
+          <dsml:value>edu:groupB</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
           <dsml:value>descriptionB</dsml:value>
@@ -50,7 +50,7 @@
   </modifyResponse>
   <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
     <pso entityName='group'>
-      <psoID ID='cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+      <psoID ID='cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>eduMember</dsml:value>
@@ -58,7 +58,7 @@
           <dsml:value>top</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
-          <dsml:value>groupB</dsml:value>
+          <dsml:value>edu:groupB</dsml:value>
         </dsml:attr>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
           <dsml:value>descriptionB</dsml:value>
