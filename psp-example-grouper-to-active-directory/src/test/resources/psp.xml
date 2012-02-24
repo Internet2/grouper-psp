@@ -110,8 +110,15 @@
       name="description"
       ref="groupDescription" />
 
+    <!-- See http://ldapwiki.willeke.com/wiki/SamAccountName. -->
+    <attribute
+      name="sAMAccountName"
+      ref="cn" />
+
     <!-- The ldap group "member" attribute. -->
-    <references name="member">
+    <references
+      name="member"
+      caseSensitive="false">
 
       <reference
         ref="membersLdap"
@@ -122,11 +129,6 @@
         toObject="group" />
 
     </references>
-
-  <!-- See http://ldapwiki.willeke.com/wiki/SamAccountName. -->
-    <attribute
-      name="sAMAccountName"
-      ref="cn" />
 
   </pso>
 
