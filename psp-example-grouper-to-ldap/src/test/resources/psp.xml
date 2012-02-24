@@ -61,7 +61,6 @@
     <attribute
       name="objectClass"
       ref="stemObjectclass" />
-    <!-- The OU "ou" attribute. -->
 
     <!-- The ldap organizational unit "ou" attribute. -->
     <attribute
