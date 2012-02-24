@@ -366,11 +366,27 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         typeOfReferences.addAll(correctReferenceMap.keySet());
         typeOfReferences.addAll(currentReferenceMap.keySet());
 
+        // determine the schema entity
+        String targetId = correctPSO.getPsoID().getTargetID();
+        String entityName = correctPSO.findOpenContentAttrValueByName(Pso.ENTITY_NAME_ATTRIBUTE);
+        Pso psoDefinition = getPso(targetId, entityName);
+        if (psoDefinition == null) {
+            LOG.error("Unknown pso for target id '" + targetId + "' entity name '" + entityName + "'");
+            throw new PspException("Unknown pso for target id '" + targetId + "' entity name '" + entityName + "'");
+        }
+
         for (String typeOfReference : typeOfReferences) {
             List<Reference> currentReferences = currentReferenceMap.get(typeOfReference);
             List<Reference> correctReferences = correctReferenceMap.get(typeOfReference);
 
-            AttributeModifier attributeModifier = new AttributeModifier(typeOfReference, true);
+            PsoReferences psoReferences = psoDefinition.getReferences(typeOfReference);
+            if (psoReferences == null) {
+                LOG.error("Unknown pso references type '" + typeOfReference + "'");
+                throw new PspException("Unknown pso references type '" + typeOfReference + "'");
+            }
+
+            AttributeModifier attributeModifier =
+                    new AttributeModifier(typeOfReference, psoReferences.isCaseSensitive());
 
             if (currentReferences != null) {
                 attributeModifier.initReference(currentReferences);

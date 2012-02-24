@@ -54,6 +54,11 @@ public class PsoReferencesBeanDefinitionParser extends AbstractSingleBeanDefinit
             builder.addPropertyValue("emptyValue", emptyValue);
         }
 
+        if (element.hasAttributeNS(null, "caseSensitive")) {
+            String caseSensitive = element.getAttributeNS(null, "caseSensitive");
+            builder.addPropertyValue("caseSensitive", caseSensitive);
+        }
+
         Map<QName, List<Element>> configChildren = XMLHelper.getChildElements(element);
 
         builder.addPropertyValue(

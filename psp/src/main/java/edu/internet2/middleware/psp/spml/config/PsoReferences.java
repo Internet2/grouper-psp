@@ -55,6 +55,9 @@ public class PsoReferences {
         }
     }
 
+    /** Whether or not comparison of references is case sensitive. */
+    private boolean caseSensitive = true;
+
     /** The value of the provisioned attribute if no references exist. */
     private String emptyValue = null;
 
@@ -156,6 +159,24 @@ public class PsoReferences {
 
         LOG.debug("Pso references '{}' - Returned {} references.", getName(), references.size());
         return references;
+    }
+
+    /**
+     * Gets whether or not equality comparison of references should be case sensitive.
+     * 
+     * @return whether or not equality comparison of references should be case sensitive
+     */
+    public boolean isCaseSensitive() {
+        return caseSensitive;
+    }
+
+    /**
+     * Sets whether or not equality comparison of references should be case sensitive.
+     * 
+     * @param caseSensitive whether or not equality comparison of references should be case sensitive.
+     */
+    public void setCaseSensitive(boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
     }
 
     /**

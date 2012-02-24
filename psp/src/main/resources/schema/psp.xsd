@@ -369,6 +369,16 @@
         </documentation>
       </annotation>
     </attribute>
+    <attribute
+      name="caseSensitive"
+      type="boolean"
+      default="true">
+      <annotation>
+        <documentation>
+          Whether or not equality comparison of references should be case sensitive.
+        </documentation>
+      </annotation>
+    </attribute>
   </complexType>
 
   <complexType name="PsoType">

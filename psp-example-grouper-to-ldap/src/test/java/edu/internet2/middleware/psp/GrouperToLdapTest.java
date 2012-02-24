@@ -435,6 +435,22 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testDiffBushyModifyMember.response.xml");
     }
 
+    public void testDiffBushyModifyMemberCaseInsensitive() throws Exception {
+
+        loadLdif(DATA_PATH + "GrouperToLdapTest.testModifyMemberBushyCaseInsensitive.before.ldif");
+
+        psp.getPso("ldap", "group").getReferences("member").setCaseSensitive(false);
+
+        groupB.addMember(groupA.toSubject());
+
+        DiffRequest request = new DiffRequest();
+        request.setRequestID("REQUESTID_TEST");
+        request.setId(groupB.getName());
+        DiffResponse response = psp.execute(request);
+
+        verifySpml(response, DATA_PATH + "GrouperToLdapTest.testDiffBushyModifyMember.response.xml");
+    }
+
     public void testDiffBushyModifyMemberForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
@@ -730,11 +746,24 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         verifyLdif(DATA_PATH + "GrouperToLdapTest.testModifyMemberBushy.after.ldif");
     }
 
-    public void testSyncBushyModifyMemberForwardSlash() throws Exception {
+    public void testSyncBushyModifyMemberCaseInsensitive() throws Exception {
 
-        // if (this.useEmbedded()) {
-        // psp.getTargetDefinitions().get("ldap").setBundleModifications(false);
-        // }
+        loadLdif(DATA_PATH + "GrouperToLdapTest.testModifyMemberBushyCaseInsensitive.before.ldif");
+
+        psp.getPso("ldap", "group").getReferences("member").setCaseSensitive(false);
+
+        groupB.addMember(groupA.toSubject());
+
+        SyncRequest request = new SyncRequest();
+        request.setRequestID("REQUESTID_TEST");
+        request.setId(groupB.getName());
+        SyncResponse response = psp.execute(request);
+
+        verifySpml(response, DATA_PATH + "GrouperToLdapTest.testSyncBushyModifyMemberCaseInsensitive.response.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapTest.testSyncBushyModifyMemberCaseInsensitive.after.ldif");
+    }
+
+    public void testSyncBushyModifyMemberForwardSlash() throws Exception {
 
         Group groupF = StemHelper.addChildGroup(this.edu, "group/F", "Group/F");
         groupF.addMember(LdapSubjectTestHelper.SUBJ0);
@@ -746,12 +775,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         request.setId(groupF.getName());
         SyncResponse response = psp.execute(request);
 
-        // if (this.useEmbedded()) {
-        // verifySpml(response, DATA_PATH +
-        // "GrouperToLdapTest.testSyncBushyModifyMemberForwardSlashUnbundled.response.xml");
-        // } else {
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testSyncBushyModifyMemberForwardSlash.response.xml");
-        // }
         verifyLdif(DATA_PATH + "GrouperToLdapTest.testModifyMemberBushyForwardSlash.after.ldif");
     }
 
