@@ -19,8 +19,8 @@ package edu.internet2.middleware.psp.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -557,7 +557,8 @@ public class AttributeModifier {
          * A backing map for the values, mapping the comparison value to the actual value. If caseSensitive is
          * <tt>true</tt> this is an identity mapping, otherwise it maps the lowercased value to the value itself.
          */
-        private Map<String, String> map = new HashMap<String, String>();
+        // private Map<String, String> map = new HashMap<String, String>();
+        private Map<String, String> map = new LinkedHashMap<String, String>();
 
         /**
          * Adds the specified element to the values if it is not already present.

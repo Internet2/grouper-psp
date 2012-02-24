@@ -105,8 +105,8 @@
       </modification>
       <modification modificationMode='add'>
         <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf' operation='add'>
-          <dsml:value>edu:groupB</dsml:value>
           <dsml:value>edu:groupA</dsml:value>
+          <dsml:value>edu:groupB</dsml:value>
         </dsml:modification>
       </modification>
     </modifyRequest>
