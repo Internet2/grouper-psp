@@ -36,6 +36,13 @@
 
   <fileSets>
     <fileSet>
+      <directory>../psp-example-grouper-to-active-directory/src/test/resources</directory>
+      <outputDirectory>/conf/psp-example-grouper-to-active-directory</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
       <directory>../psp-example-grouper-to-ldap/src/test/resources</directory>
       <outputDirectory>/conf/psp-example-grouper-to-ldap</outputDirectory>
       <excludes>

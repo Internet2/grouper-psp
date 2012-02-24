@@ -23,6 +23,7 @@
     <module>../psp-grouper-target</module>
     <module>../psp-ldap-target</module>
     <module>../psp-grouper-changelog</module>
+    <module>../psp-example-grouper-to-active-directory</module>
     <module>../psp-example-grouper-to-ldap</module>
     <module>../psp-example-grouper-to-openldap</module>
     <module>../psp-example-grouper-to-tivoli</module>
