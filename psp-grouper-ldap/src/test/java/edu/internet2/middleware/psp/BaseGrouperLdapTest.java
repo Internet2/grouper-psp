@@ -18,12 +18,15 @@
 package edu.internet2.middleware.psp;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.naming.NamingException;
 
+import org.apache.commons.lang.StringUtils;
 import org.opensaml.util.resource.ResourceException;
 import org.openspml.v2.msg.Marshallable;
 import org.openspml.v2.msg.spml.SchemaEntityRef;
@@ -42,6 +45,7 @@ import edu.internet2.middleware.grouper.helper.GrouperTest;
 import edu.internet2.middleware.grouper.helper.StemHelper;
 import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.util.GrouperUtil;
+import edu.internet2.middleware.morphString.Morph;
 import edu.internet2.middleware.psp.helper.LdapTestHelper;
 import edu.internet2.middleware.psp.shibboleth.GroupDnStructure;
 import edu.internet2.middleware.psp.shibboleth.LdapDnFromGrouperNamePSOIdentifierAttributeDefinition;
@@ -51,6 +55,7 @@ import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.Sh
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.attributeDefinition.BaseAttributeDefinition;
 import edu.internet2.middleware.subject.Subject;
 import edu.vt.middleware.ldap.Ldap;
+import edu.vt.middleware.ldap.LdapConfig;
 
 /** Test provisioning Grouper to an LDAP directory target. */
 public abstract class BaseGrouperLdapTest extends GrouperTest {
@@ -185,7 +190,7 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
 
         lad.setStructure(GroupDnStructure.flat);
         lad.setSourceAttributeID("name");
-        
+
         ((BaseAttributeDefinition) AR.getAttributeDefinitions().get("cn")).setSourceAttributeID("name");
     }
 
@@ -291,10 +296,30 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
      * @throws Exception
      */
     public Ldap setUpLdap() throws Exception {
-        ldap = new Ldap();
-        ldap.loadFromProperties();
+
+        // Create ldap config from properties file
+        LdapConfig ldapConfig = LdapConfig.createFromProperties(new FileInputStream(propertiesFile));
+
+        // Create a properties object from the properties file
+        Properties properties = new Properties();
+        properties.load(new FileInputStream(propertiesFile));
+
+        // Get the bindCredential property
+        String bindCredential = properties.getProperty("edu.vt.middleware.ldap.bindCredential");
+        // The password might be encrypted
+        if (!StringUtils.isBlank(bindCredential)) {
+            bindCredential = Morph.decryptIfFile(bindCredential);
+        }
+
+        // Override the credential in case it was encrypted
+        ldapConfig.setBindCredential(bindCredential);
+
+        ldap = new Ldap(ldapConfig);
+
         deleteAllLdapEntries();
+
         loadLdif(DATA_PATH + "GrouperLdapTest.before.ldif");
+
         return ldap;
     }
 

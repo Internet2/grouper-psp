@@ -27,8 +27,8 @@
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
     baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
-    principal="${edu.vt.middleware.ldap.serviceUser}"
-    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    principal="${edu.vt.middleware.ldap.bindDn}"
+    principalCredential="${edu.vt.middleware.ldap.bindCredential}"
     mergeResults="true"
     maxResultSize="100000">
     <dc:FilterTemplate>
@@ -52,8 +52,8 @@
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
     baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
-    principal="${edu.vt.middleware.ldap.serviceUser}"
-    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    principal="${edu.vt.middleware.ldap.bindDn}"
+    principalCredential="${edu.vt.middleware.ldap.bindCredential}"
     maxResultSize="1">
     <dc:FilterTemplate>
         <![CDATA[
@@ -166,8 +166,8 @@
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
     baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
-    principal="${edu.vt.middleware.ldap.serviceUser}"
-    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    principal="${edu.vt.middleware.ldap.bindDn}"
+    principalCredential="${edu.vt.middleware.ldap.bindCredential}"
     mergeResults="true"
     maxResultSize="100000">
     <dc:FilterTemplate>
@@ -191,8 +191,8 @@
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
     baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
-    principal="${edu.vt.middleware.ldap.serviceUser}"
-    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    principal="${edu.vt.middleware.ldap.bindDn}"
+    principalCredential="${edu.vt.middleware.ldap.bindCredential}"
     maxResultSize="1">
     <dc:FilterTemplate>
         <![CDATA[
@@ -322,8 +322,8 @@
     xsi:type="dc:LDAPDirectory"
     ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
     baseDN="${edu.internet2.middleware.psp.peopleBaseDn}"
-    principal="${edu.vt.middleware.ldap.serviceUser}"
-    principalCredential="${edu.vt.middleware.ldap.serviceCredential}"
+    principal="${edu.vt.middleware.ldap.bindDn}"
+    principalCredential="${edu.vt.middleware.ldap.bindCredential}"
     maxResultSize="1">
     <dc:FilterTemplate>
         <![CDATA[
