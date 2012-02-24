@@ -158,7 +158,9 @@
       containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
 
     <!-- The ldap group "member" attribute. -->
-    <references name="member">
+    <references
+      name="member"
+      caseSensitive="false">
 
       <reference
         ref="changeLogMembershipLdapSubjectId"
