@@ -232,38 +232,26 @@
     the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
   <resolver:AttributeDefinition
     id="groupNameInStem"
-    xsi:type="ad:Script">
+    xsi:type="grouper:FilteredName"
+    sourceAttributeID="name">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
     <resolver:Dependency ref="GroupAttributeAssignValueChangeLogDataConnector" />
-    <ad:Script><![CDATA[
-        // Import Shibboleth attribute provider.
-        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
-        
-        // Create the attribute to be returned.
-        groupNameInStem = new BasicAttribute("groupNameInStem")
-        
-        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
-        if (typeof name != "undefined" && name != null ) {
-            // The name of the base stem to be provisioned.
-            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
-
-            // If the base stem is the root stem, ignore groups under the 'etc' stem.
-            if (scriptBaseStem.length == 0) {
-                if (name.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
-                    groupNameInStem.getValues().add(name.getValues().get(0));
-                }
-            // Return the group name if it starts with the base stem to be provisioned.
-            } else {
-                if (name.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
-                    groupNameInStem.getValues().add(name.getValues().get(0));                
-                }
-            }
-        }
-    ]]></ad:Script>
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The GroupInStem filter matches groups which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group. For example, the DN of a group before it is renamed. -->
@@ -433,34 +421,22 @@
     property. If the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
   <resolver:AttributeDefinition
     id="changeLogMembershipGroupName"
-    xsi:type="ad:Script">
+    xsi:type="grouper:FilteredName"
+    sourceAttributeID="groupName">
     <resolver:Dependency ref="AddMembershipChangeLogDataConnector" />
     <resolver:Dependency ref="DeleteMembershipChangeLogDataConnector" />
-    <ad:Script><![CDATA[
-        // Import Shibboleth attribute provider.
-        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
-        
-        // Create the attribute to be returned.
-        changeLogMembershipGroupName = new BasicAttribute("changeLogMembershipGroupName")
-        
-        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
-        if (typeof groupName != "undefined" && groupName != null ) {
-            // The name of the base stem to be provisioned.
-            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
-
-            // If the base stem is the root stem, ignore groups under the 'etc' stem.
-            if (scriptBaseStem.length == 0) {
-                if (groupName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
-                    changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));
-                }
-            // Return the group name if it starts with the base stem to be provisioned.
-            } else {
-                if (groupName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
-                    changeLogMembershipGroupName.getValues().add(groupName.getValues().get(0));                
-                }
-            }
-        }
-    ]]></ad:Script>
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The NameInStem filter matches names which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
   </resolver:AttributeDefinition>
 
   <!-- The value of the "changeLogMembershipGroupSubjectName" attribute is the name of the group member of a membership change 
@@ -525,42 +501,27 @@
     base="${edu.internet2.middleware.psp.groupsBaseDn}">
     <resolver:Dependency ref="changeLogMembershipGroupSubjectNameInStem" />
   </resolver:AttributeDefinition>
-  
-    <!-- The value of the "changeLogMembershipGroupSubjectNameInStem" attribute is the name of the group member of a membership 
+
+  <!-- The value of the "changeLogMembershipGroupSubjectNameInStem" attribute is the name of the group member of a membership 
     change log entry. The name of the group is returned only if the group is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem 
     property. If the edu.internet2.middleware.psp.baseStem property is the root stem, groups under the "etc" stem are omitted. -->
   <resolver:AttributeDefinition
     id="changeLogMembershipGroupSubjectNameInStem"
-    xsi:type="ad:Script">
+    xsi:type="grouper:FilteredName"
+    sourceAttributeID="changeLogMembershipGroupSubjectName">
     <resolver:Dependency ref="changeLogMembershipGroupSubjectName" />
-    <ad:Script><![CDATA[
-        // Import Shibboleth attribute provider.
-        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
-        
-        // Create the attribute to be returned.
-        changeLogMembershipGroupSubjectNameInStem = new BasicAttribute("changeLogMembershipGroupSubjectNameInStem")
-        
-        // Return the group name if it is a child of the base stem to be provisioned, omitting 'etc'.
-        if (typeof changeLogMembershipGroupSubjectName != "undefined" &&
-            changeLogMembershipGroupSubjectName != null &&
-            !changeLogMembershipGroupSubjectName.getValues().isEmpty()) {
-                
-            // The name of the base stem to be provisioned.
-            var scriptBaseStem = "${edu.internet2.middleware.psp.baseStem}";
-
-            // If the base stem is the root stem, ignore groups under the 'etc' stem.
-            if (scriptBaseStem.length == 0) {
-                if (changeLogMembershipGroupSubjectName.getValues().get(0).lastIndexOf("etc:", 0) === -1) {
-                    changeLogMembershipGroupSubjectNameInStem.getValues().add(changeLogMembershipGroupSubjectName.getValues().get(0));
-                }
-            // Return the group name if it starts with the base stem to be provisioned.
-            } else {
-                if (changeLogMembershipGroupSubjectName.getValues().get(0).lastIndexOf(scriptBaseStem + ":", 0) != -1) {
-                    changeLogMembershipGroupSubjectNameInStem.getValues().add(changeLogMembershipGroupSubjectName.getValues().get(0));                
-                }
-            }
-        }
-    ]]></ad:Script>
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The NameInStem filter matches names which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
   </resolver:AttributeDefinition>
 
   <!-- Change log member membership. -->

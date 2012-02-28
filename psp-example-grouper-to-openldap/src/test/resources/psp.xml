@@ -72,6 +72,11 @@
       name="description"
       ref="stemDescription" />
 
+    <!-- The ldap organizational unit "seeAlso" attribute. -->
+    <attribute
+      name="seeAlso"
+      ref="stemSeeAlso" />
+
   </pso>
 
   <!-- Provision a grouper group as an ldap group. -->

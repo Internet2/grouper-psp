@@ -82,6 +82,8 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
 
         setUpMailLocalAddressAttributeDef();
 
+        setUpSeeAlsoAddressAttributeDef();
+        
         try {
 
             setUpLdap();

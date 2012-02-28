@@ -56,8 +56,10 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
     public void setUp() {
 
         super.setUp();
-        
+
         setUpMailLocalAddressAttributeDef();
+
+        setUpSeeAlsoAddressAttributeDef();
 
         try {
             setUpPSP();
@@ -105,8 +107,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapTest.testMultipleSubjects.before.ldif");
 
-        psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap")
-                .setMultipleResults(true);
+        psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap").setMultipleResults(true);
 
         ((LdapSourceAdapter) SubjectFinder.getSource("ldap")).setMultipleResults(true);
 
@@ -161,8 +162,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
     public void testBulkDiffBushyAddMultipleSubjectsTrue() throws Exception {
 
-        psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap")
-                .setMultipleResults(true);
+        psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap").setMultipleResults(true);
 
         loadLdif(DATA_PATH + "GrouperToOpenLdapTest.testMultipleSubjects.before.ldif");
 
@@ -196,8 +196,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
     public void testBulkSyncBushyAddMultipleSubjectsTrue() throws Exception {
 
-        psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap")
-                .setMultipleResults(true);
+        psp.getPso("ldap", "group").getReferences("member").getPsoReference("membersLdap").setMultipleResults(true);
 
         ((LdapSourceAdapter) SubjectFinder.getSource("ldap")).setMultipleResults(true);
 
@@ -218,7 +217,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         // loadLdif(PSPLdapTest.DATA_PATH + "PSPTest.before.ldif");
 
-        groupA.addMember(groupB.toSubject());
+        // groupA.addMember(groupB.toSubject());
 
         // CalcRequest request = new CalcRequest();
         // SyncRequest request = new SyncRequest();
@@ -364,10 +363,6 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
 
         makeGroupDNStructureFlat();
 
-        // if (this.useEmbedded()) {
-        // psp.getTargetDefinitions().get("ldap").setBundleModifications(false);
-        // }
-
         loadLdif(DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListAddMember.before.ldif");
 
         SyncRequest request = new SyncRequest();
@@ -375,17 +370,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
         request.setId(groupB.getName());
         SyncResponse response = psp.execute(request);
 
-        try {
-            verifySpml(response, DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListAddMember.response.xml");
-        } catch (AssertionFailedError e) {
-            // if (useEmbedded()) {
-            // OK
-            // } else {
-            throw e;
-            // }
-
-        }
-
+        verifySpml(response, DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListAddMember.response.xml");
         verifyLdif(DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListAddMember.after.ldif");
     }
 
@@ -420,16 +405,7 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
         request.setId(groupB.getName());
         SyncResponse response = psp.execute(request);
 
-        try {
-            verifySpml(response, DATA_PATH
-                    + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListDeleteMember.response.xml");
-        } catch (AssertionFailedError e) {
-            // if (useEmbedded()) {
-            // OK
-            // } else {
-            throw e;
-            // }
-        }
+        verifySpml(response, DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListDeleteMember.response.xml");
 
         if (!psp.getTarget("ldap").isBundleModifications()) {
             verifyLdif(DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatAddEmptyList.after.ldif");
@@ -454,6 +430,30 @@ public class GrouperToOpenLdapTest extends BaseGrouperLdapTest {
         verifySpml(response, DATA_PATH
                 + "GrouperToOpenLdapTest.testSyncFlatModifyEmptyListDeleteMemberUnbundled.response.xml");
         verifyLdif(DATA_PATH + "GrouperToOpenLdapTest.testSyncFlatAddEmptyList.after.ldif");
+    }
+
+    public void testCalcAttributeFrameworkGroup() throws Exception {
+
+        groupA.getAttributeValueDelegate().assignValue("etc:attribute:mailLocalAddress", "mail@example.edu");
+
+        CalcRequest request = new CalcRequest();
+        request.setRequestID("REQUESTID_TEST");
+        request.setId(groupA.getName());
+        CalcResponse response = psp.execute(request);
+
+        verifySpml(response, DATA_PATH + "GrouperToOpenLdapTest.testCalcAttributeFrameworkGroup.response.xml");
+    }
+
+    public void testCalcAttributeFrameworkStem() throws Exception {
+
+        edu.getAttributeValueDelegate().assignValue("etc:attribute:seeAlso", "see another stem");
+
+        CalcRequest request = new CalcRequest();
+        request.setRequestID("REQUESTID_TEST");
+        request.setId(edu.getName());
+        CalcResponse response = psp.execute(request);
+
+        verifySpml(response, DATA_PATH + "GrouperToOpenLdapTest.testCalcAttributeFrameworkStem.response.xml");
     }
 
 }

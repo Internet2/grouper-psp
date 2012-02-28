@@ -291,6 +291,24 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
     }
 
     /**
+     * Set up the seeAlso attribute definition.
+     * 
+     * @return the attribute def name, whatever that is
+     */
+    public AttributeDefName setUpSeeAlsoAddressAttributeDef() {
+
+        Stem etcAttribute = StemFinder.findByName(GrouperSession.staticGrouperSession(), "etc:attribute", true);
+
+        AttributeDef attributeDef = etcAttribute.addChildAttributeDef("seeAlsoAttributeDef", AttributeDefType.attr);
+        attributeDef.setAssignToStem(true);
+        attributeDef.setMultiValued(true);
+        attributeDef.setValueType(AttributeDefValueType.string);
+        attributeDef.store();
+
+        return etcAttribute.addChildAttributeDefName(attributeDef, "seeAlso", "seeAlso");
+    }
+
+    /**
      * Delete all existing entries under the base DN and load the skeleton LDIF.
      * 
      * @throws Exception
