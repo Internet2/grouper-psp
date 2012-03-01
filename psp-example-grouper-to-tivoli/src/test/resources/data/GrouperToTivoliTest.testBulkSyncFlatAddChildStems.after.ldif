@@ -2,7 +2,7 @@ dn: ${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: organizationalUnit
 ou: groups
 
-dn: cn=edu:courses:fall:courseA,ou=groups,dc=example,dc=edu
+dn: cn=edu:courses:fall:courseA,${edu.internet2.middleware.psp.groupsBaseDn}
 objectClass: eduMember
 objectClass: groupOfNames
 objectClass: top
@@ -12,7 +12,7 @@ hasMember: my name is test.subject.1
 member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 
-dn: cn=edu:courses:fall:courseB,ou=groups,dc=example,dc=edu
+dn: cn=edu:courses:fall:courseB,${edu.internet2.middleware.psp.groupsBaseDn}
 objectClass: eduMember
 objectClass: groupOfNames
 objectClass: top
@@ -20,7 +20,7 @@ cn: edu:courses:fall:courseB
 hasMember: my name is test.subject.1
 member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 
-dn: cn=edu:courses:spring:courseA,ou=groups,dc=example,dc=edu
+dn: cn=edu:courses:spring:courseA,${edu.internet2.middleware.psp.groupsBaseDn}
 objectClass: eduMember
 objectClass: groupOfNames
 objectClass: top
@@ -30,13 +30,13 @@ hasMember: my name is test.subject.1
 member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 
-dn: cn=edu:courses:spring:courseB,ou=groups,dc=example,dc=edu
+dn: cn=edu:courses:spring:courseB,${edu.internet2.middleware.psp.groupsBaseDn}
 objectClass: eduMember
 objectClass: groupOfNames
 objectClass: top
 cn: edu:courses:spring:courseB
 hasMember: my name is test.subject.1
-member: uid=test.subject.1,ou=people,dc=example,dc=edu
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 
 dn: cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}
 objectclass: top
