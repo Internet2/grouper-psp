@@ -132,7 +132,7 @@ Grouper subject resolver configuration
     
      <init-param>
       <param-name>SubjectID_AttributeType</param-name>
-      <param-value>cn</param-value>
+      <param-value>uid</param-value>
     </init-param>
     <init-param>
       <param-name>Name_AttributeType</param-name>
@@ -148,7 +148,7 @@ Grouper subject resolver configuration
         <param>
             <param-name>filter</param-name>
             <param-value>
-                (&amp;(cn=%TERM%)(objectclass=person))
+                (&amp;(uid=%TERM%)(objectclass=person))
             </param-value>
         </param>
         <param>
@@ -166,7 +166,7 @@ Grouper subject resolver configuration
         <param>
             <param-name>filter</param-name>
             <param-value>
-                (&amp;(cn=%TERM%)(objectclass=person))
+                (&amp;(uid=%TERM%)(objectclass=person))
             </param-value>
         </param>
         <param>
@@ -218,6 +218,7 @@ Grouper subject resolver configuration
     <internal-attribute>searchAttribute0</internal-attribute>
     ///Attributes you would like to display when doing a search 
     <attribute>cn</attribute>
+    <attribute>uid</attribute>
    
   </source>
 

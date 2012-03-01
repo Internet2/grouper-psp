@@ -1,7 +1,10 @@
-dn: cn=test.subject.10,${edu.internet2.middleware.psp.peopleBaseDn}
+dn: uid=test.subject.10,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: top
 objectclass: person
 objectclass: organizationalPerson
+objectclass: inetOrgPerson
 cn: test.subject.10
 cn: test.subject.1
 sn: subject.10
+uid: test.subject.10
+uid: test.subject.1

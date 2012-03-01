@@ -9,7 +9,7 @@ objectClass: top
 objectClass: eduMember
 objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupA
-member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 hasMember: test.subject.0
 
 dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
@@ -19,4 +19,4 @@ objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupB
 description: descriptionB
 hasMember: test.subject.1
-member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}

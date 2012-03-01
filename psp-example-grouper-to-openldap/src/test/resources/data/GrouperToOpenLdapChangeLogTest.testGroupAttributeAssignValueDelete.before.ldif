@@ -11,4 +11,4 @@ objectClass: groupOfNames
 objectClass: inetLocalMailRecipient
 cn: groupA
 mailLocalAddress: mail@example.edu
-member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}

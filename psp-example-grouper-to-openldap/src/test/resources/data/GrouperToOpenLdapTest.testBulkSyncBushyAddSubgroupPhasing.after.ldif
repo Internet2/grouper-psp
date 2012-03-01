@@ -3,20 +3,24 @@ objectclass: organizationalUnit
 description: people
 ou: people
 
-dn: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+dn: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: person
 objectclass: organizationalPerson
 objectclass: eduMember
+objectclass: inetOrgPerson
 cn: test.subject.0
 sn: subject.0
+uid: test.subject.0
 isMemberOf: edu:groupA
 
-dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+dn: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 objectclass: person
 objectclass: organizationalPerson
 objectclass: eduMember
+objectclass: inetOrgPerson
 cn: test.subject.1
 sn: subject.1
+uid: test.subject.1
 isMemberOf: edu:groupA
 isMemberOf: edu:groupB
 
@@ -36,8 +40,8 @@ cn: groupA
 hasMember: my name is test.subject.0
 hasMember: my name is test.subject.1
 hasMember: edu:groupB
-member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
-member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 member: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
 
 dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
@@ -46,6 +50,6 @@ objectClass: eduMember
 objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 cn: groupB
 hasMember: my name is test.subject.1
-member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 description: descriptionB
 isMemberOf: edu:groupA

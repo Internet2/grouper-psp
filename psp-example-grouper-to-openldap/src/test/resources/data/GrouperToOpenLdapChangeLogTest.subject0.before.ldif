@@ -1,4 +1,4 @@
-dn: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+dn: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
 changetype: modify
 add: objectClass
 objectClass: eduMember

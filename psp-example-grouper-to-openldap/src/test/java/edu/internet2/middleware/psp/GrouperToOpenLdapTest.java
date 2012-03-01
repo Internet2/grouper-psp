@@ -14,7 +14,6 @@
 
 package edu.internet2.middleware.psp;
 
-import junit.framework.AssertionFailedError;
 import junit.textui.TestRunner;
 
 import org.opensaml.util.resource.ResourceException;

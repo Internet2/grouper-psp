@@ -36,7 +36,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </psp:pso>
@@ -63,7 +63,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </psp:pso>
@@ -71,7 +71,7 @@
   <psp:calcResponse status='success' requestID='REQUESTID_TEST'>
     <psp:id ID='test.subject.0'/>
     <psp:pso entityName='member'>
-      <psoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>eduMember</dsml:value>
@@ -85,7 +85,7 @@
   <psp:calcResponse status='success' requestID='REQUESTID_TEST'>
     <psp:id ID='test.subject.1'/>
     <psp:pso entityName='member'>
-      <psoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
       <data>
         <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
           <dsml:value>eduMember</dsml:value>

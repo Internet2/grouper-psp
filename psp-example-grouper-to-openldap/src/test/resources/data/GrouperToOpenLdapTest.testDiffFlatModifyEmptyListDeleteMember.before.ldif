@@ -3,6 +3,6 @@ objectclass: top
 objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
 objectclass: eduMember
 cn: edu:groupB
-member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
 description: descriptionB
 hasMember: test.subject.1

@@ -35,7 +35,7 @@
       </data>
       <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
         <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-          <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         </spmlref:reference>
       </capabilityData>
     </addRequest>
@@ -47,7 +47,7 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='member' returnData='everything' requestID='REQUESTID_TEST'>
-      <psoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
       <modification modificationMode='add'>
         <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass' operation='add'>
           <dsml:value>eduMember</dsml:value>
@@ -63,7 +63,7 @@
   </psp:diffResponse>
   <psp:diffResponse status='success' requestID='REQUEST_ID'>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='member' returnData='everything' requestID='REQUESTID_TEST'>
-      <psoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      <psoID ID='uid=test.subject.10,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
       <modification modificationMode='add'>
         <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass' operation='add'>
           <dsml:value>eduMember</dsml:value>
@@ -76,7 +76,7 @@
       </modification>
     </modifyRequest>
     <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='member' returnData='everything' requestID='REQUESTID_TEST'>
-      <psoID ID='cn=test.subject.10,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
       <modification modificationMode='add'>
         <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass' operation='add'>
           <dsml:value>eduMember</dsml:value>

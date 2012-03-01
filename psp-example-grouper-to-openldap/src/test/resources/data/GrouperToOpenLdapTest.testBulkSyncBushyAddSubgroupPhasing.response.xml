@@ -43,10 +43,10 @@
             <spmlref:toPsoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
           </spmlref:reference>
           <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-            <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
           </spmlref:reference>
           <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-            <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
           </spmlref:reference>
         </capabilityData>
       </pso>
@@ -78,7 +78,7 @@
         </data>
         <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
           <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
-            <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
           </spmlref:reference>
         </capabilityData>
       </pso>
@@ -88,10 +88,11 @@
   <psp:syncResponse>
     <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
       <pso entityName='member'>
-        <psoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+        <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         <data>
           <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
             <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
             <dsml:value>organizationalPerson</dsml:value>
             <dsml:value>person</dsml:value>
             <dsml:value>top</dsml:value>
@@ -107,10 +108,11 @@
   <psp:syncResponse>
     <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
       <pso entityName='member'>
-        <psoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+        <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
         <data>
           <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
             <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
             <dsml:value>organizationalPerson</dsml:value>
             <dsml:value>person</dsml:value>
             <dsml:value>top</dsml:value>
