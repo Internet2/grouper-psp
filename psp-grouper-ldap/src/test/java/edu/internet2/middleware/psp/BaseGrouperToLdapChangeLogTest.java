@@ -86,8 +86,6 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
         
         try {
 
-            setUpLdap();
-
             tmpFile = File.createTempFile(getName(), ".tmp");
             LOG.debug("creating tmp file '{}'", tmpFile);
             tmpFile.deleteOnExit();

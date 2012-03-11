@@ -584,6 +584,24 @@ public class LdapTestHelper {
       }
     }
   }
+  
+  /**
+   * Remove any attribute whose name is "entryDN".
+   * 
+   * @param ldifEntries
+   * @throws NamingException
+   */
+  public static void purgeEntryDN(Collection<LdifEntry> ldifEntries)
+      throws NamingException {
+    for (LdifEntry ldifEntry : ldifEntries) {
+      if (ldifEntry.isEntry()) {
+        Entry entry = ldifEntry.getEntry();        
+        if (entry.contains("entryDN", entry.getDn().toString())) {
+          entry.remove("entryDN", entry.getDn().toString());
+        }
+      }
+    }
+  }
 
   /**
    * Return the contents of the given file as a string.
@@ -823,6 +841,10 @@ public class LdapTestHelper {
     purgeObjectclassTop(correctEntries);
     purgeObjectclassTop(currentEntries);
 
+    // remove entryDN if present
+    purgeEntryDN(correctEntries);
+    purgeEntryDN(currentEntries);
+    
     if (purgeAttributes) {
       Map<String, Collection<String>> objectClassAttributeMap = buildObjectlassAttributeMap(correctEntries);
       if (objectClassAttributeMap != null) {

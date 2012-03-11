@@ -47,6 +47,7 @@ import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.grouper.util.GrouperUtil;
 import edu.internet2.middleware.morphString.Morph;
 import edu.internet2.middleware.psp.helper.LdapTestHelper;
+import edu.internet2.middleware.psp.ldap.LdapSpmlTarget;
 import edu.internet2.middleware.psp.shibboleth.GroupDnStructure;
 import edu.internet2.middleware.psp.shibboleth.LdapDnFromGrouperNamePSOIdentifierAttributeDefinition;
 import edu.internet2.middleware.psp.spml.config.Pso;
@@ -175,6 +176,39 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
             throw new IllegalArgumentException("Unable to find '" + fileName + "'");
         }
         LdapTestHelper.loadLdif(file, propertiesFile, ldap);
+    }
+
+    /**
+     * Load the supplied LDIF file into the ldap directory.
+     * 
+     * Macros are replaced using the {@link PROPERTIES_FILE}.
+     * 
+     * @param fileName the name of the ldif file
+     * @param ldap the ldap connection
+     * @throws Exception if an error occurs
+     */
+    public void loadLdif(String fileName, Ldap ldap) throws Exception {
+        File file = PSPUtil.getFile(fileName);
+        if (file == null) {
+            throw new IllegalArgumentException("Unable to find '" + fileName + "'");
+        }
+        LdapTestHelper.loadLdif(file, getPropertiesFile(), ldap);
+    }
+
+    /**
+     * Load the supplied LDIF file into the ldap directory with the given target id.
+     * 
+     * Macros are replaced using the {@link PROPERTIES_FILE}.
+     * 
+     * @param fileName the name of the ldif file
+     * @param targetId the target id
+     * @throws Exception if an error occurs
+     */
+    public void loadLdif(String fileName, String targetId) throws Exception {
+        LdapSpmlTarget ldapTarget = (LdapSpmlTarget) psp.getTarget(targetId);
+        Ldap ldap = ldapTarget.getLdapPool().checkOut();
+        loadLdif(fileName, ldap);
+        ldapTarget.getLdapPool().checkIn(ldap);
     }
 
     /**
@@ -342,6 +376,20 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
     }
 
     /**
+     * Delete all existing entries under the base DN and load the skeleton LDIF.
+     * 
+     * @param targetId the ldap target id
+     * @throws Exception
+     */
+    public void setUpLdap(String targetId) throws Exception {
+        LdapSpmlTarget ldapTarget = (LdapSpmlTarget) psp.getTarget(targetId);
+        Ldap ldap = ldapTarget.getLdapPool().checkOut();
+        LdapTestHelper.deleteChildren(ldap.getLdapConfig().getBaseDn(), ldap);
+        loadLdif(DATA_PATH + "GrouperLdapTest.before.ldif", ldap);
+        ldapTarget.getLdapPool().checkIn(ldap);
+    }
+
+    /**
      * Initialize the {@link Psp}.
      */
     public Psp setUpPSP() throws ResourceException {
@@ -359,6 +407,33 @@ public abstract class BaseGrouperLdapTest extends GrouperTest {
         String correctLdif = LdapTestHelper.readFile(PSPUtil.getFile(pathToCorrectFile));
         LdapTestHelper.verifyLdif(correctLdif, propertiesFile, getAllReferenceNames(),
                 ldap.getLdapConfig().getBaseDn(), ldap, false);
+    }
+
+    /**
+     * Verify that the entries in the ldif file are correctly provisioned.
+     * 
+     * @param pathToCorrectFile the ldif file
+     * @param ldap the ldap connection
+     * @throws Exception if an error occurs
+     */
+    public void verifyLdif(String pathToCorrectFile, Ldap ldap) throws Exception {
+        String correctLdif = LdapTestHelper.readFile(PSPUtil.getFile(pathToCorrectFile));
+        LdapTestHelper.verifyLdif(correctLdif, propertiesFile, getAllReferenceNames(),
+                ldap.getLdapConfig().getBaseDn(), ldap, false);
+    }
+
+    /**
+     * Verify that the entries in the ldif file are correctly provisioned.
+     * 
+     * @param pathToCorrectFile the ldif file
+     * @param targetId the ldap target id
+     * @throws Exception if an error occurs
+     */
+    public void verifyLdif(String pathToCorrectFile, String targetId) throws Exception {
+        LdapSpmlTarget ldapTarget = (LdapSpmlTarget) psp.getTarget(targetId);
+        Ldap ldap = ldapTarget.getLdapPool().checkOut();
+        verifyLdif(pathToCorrectFile, ldap);
+        ldapTarget.getLdapPool().checkIn(ldap);
     }
 
     /**

@@ -49,6 +49,23 @@ public class GrouperToTivoliChangeLogTest extends BaseGrouperToLdapChangeLogTest
     }
 
     /**
+     * Initialize the ldap directory.
+     * 
+     * {@inheritDoc}
+     */
+    public void setUp() {
+
+        super.setUp();
+
+        try {
+            setUpLdap();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("An error occurred : " + e);
+        }
+    }
+
+    /**
      * Test provisioning resulting from the adding of a membership.
      * 
      * @throws Exception
@@ -94,7 +111,7 @@ public class GrouperToTivoliChangeLogTest extends BaseGrouperToLdapChangeLogTest
         ChangeLogTempToEntity.convertRecords();
         runChangeLog();
 
-        //verifySpml(DATA_PATH + "GrouperToTivoliChangeLogTest.testMembershipAddGroup.xml");
+        verifySpml(DATA_PATH + "GrouperToTivoliChangeLogTest.testMembershipAddGroup.xml");
         verifyLdif(DATA_PATH + "GrouperToTivoliChangeLogTest.testMembershipAddGroup.after.ldif");
     }
 

@@ -50,6 +50,23 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
     }
 
     /**
+     * Initialize the ldap directory.
+     * 
+     * {@inheritDoc}
+     */
+    public void setUp() {
+
+        super.setUp();
+
+        try {
+            setUpLdap();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("An error occurred : " + e);
+        }
+    }
+
+    /**
      * Determine if subtree renames are supported by attempting to rename a non-empty ou.
      * 
      * This method deletes the test target ldap directory and re-adds the basic test ldif.
