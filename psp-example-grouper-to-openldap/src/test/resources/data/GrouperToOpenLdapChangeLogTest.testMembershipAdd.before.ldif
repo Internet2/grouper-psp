@@ -1,0 +1,13 @@
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: organizationalUnit
+ou: edu
+description: The edu stem.
+
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: groupOfNames
+objectClass: eduMember
+cn: groupA
+hasMember: test.subject.0
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
