@@ -108,7 +108,7 @@
 
   </pso>
 
-  <!-- Do not provision grouper members, but enable lookup. -->
+  <!-- Provision memberOf attributes for members which are ldap persons. -->
   <pso
     id="member"
     allSourceIdentifiersRef="memberSubjectIds">
