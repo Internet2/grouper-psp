@@ -1,0 +1,114 @@
+dn: ${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: organizationalUnit
+objectClass: top
+ou: groups
+
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: organizationalUnit
+objectClass: top
+ou: edu
+description: The edu stem.
+
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: groupOfNames
+objectClass: eduMember
+cn: groupA
+hasMember: test.subject.0
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: ${edu.internet2.middleware.psp.peopleBaseDn}
+description: people
+objectClass: organizationalUnit
+objectClass: top
+ou: people
+
+dn: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: person
+objectClass: top
+cn: test.subject.0
+sn: subject.0
+uid: test.subject.0
+
+dn: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.1
+sn: subject.1
+uid: test.subject.1
+
+dn: uid=test.subject.2,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.2
+sn: subject.2
+uid: test.subject.2
+
+dn: uid=test.subject.3,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.3
+sn: subject.3
+uid: test.subject.3
+
+dn: uid=test.subject.4,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.4
+sn: subject.4
+uid: test.subject.4
+
+dn: uid=test.subject.5,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.5
+sn: subject.5
+uid: test.subject.5
+
+dn: uid=test.subject.6,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.6
+sn: subject.6
+uid: test.subject.6
+
+dn: uid=test.subject.7,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.7
+sn: subject.7
+uid: test.subject.7
+
+dn: uid=test.subject.8,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.8
+sn: subject.8
+uid: test.subject.8
+
+dn: uid=test.subject.9,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+objectclass: inetOrgPerson
+cn: test.subject.9
+sn: subject.9
+uid: test.subject.9
