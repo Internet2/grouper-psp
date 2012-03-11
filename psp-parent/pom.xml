@@ -26,6 +26,8 @@
     <module>../psp-example-grouper-to-active-directory</module>
     <module>../psp-example-grouper-to-ldap</module>
     <module>../psp-example-grouper-to-openldap</module>
+    <module>../psp-example-grouper-to-openldap-memberof-overlay</module>
+    <module>../psp-example-grouper-to-openldap-multiple</module>
     <module>../psp-example-grouper-to-tivoli</module>
     <module>../psp-example-ldap-to-grouper</module>
     <module>../psp-distribution</module>
@@ -205,7 +207,7 @@
           <artifactId>maven-surefire-plugin</artifactId>
           <version>2.5</version>
           <configuration>
-            <argLine>-Xmx512m</argLine>
+            <argLine>-Xmx1024m</argLine>
             <additionalClasspathElements>
               <additionalClasspathElement>${grouper.dir}/confForTest</additionalClasspathElement>
               <additionalClasspathElement>${grouper.dir}/conf</additionalClasspathElement>
