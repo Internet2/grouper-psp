@@ -2015,8 +2015,8 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                 }
                 objects.get(targetId).add(psoDefinition);
             }
+            targets = new LinkedHashMap<String, SpmlTarget>(objects.keySet().size());
             for (String targetId : objects.keySet()) {
-                targets = new LinkedHashMap<String, SpmlTarget>(objects.keySet().size());
                 Object target = newServiceContext.getBean(targetId, SpmlTarget.class);
                 ((SpmlTarget) target).setPSP(this);
                 targets.put(targetId, (SpmlTarget) target);

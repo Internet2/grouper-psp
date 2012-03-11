@@ -25,7 +25,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.commons.lang.builder.ToStringStyle;
 import org.openspml.v2.msg.spml.ErrorCode;
 import org.openspml.v2.msg.spml.PSO;
-import org.openspml.v2.msg.spml.Request;
+import org.openspml.v2.msg.spml.Response;
 import org.openspml.v2.msg.spml.ReturnData;
 import org.openspml.v2.msg.spml.SchemaEntityRef;
 import org.openspml.v2.msg.spml.StatusCode;
@@ -109,13 +109,22 @@ public class PsoReference {
             schemaEntityRef.setEntityName(getToObject().getId());
             calcRequest.addSchemaEntity(schemaEntityRef);
 
-            CalcResponse calcResponse =
-                    (CalcResponse) context.getProvisioningServiceProvider().execute((Request) calcRequest);
+            Response response = context.getProvisioningServiceProvider().execute(calcRequest);
+
+            if (response.getStatus().equals(StatusCode.FAILURE)) {
+                if (onNotFound.equals(OnNotFound.warn)) {
+                    LOG.warn("Pso reference '{}' - Unable to resolve identifier '{}'", getRef(), value);
+                } else if (onNotFound.equals(OnNotFound.fail)) {
+                    LOG.error("Pso reference '{}' - Unable to resolve identifier '{}'", getRef(), value);
+                    throw new PspException("Unable to resolve identifier '" + value + "'");
+                }
+            }
+
+            CalcResponse calcResponse = (CalcResponse) response;
 
             List<PSO> psos = calcResponse.getPSOs();
 
-            if (calcResponse.getStatus().equals(StatusCode.FAILURE)
-                    || (calcResponse.getStatus().equals(StatusCode.SUCCESS) && psos.isEmpty())) {
+            if (calcResponse.getStatus().equals(StatusCode.SUCCESS) && psos.isEmpty()) {
                 if (onNotFound.equals(OnNotFound.warn)) {
                     LOG.warn("Pso reference '{}' - Unable to resolve identifier '{}'", getRef(), value);
                 } else if (onNotFound.equals(OnNotFound.fail)) {

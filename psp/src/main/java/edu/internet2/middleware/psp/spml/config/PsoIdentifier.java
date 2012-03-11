@@ -102,7 +102,10 @@ public class PsoIdentifier {
                         + PSOIdentifier.class + " : " + value.getClass());
             }
 
-            PSOIdentifier psoIdentifier = (PSOIdentifier) value;
+            PSOIdentifier valuePSOIdentifier = (PSOIdentifier) value;
+
+            PSOIdentifier psoIdentifier = new PSOIdentifier();
+            psoIdentifier.setID(valuePSOIdentifier.getID());
             psoIdentifier.setTargetID(targetId);
 
             // TODO set container ID ?
