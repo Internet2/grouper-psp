@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>psp-example-grouper-to-openldap</name>
+	<name>psp-example-grouper-to-openldap-memberof-overlay</name>
 	<comment></comment>
 	<projects>
 	</projects>

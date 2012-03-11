@@ -49,6 +49,23 @@ public class GrouperToOpenLdapChangeLogTest extends BaseGrouperToLdapChangeLogTe
     }
 
     /**
+     * Initialize the ldap directory.
+     * 
+     * {@inheritDoc}
+     */
+    public void setUp() {
+
+        super.setUp();
+
+        try {
+            setUpLdap();
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("An error occurred : " + e);
+        }
+    }
+
+    /**
      * Test provisioning resulting from the adding of a membership.
      * 
      * @throws Exception

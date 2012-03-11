@@ -13,8 +13,8 @@
     <relativePath>../psp-parent</relativePath>
   </parent>
 
-  <name>Provisioning Service Provider - Example - Grouper to OpenLDAP</name>
-  <artifactId>psp-example-grouper-to-openldap</artifactId>
+  <name>Provisioning Service Provider - Example - Grouper to OpenLDAP with MemberOf Overlay</name>
+  <artifactId>psp-example-grouper-to-openldap-memberof-overlay</artifactId>
   <packaging>jar</packaging>
 
   <dependencies>

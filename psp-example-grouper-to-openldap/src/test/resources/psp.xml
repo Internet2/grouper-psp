@@ -56,7 +56,6 @@
     <!-- The "old" ldap organizational unit DN calculated from stem update change log events. -->
     <alternateIdentifier ref="stemDnAlternateChangeLog" />
 
-
     <!-- The ldap organizational unit "objectClass" attribute. -->
     <attribute
       name="objectClass"
@@ -148,7 +147,7 @@
 
   </pso>
 
-  <!-- Do not provision grouper members, but enable lookup. -->
+  <!-- Provision isMemberOf attribute for members which are ldap persons. -->
   <pso
     id="member"
     allSourceIdentifiersRef="memberSubjectIds">
