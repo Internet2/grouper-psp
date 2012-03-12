@@ -57,6 +57,20 @@
       </excludes>
     </fileSet>
     <fileSet>
+      <directory>../psp-example-grouper-to-openldap-memberof-overlay/src/test/resources</directory>
+      <outputDirectory>/conf/psp-example-grouper-to-openldap-memberof-overlay</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
+      <directory>../psp-example-grouper-to-openldap-multiple/src/test/resources</directory>
+      <outputDirectory>/conf/psp-example-grouper-to-openldap-multiple</outputDirectory>
+      <excludes>
+        <exclude>**/data/</exclude>
+      </excludes>
+    </fileSet>
+    <fileSet>
       <directory>../psp-example-grouper-to-tivoli/src/test/resources</directory>
       <outputDirectory>/conf/psp-example-grouper-to-tivoli</outputDirectory>
       <excludes>
