@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Provisioning Service Provider (PSP) configuration. -->
+
+<!-- A <pso /> is a Provisioning Service Object. The authoritative and allSourceIdentifiersRef attributes control the provisioning 
+  of all source and target objects. If authoritative is "true", orphan objects will be deleted. Orphan objects exist on a target 
+  without a corresponding source object. The allSourceIdentifiersRef attribute refers to an attribute resolver definition whose 
+  values are all source identifiers applicable to this provisioned object. -->
+<!-- <pso id="entityName" authoritative="[true|false]" allSourceIdentifiersRef="attributeDefinitionID" /> -->
+
+<!-- The pso identifier refers to an attribute resolver definition. The targetId must match the id of a provisioning service 
+  target in psp-services.xml. The containerId is the string id of the pso identifier containing these objects. -->
+<!-- <identifier ref="attributeDefinitionID" targetId="targetId" containerId="containerId"/> -->
+
+<!-- The identifying attribute has two purposes : (1) to determine the schema entity of target objects returned from a lookup 
+  or search request and (2) to be converted to a query to search a target for all identifiers. If the identifying attribute 
+  is not present, the pso will be ignored during bulk requests. -->
+<!-- <identifyingAttribute name="attributeName" value="attributeValue" /> -->
+
+<!-- The alternate identifier refers to an attribute resolver definition, and is the previous (old) identifier of an object 
+  after it has been renamed. -->
+<!-- <alternateIdentifier ref="attributeDefinitionID" /> -->
+
+<!-- A provisioned attribute refers to an attribute resolver definition. -->
+<!-- <attribute name="attributeName" ref="attributeDefinitionID" /> -->
+
+<!-- References to the identifiers of other objects. -->
+<!-- <references name="attributeName"> <reference ... /> </references> -->
+
+<!-- A reference to the identifier of an object refers to an attribute resolver definition. -->
+<!-- <reference ref="attributeDefinitionID" toObject="psoId" /> -->
+
+<psp
+  xmlns="http://grouper.internet2.edu/psp"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://grouper.internet2.edu/psp classpath:/schema/psp.xsd">
+
+  <!-- Provision a grouper group as an ldap group. -->
+  <pso id="grouperToLdapGroup">
+
+    <!-- The ldap group DN. -->
+    <identifier
+      ref="groupDn"
+      targetId="ldap"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies ldap group objects which exist on the target by objectClass attribute value. -->
+    <identifyingAttribute
+      name="objectClass"
+      value="${edu.internet2.middleware.psp.groupObjectClass}" />
+
+  </pso>
+
+  <!-- Provision an ldap group as a grouper group. -->
+  <pso id="ldapToGrouperGroup">
+
+    <!-- The group identifier. For example, "edu:group". -->
+    <identifier
+      ref="groupName"
+      targetId="grouper"
+      containerId="edu" />
+
+    <!-- Identifies groups which exist in Grouper. The "objectclass" attribute is virtual. -->
+    <identifyingAttribute
+      name="objectClass"
+      value="group" />
+
+  </pso>
+
+</psp>
+ 
+
+

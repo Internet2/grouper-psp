@@ -271,7 +271,8 @@
     structure="bushy"
     sourceAttributeID="name"
     rdnAttributeName="ou"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependencies which return a "name" attribute whose value is the stem name. -->
     <resolver:Dependency ref="StemDataConnector" />
     <resolver:Dependency ref="DeleteStemChangeLogDataConnector" />
@@ -285,7 +286,8 @@
     structure="bushy"
     sourceAttributeID="propertyOldValue"
     rdnAttributeName="ou"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old stem name. -->
     <resolver:Dependency ref="UpdateStemChangeLogDataConnector" />
   </resolver:AttributeDefinition>
@@ -323,7 +325,8 @@
     structure="${edu.internet2.middleware.psp.structure}"
     sourceAttributeID="name"
     rdnAttributeName="cn"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
@@ -337,7 +340,8 @@
     structure="${edu.internet2.middleware.psp.structure}"
     sourceAttributeID="alternateName"
     rdnAttributeName="cn"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependency which returns an "alternateName" attribute whose value is the old group name. -->
     <resolver:Dependency ref="GroupDataConnector" />
   </resolver:AttributeDefinition>
@@ -349,7 +353,8 @@
     structure="${edu.internet2.middleware.psp.structure}"
     sourceAttributeID="propertyOldValue"
     rdnAttributeName="cn"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependency which returns a "propertyOldValue" attribute whose value is the old group name. -->
     <resolver:Dependency ref="UpdateGroupChangeLogDataConnector" />
   </resolver:AttributeDefinition>
@@ -431,7 +436,8 @@
     structure="${edu.internet2.middleware.psp.structure}"
     sourceAttributeID="changeLogMembershipGroupName"
     rdnAttributeName="cn"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <resolver:Dependency ref="changeLogMembershipGroupName" />
   </resolver:AttributeDefinition>
 

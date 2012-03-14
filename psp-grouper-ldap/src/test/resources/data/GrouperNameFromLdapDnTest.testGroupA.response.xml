@@ -1,0 +1,6 @@
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:id ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
+  <psp:pso entityName='ldapToGrouperGroup'>
+    <psoID ID='groupA' targetID='grouper'/>
+  </psp:pso>
+</psp:calcResponse>

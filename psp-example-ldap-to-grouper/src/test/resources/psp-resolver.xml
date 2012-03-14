@@ -46,7 +46,7 @@
     <resolver:Dependency ref="AllLDAPOrganizationalUnits" />
   </resolver:AttributeDefinition>
 
-  <!-- Returns the DN of an ldap organizational unit. The SortedLdapDirectory type sorts attribute names and values. -->
+  <!-- Returns the DN of an ldap organizational unit. -->
   <resolver:DataConnector
     id="LDAPOrganizationalUnit"
     xsi:type="dc:LDAPDirectory"
@@ -68,7 +68,8 @@
     id="stemName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="entryDN"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <resolver:Dependency ref="LDAPOrganizationalUnit" />
   </resolver:AttributeDefinition>
 
@@ -77,7 +78,8 @@
     id="previousStemName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="stemPreviousOu"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <resolver:Dependency ref="stemPreviousOu" />
   </resolver:AttributeDefinition>
 
@@ -207,7 +209,8 @@
     id="groupName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="entryDN"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <resolver:Dependency ref="LDAPGroup" />
   </resolver:AttributeDefinition>
 
@@ -216,7 +219,8 @@
     id="previousGroupName"
     xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
     sourceAttributeID="groupPreviousCn"
-    base="${edu.internet2.middleware.psp.groupsBaseDn}">
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
     <resolver:Dependency ref="groupPreviousCn" />
   </resolver:AttributeDefinition>
 

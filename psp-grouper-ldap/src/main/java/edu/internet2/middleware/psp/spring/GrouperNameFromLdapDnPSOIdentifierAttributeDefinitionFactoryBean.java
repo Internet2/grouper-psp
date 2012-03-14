@@ -25,15 +25,18 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionFactoryBean ex
         BaseAttributeDefinitionFactoryBean {
 
     /** The LDAP DN base. */
-    private String base;
+    private String baseDn;
+
+    /** The Grouper base stem. */
+    private String baseStem;
 
     /**
      * Get the LDAP DN base.
      * 
      * @return the base DN
      */
-    public String getBase() {
-        return base;
+    public String getBaseDn() {
+        return baseDn;
     }
 
     /**
@@ -41,8 +44,26 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionFactoryBean ex
      * 
      * @param base the base DN
      */
-    public void setBase(String base) {
-        this.base = base;
+    public void setBaseDn(String baseDn) {
+        this.baseDn = baseDn;
+    }
+
+    /**
+     * Get the base stem.
+     * 
+     * @return the base stem
+     */
+    public String getBaseStem() {
+        return baseStem;
+    }
+
+    /**
+     * Set the base stem.
+     * 
+     * @param base the base stem
+     */
+    public void setBaseStem(String baseStem) {
+        this.baseStem = baseStem;
     }
 
     /** {@inheritDoc} */
@@ -50,7 +71,8 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionFactoryBean ex
         GrouperNameFromLdapDnPSOIdentifierAttributeDefinition definition =
                 new GrouperNameFromLdapDnPSOIdentifierAttributeDefinition();
         populateAttributeDefinition(definition);
-        definition.setBase(base);
+        definition.setBaseDn(baseDn);
+        definition.setBaseStem(baseStem);
         return definition;
     }
 

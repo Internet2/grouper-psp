@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AttributeResolver
+  xmlns="urn:mace:shibboleth:2.0:resolver"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:ad="urn:mace:shibboleth:2.0:resolver:ad"
+  xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:psp-grouper-ldap="http://grouper.internet2.edu/psp-grouper-ldap"
+  xmlns:psp-grouper-changelog="http://grouper.internet2.edu/psp-grouper-changelog"
+  xmlns:psp-grouper-source="http://grouper.internet2.edu/psp-grouper-source"
+  xsi:schemaLocation="
+   urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd
+   urn:mace:shibboleth:2.0:resolver:dc classpath:/schema/shibboleth-2.0-attribute-resolver-dc.xsd
+   urn:mace:shibboleth:2.0:resolver:ad classpath:/schema/shibboleth-2.0-attribute-resolver-ad.xsd
+   http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+   http://grouper.internet2.edu/psp classpath:/schema/psp.xsd
+   http://grouper.internet2.edu/psp-grouper-ldap classpath:/schema/psp-grouper-ldap.xsd
+   http://grouper.internet2.edu/psp-grouper-changelog classpath:/schema/psp-grouper-changelog.xsd
+   http://grouper.internet2.edu/psp-grouper-source classpath:/schema/psp-grouper-source.xsd">
+
+  <!-- LdapDnFromGrouperNameTest. -->
+
+  <!-- The GroupDataConnector returns attributes representing the group whose name is the principal name. The returned group 
+    must be a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. Groups under the "etc" stem 
+    are omitted. -->
+  <resolver:DataConnector
+    id="GroupDataConnector"
+    xsi:type="grouper:GroupDataConnector">
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The GroupInStem filter matches groups which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
+    <!-- The "members" attribute values are equivalent to group.getMembers(). -->
+    <grouper:Attribute id="members" />
+    <!-- The "groups" attribute values are equivalent to group.getGroups(). -->
+    <grouper:Attribute id="groups" />
+  </resolver:DataConnector>
+
+  <!-- Group identifier and attributes. -->
+
+  <!-- The LDAP DN of a group. For example, "cn=groupExtension,ou=stem,ou=groups,dc=example,dc=edu". -->
+  <resolver:AttributeDefinition
+    id="groupDn"
+    xsi:type="psp-grouper-ldap:LdapDnFromGrouperNamePSOIdentifier"
+    structure="${edu.internet2.middleware.psp.structure}"
+    sourceAttributeID="groupNameInStem"
+    rdnAttributeName="cn"
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
+    <!-- Dependencies which return a "groupNameInStem" attribute whose value is the group name. -->
+    <resolver:Dependency ref="groupNameInStem" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the "groupNameInStem" attribute is the name of a group. The name of the group is returned only if the 
+    group is a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. If the edu.internet2.middleware.psp.baseStem 
+    property is the root stem, groups under the "etc" stem are omitted. -->
+  <resolver:AttributeDefinition
+    id="groupNameInStem"
+    xsi:type="grouper:FilteredName"
+    sourceAttributeID="name">
+    <!-- Dependencies which return a "name" attribute whose value is the group name. -->
+    <resolver:Dependency ref="GroupDataConnector" />
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The NameInStem filter matches names which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:NameInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
+  </resolver:AttributeDefinition>
+
+
+  <!-- GrouperNameFromLdapDnTest -->
+
+  <!-- Returns the DN of an ldap group. The SortedLdapDirectory type sorts attribute names and values. -->
+  <resolver:DataConnector
+    id="LDAPGroup"
+    xsi:type="dc:LDAPDirectory"
+    ldapURL="${edu.vt.middleware.ldap.ldapUrl}"
+    baseDN="${edu.internet2.middleware.psp.groupsBaseDn}"
+    principal="${edu.vt.middleware.ldap.bindDn}"
+    principalCredential="${edu.vt.middleware.ldap.bindCredential}"
+    maxResultSize="1">
+    <dc:FilterTemplate>
+        <![CDATA[
+            (&(entryDN=${requestContext.principalName})(objectclass=groupOfNames))
+        ]]>
+    </dc:FilterTemplate>
+  </resolver:DataConnector>
+
+  <!-- Returns a group name constructed from an ldap DN. The base DN is excluded. For example, "cn=group,ou=stem,ou=edu,ou=testgroups,dc=example,dc=edu" 
+    will be translated to "edu:stem:group". -->
+  <resolver:AttributeDefinition
+    id="groupName"
+    xsi:type="psp-grouper-ldap:GrouperNameFromLdapDnPSOIdentifier"
+    sourceAttributeID="entryDN"
+    baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
+    baseStem="${edu.internet2.middleware.psp.baseStem}">
+    <resolver:Dependency ref="LDAPGroup" />
+  </resolver:AttributeDefinition>
+
+</AttributeResolver>

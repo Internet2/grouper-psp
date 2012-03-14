@@ -53,12 +53,21 @@
           </simpleType>
         </attribute>
         <attribute
-          name="base"
+          name="baseDn"
           type="string"
           use="required">
           <annotation>
             <documentation>
               The LDAP DN base.
+            </documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="baseStem"
+          type="string">
+          <annotation>
+            <documentation>
+              The base Grouper stem.
             </documentation>
           </annotation>
         </attribute>
@@ -86,12 +95,21 @@
     <complexContent>
       <extension base="resolver:BaseAttributeDefinitionType">
         <attribute
-          name="base"
+          name="baseDn"
           type="string"
           use="required">
           <annotation>
             <documentation>
               The LDAP DN base.
+            </documentation>
+          </annotation>
+        </attribute>
+        <attribute
+          name="baseStem"
+          type="string">
+          <annotation>
+            <documentation>
+              The base Grouper stem.
             </documentation>
           </annotation>
         </attribute>

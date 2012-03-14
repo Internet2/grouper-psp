@@ -54,7 +54,10 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
     public static final String STEM_RDN_ATTRIBUTE = "ou";
 
     /** The LDAP DN base. */
-    private String base;
+    private String baseDn;
+
+    /** The Grouper base stem. */
+    private String baseStem;
 
     /** The LDAP RDN attribute name. */
     private String rdnAttributeName;
@@ -67,8 +70,8 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
      * 
      * @return the base DN
      */
-    public String getBase() {
-        return base;
+    public String getBaseDn() {
+        return baseDn;
     }
 
     /**
@@ -76,8 +79,26 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
      * 
      * @param base the base DN
      */
-    public void setBase(String base) {
-        this.base = base;
+    public void setBaseDn(String baseDn) {
+        this.baseDn = baseDn;
+    }
+
+    /**
+     * Get the base stem.
+     * 
+     * @return the base stem
+     */
+    public String getBaseStem() {
+        return baseStem;
+    }
+
+    /**
+     * Set the base stem.
+     * 
+     * @param base the base stem
+     */
+    public void setBaseStem(String baseStem) {
+        this.baseStem = baseStem;
     }
 
     /**
@@ -147,19 +168,16 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
 
         String principalName = resolutionContext.getAttributeRequestContext().getPrincipalName();
 
-        String msg =
-                "Ldap Dn PSOIdentifier attribute definition '" + getId() + "' - Resolve principal '" + principalName
-                        + "'";
-        LOG.debug("{}", msg);
+        LOG.debug("Ldap dn from grouper name attribute definition '{}' - Resolve principal '{}'", getId(),
+                principalName);
 
         BasicAttribute<PSOIdentifier> attribute = new BasicAttribute<PSOIdentifier>(getId());
 
         Collection<?> values = getValuesFromAllDependencies(resolutionContext, getSourceAttributeID());
 
-        LOG.debug("{} Dependency '{}'", msg, values);
-
         if (values.isEmpty()) {
-            LOG.debug("{} No dependencies.", msg);
+            LOG.debug("Ldap dn from grouper name attribute definition '{}' - Resolve principal '{}' No dependencies",
+                    getId(), principalName);
             return attribute;
         }
 
@@ -172,23 +190,32 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
             List<Rdn> rdns = new ArrayList<Rdn>();
             try {
                 // base
-                LdapName baseDn = new LdapName(base);
-                rdns.addAll(baseDn.getRdns());
+                LdapName baseDnLdapName = new LdapName(baseDn);
+                rdns.addAll(baseDnLdapName.getRdns());
 
                 if (getStructure().equals(GroupDnStructure.bushy)) {
                     String parentStemName = GrouperUtil.parentStemNameFromName(rdnAttributeValue, true);
-                    String extension = GrouperUtil.extensionFromName(rdnAttributeValue);
-                    if (parentStemName != null) {
+
+                    // remove baseStem from name
+                    if (parentStemName != null && !parentStemName.isEmpty()) {
+                        if (baseStem != null && !baseStem.isEmpty()) {
+                            if (parentStemName.startsWith(baseStem)) {
+                                parentStemName = parentStemName.replaceFirst(baseStem, "");
+                            }
+                        }
                         rdns.addAll(getRdnsFromStemName(parentStemName));
                     }
+
+                    String extension = GrouperUtil.extensionFromName(rdnAttributeValue);
                     rdns.add(new Rdn(rdnAttributeName, extension));
                 } else {
                     rdns.add(new Rdn(rdnAttributeName, rdnAttributeValue));
                 }
 
             } catch (InvalidNameException e) {
-                LOG.error("{} Unable to resolve identifier, an error occurred {}", msg, e.getMessage());
-                throw new AttributeResolutionException("Unable to resolve identifier", e);
+                LOG.error("Ldap dn from grouper name attribute definition '" + getId() + "' - Resolve principal '"
+                        + principalName + "' Invalid name.", e);
+                throw new AttributeResolutionException("Unable to resolve identifier.", e);
             }
 
             // dn
@@ -206,8 +233,9 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
             try {
                 psoIdentifier.setID(LdapSpmlTarget.canonicalizeDn(dn.toString()));
             } catch (InvalidNameException e) {
-                LOG.error("{} Unable to canonicalize identifier, an error occurred {}", msg, e.getMessage());
-                throw new AttributeResolutionException("Unable to canonicalize identifier", e);
+                LOG.error("Ldap dn from grouper name attribute definition '" + getId() + "' - Resolve principal '"
+                        + principalName + "' Unable to canonicalize identifier.", e);
+                throw new AttributeResolutionException("Unable to canonicalize identifier.", e);
             }
 
             attribute.getValues().add(psoIdentifier);
@@ -215,7 +243,9 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
 
         if (LOG.isTraceEnabled()) {
             for (Object value : attribute.getValues()) {
-                LOG.trace("{} value '{}'", msg, PSPUtil.getString(value));
+                LOG.trace(
+                        "Ldap dn from grouper name attribute definition '{}' - Resolve principal '{}' Returned value '{}'",
+                        new Object[] {getId(), principalName, PSPUtil.getString(value),});
             }
         }
 

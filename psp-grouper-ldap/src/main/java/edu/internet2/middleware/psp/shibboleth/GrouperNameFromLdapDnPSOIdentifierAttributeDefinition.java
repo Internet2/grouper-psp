@@ -32,10 +32,12 @@ import edu.internet2.middleware.shibboleth.common.attribute.BaseAttribute;
 import edu.internet2.middleware.shibboleth.common.attribute.provider.BasicAttribute;
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.AttributeResolutionException;
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.ShibbolethResolutionContext;
+import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.attributeDefinition.AttributeDefinition;
 import edu.internet2.middleware.shibboleth.common.attribute.resolver.provider.attributeDefinition.BaseAttributeDefinition;
 
 /**
- *
+ * An {@link AttributeDefinition} which returns a {@link PSOIdentifier} whose ID is a Grouper name computed from LDAP DN
+ * dependencies.
  */
 public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinition extends BaseAttributeDefinition {
 
@@ -43,15 +45,18 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinition extends BaseA
     private static Logger LOG = LoggerFactory.getLogger(GrouperNameFromLdapDnPSOIdentifierAttributeDefinition.class);
 
     /** The LDAP DN base. */
-    private String base;
+    private String baseDn;
+
+    /** The Grouper base stem. */
+    private String baseStem;
 
     /**
      * Get the LDAP DN base.
      * 
      * @return the base DN
      */
-    public String getBase() {
-        return base;
+    public String getBaseDn() {
+        return baseDn;
     }
 
     /**
@@ -59,35 +64,51 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinition extends BaseA
      * 
      * @param base the base DN
      */
-    public void setBase(String base) {
-        this.base = base;
+    public void setBaseDn(String baseDn) {
+        this.baseDn = baseDn;
+    }
+
+    /**
+     * Get the base stem.
+     * 
+     * @return the base stem
+     */
+    public String getBaseStem() {
+        return baseStem;
+    }
+
+    /**
+     * Set the base stem.
+     * 
+     * @param base the base stem
+     */
+    public void setBaseStem(String baseStem) {
+        this.baseStem = baseStem;
     }
 
     /** {@inheritDoc} */
     protected BaseAttribute doResolve(ShibbolethResolutionContext resolutionContext)
             throws AttributeResolutionException {
+
         String principalName = resolutionContext.getAttributeRequestContext().getPrincipalName();
 
-        String msg =
-                "Grouper Name PSOIdentifier attribute definition '" + getId() + "' - Resolve principal '"
-                        + principalName + "'";
-        LOG.debug("{}", msg);
+        LOG.debug("Grouper name from ldap dn attribute definition '{}' - Resolve principal '{}'", getId(),
+                principalName);
 
         BasicAttribute<PSOIdentifier> attribute = new BasicAttribute<PSOIdentifier>(getId());
 
         Collection<?> values = getValuesFromAllDependencies(resolutionContext, getSourceAttributeID());
 
-        LOG.debug("{} Dependency '{}'", msg, values);
-
         if (values.isEmpty()) {
-            LOG.debug("{} No dependencies.", msg);
+            LOG.debug("Grouper name from ldap dn attribute definition '{}' - Resolve principal '{}' No dependencies",
+                    getId(), principalName);
             return attribute;
         }
 
         for (Object value : values) {
             try {
 
-                LdapName baseName = new LdapName(base);
+                LdapName baseName = new LdapName(baseDn);
 
                 LdapName dn = new LdapName(value.toString());
 
@@ -105,21 +126,34 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinition extends BaseA
                     buffer.append(rdn.getValue());
                 }
 
+                String name = buffer.toString();
+
+                // remove baseStem from name
+                if (name != null && !name.isEmpty()) {
+                    if (baseStem != null && !baseStem.isEmpty()) {
+                        if (name.startsWith(baseStem + ":")) {
+                            name = name.replaceFirst(baseStem + ":", "");
+                        }
+                    }
+                }
+
                 PSOIdentifier psoIdentifier = new PSOIdentifier();
-                psoIdentifier.setID(buffer.toString());
+                psoIdentifier.setID(name);
 
                 attribute.getValues().add(psoIdentifier);
 
             } catch (InvalidNameException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-                throw new AttributeResolutionException("TODO");
+                LOG.error("Grouper name from ldap dn attribute definition '" + getId() + "' - Resolve principal '"
+                        + principalName + "' Invalid name.", e);
+                throw new AttributeResolutionException("Unable to resolve identifier.", e);
             }
         }
 
         if (LOG.isTraceEnabled()) {
             for (Object value : attribute.getValues()) {
-                LOG.trace("{} value '{}'", msg, PSPUtil.getString(value));
+                LOG.trace(
+                        "Grouper name from ldap dn attribute definition '{}' - Resolve principal '{}' Returned value '{}'",
+                        new Object[] {getId(), principalName, PSPUtil.getString(value),});
             }
         }
 

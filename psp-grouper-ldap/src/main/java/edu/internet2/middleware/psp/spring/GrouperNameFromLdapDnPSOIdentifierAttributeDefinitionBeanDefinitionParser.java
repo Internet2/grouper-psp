@@ -53,9 +53,13 @@ public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionBeanDefinition
             BeanDefinitionBuilder pluginBuilder, ParserContext parserContext) {
         super.doParse(pluginId, pluginConfig, pluginConfigChildren, pluginBuilder, parserContext);
 
-        String base = pluginConfig.getAttributeNS(null, "base");
-        LOG.debug("Setting base of element '{}' to: '{}'", pluginConfig.getLocalName(), base);
-        pluginBuilder.addPropertyValue("base", base);
+        String baseDn = pluginConfig.getAttributeNS(null, "baseDn");
+        LOG.debug("Setting baseDn of element '{}' to: '{}'", pluginConfig.getLocalName(), baseDn);
+        pluginBuilder.addPropertyValue("baseDn", baseDn);
+
+        String baseStem = pluginConfig.getAttributeNS(null, "baseStem");
+        LOG.debug("Setting baseStem of element '{}' to: '{}'", pluginConfig.getLocalName(), baseStem);
+        pluginBuilder.addPropertyValue("baseStem", baseStem);
 
     }
 }
