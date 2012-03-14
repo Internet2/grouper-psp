@@ -22,84 +22,86 @@ import edu.internet2.middleware.psp.shibboleth.LdapDnFromGrouperNamePSOIdentifie
 import edu.internet2.middleware.shibboleth.common.config.attribute.resolver.attributeDefinition.BaseAttributeDefinitionFactoryBean;
 
 /** Spring bean factory that produces {@link LdapDnFromGrouperNamePSOIdentifierAttributeDefinition}s. */
-public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinitionFactoryBean extends BaseAttributeDefinitionFactoryBean {
+public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinitionFactoryBean extends
+        BaseAttributeDefinitionFactoryBean {
 
-  /** The LDAP DN base. */
-  private String base;
+    /** The LDAP DN base. */
+    private String base;
 
-  /** The LDAP RDN attribute name. */
-  private String rdnAttributeName;
+    /** The LDAP RDN attribute name. */
+    private String rdnAttributeName;
 
-  /** The Grouper DN structure. */
-  private GroupDnStructure structure;
+    /** The Grouper DN structure. */
+    private GroupDnStructure structure;
 
-  /**
-   * Get the LDAP DN base.
-   * 
-   * @return the base DN
-   */
-  public String getBase() {
-    return base;
-  }
+    /**
+     * Get the LDAP DN base.
+     * 
+     * @return the base DN
+     */
+    public String getBase() {
+        return base;
+    }
 
-  /**
-   * Set the LDAP DN base.
-   * 
-   * @param base the base DN
-   */
-  public void setBase(String base) {
-    this.base = base;
-  }
+    /**
+     * Set the LDAP DN base.
+     * 
+     * @param base the base DN
+     */
+    public void setBase(String base) {
+        this.base = base;
+    }
 
-  /**
-   * Get the LDAP RDN attribute name.
-   * 
-   * @return the RDN attribute name
-   */
-  public String getRdnAttributeName() {
-    return rdnAttributeName;
-  }
+    /**
+     * Get the LDAP RDN attribute name.
+     * 
+     * @return the RDN attribute name
+     */
+    public String getRdnAttributeName() {
+        return rdnAttributeName;
+    }
 
-  /**
-   * Set the LDAP RDN attribute name.
-   * 
-   * @param rdnAttributeName the RDN attribute name
-   */
-  public void setRdnAttributeName(String rdnAttributeName) {
-    this.rdnAttributeName = rdnAttributeName;
-  }
+    /**
+     * Set the LDAP RDN attribute name.
+     * 
+     * @param rdnAttributeName the RDN attribute name
+     */
+    public void setRdnAttributeName(String rdnAttributeName) {
+        this.rdnAttributeName = rdnAttributeName;
+    }
 
-  /**
-   * Get the Grouper DN structure.
-   * 
-   * @return the DN structure
-   */
-  public GroupDnStructure getStructure() {
-    return structure;
-  }
+    /**
+     * Get the Grouper DN structure.
+     * 
+     * @return the DN structure
+     */
+    public GroupDnStructure getStructure() {
+        return structure;
+    }
 
-  /**
-   * Set the Grouper DN structure.
-   * 
-   * @param structure the DN structure
-   */
-  public void setStructure(GroupDnStructure structure) {
-    this.structure = structure;
-  }
+    /**
+     * Set the Grouper DN structure.
+     * 
+     * @param structure the DN structure
+     */
+    public void setStructure(GroupDnStructure structure) {
+        this.structure = structure;
+    }
 
-  /** {@inheritDoc} */
-  protected Object createInstance() throws Exception {
-    LdapDnFromGrouperNamePSOIdentifierAttributeDefinition definition = new LdapDnFromGrouperNamePSOIdentifierAttributeDefinition();
-    populateAttributeDefinition(definition);
-    definition.setBase(base);
-    definition.setStructure(structure);
-    definition.setRdnAttributeName(rdnAttributeName);
-    return definition;
-  }
+    /** {@inheritDoc} */
+    protected Object createInstance() throws Exception {
+        LdapDnFromGrouperNamePSOIdentifierAttributeDefinition definition =
+                new LdapDnFromGrouperNamePSOIdentifierAttributeDefinition();
+        populateAttributeDefinition(definition);
+        definition.setBase(base);
+        definition.setStructure(structure);
+        definition.setRdnAttributeName(rdnAttributeName);
+        return definition;
+    }
 
-  /** {@inheritDoc} */
-  public Class getObjectType() {
-    return LdapDnFromGrouperNamePSOIdentifierAttributeDefinition.class;
-  }
+    /** {@inheritDoc} */
+    public Class getObjectType() {
+        return LdapDnFromGrouperNamePSOIdentifierAttributeDefinition.class;
+    }
 
 }

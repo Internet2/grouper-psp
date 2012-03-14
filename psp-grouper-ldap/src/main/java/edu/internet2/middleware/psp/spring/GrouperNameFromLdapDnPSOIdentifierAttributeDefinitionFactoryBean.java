@@ -22,40 +22,41 @@ import edu.internet2.middleware.shibboleth.common.config.attribute.resolver.attr
 
 /** Spring bean factory that produces {@link GrouperNameFromLdapDnPSOIdentifierAttributeDefinition}s. */
 public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionFactoryBean extends
-    BaseAttributeDefinitionFactoryBean {
+        BaseAttributeDefinitionFactoryBean {
 
-  /** The LDAP DN base. */
-  private String base;
+    /** The LDAP DN base. */
+    private String base;
 
-  /**
-   * Get the LDAP DN base.
-   * 
-   * @return the base DN
-   */
-  public String getBase() {
-    return base;
-  }
+    /**
+     * Get the LDAP DN base.
+     * 
+     * @return the base DN
+     */
+    public String getBase() {
+        return base;
+    }
 
-  /**
-   * Set the LDAP DN base.
-   * 
-   * @param base the base DN
-   */
-  public void setBase(String base) {
-    this.base = base;
-  }
+    /**
+     * Set the LDAP DN base.
+     * 
+     * @param base the base DN
+     */
+    public void setBase(String base) {
+        this.base = base;
+    }
 
-  /** {@inheritDoc} */
-  protected Object createInstance() throws Exception {
-    GrouperNameFromLdapDnPSOIdentifierAttributeDefinition definition = new GrouperNameFromLdapDnPSOIdentifierAttributeDefinition();
-    populateAttributeDefinition(definition);
-    definition.setBase(base);
-    return definition;
-  }
+    /** {@inheritDoc} */
+    protected Object createInstance() throws Exception {
+        GrouperNameFromLdapDnPSOIdentifierAttributeDefinition definition =
+                new GrouperNameFromLdapDnPSOIdentifierAttributeDefinition();
+        populateAttributeDefinition(definition);
+        definition.setBase(base);
+        return definition;
+    }
 
-  /** {@inheritDoc} */
-  public Class getObjectType() {
-    return GrouperNameFromLdapDnPSOIdentifierAttributeDefinition.class;
-  }
+    /** {@inheritDoc} */
+    public Class getObjectType() {
+        return GrouperNameFromLdapDnPSOIdentifierAttributeDefinition.class;
+    }
 
 }

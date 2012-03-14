@@ -33,29 +33,29 @@ import edu.internet2.middleware.shibboleth.common.config.attribute.resolver.attr
 
 /** Spring bean definition parser for configuring a {@link GrouperNameFromLdapDnPSOIdentifierAttributeDefinition}. */
 public class GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionBeanDefinitionParser extends
-    BaseAttributeDefinitionBeanDefinitionParser {
+        BaseAttributeDefinitionBeanDefinitionParser {
 
-  /** Schema type name. */
-  public static final QName TYPE_NAME = new QName(GrouperLdapNamespaceHandler.NAMESPACE,
-      "GrouperNameFromLdapDnPSOIdentifier");
+    /** Schema type name. */
+    public static final QName TYPE_NAME = new QName(GrouperLdapNamespaceHandler.NAMESPACE,
+            "GrouperNameFromLdapDnPSOIdentifier");
 
-  /** The logger. */
-  private final Logger LOG = LoggerFactory
-      .getLogger(GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionBeanDefinitionParser.class);
+    /** The logger. */
+    private final Logger LOG = LoggerFactory
+            .getLogger(GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionBeanDefinitionParser.class);
 
-  /** {@inheritDoc} */
-  protected Class getBeanClass(Element element) {
-    return GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionFactoryBean.class;
-  }
+    /** {@inheritDoc} */
+    protected Class getBeanClass(Element element) {
+        return GrouperNameFromLdapDnPSOIdentifierAttributeDefinitionFactoryBean.class;
+    }
 
-  /** {@inheritDoc} */
-  protected void doParse(String pluginId, Element pluginConfig, Map<QName, List<Element>> pluginConfigChildren,
-      BeanDefinitionBuilder pluginBuilder, ParserContext parserContext) {
-    super.doParse(pluginId, pluginConfig, pluginConfigChildren, pluginBuilder, parserContext);
+    /** {@inheritDoc} */
+    protected void doParse(String pluginId, Element pluginConfig, Map<QName, List<Element>> pluginConfigChildren,
+            BeanDefinitionBuilder pluginBuilder, ParserContext parserContext) {
+        super.doParse(pluginId, pluginConfig, pluginConfigChildren, pluginBuilder, parserContext);
 
-    String base = pluginConfig.getAttributeNS(null, "base");
-    LOG.debug("Setting base of element '{}' to: '{}'", pluginConfig.getLocalName(), base);
-    pluginBuilder.addPropertyValue("base", base);
+        String base = pluginConfig.getAttributeNS(null, "base");
+        LOG.debug("Setting base of element '{}' to: '{}'", pluginConfig.getLocalName(), base);
+        pluginBuilder.addPropertyValue("base", base);
 
-  }
+    }
 }
