@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<psp
+  xmlns="http://grouper.internet2.edu/psp"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://grouper.internet2.edu/psp classpath:/schema/psp.xsd">
+
+  <pso
+    id="group"
+    authoritative="true"
+    allSourceIdentifiersRef="groupNames">
+
+    <identifier
+      ref="groupDn"
+      targetId="ldap"
+      containerId="dc=example,dc=edu" />
+
+    <identifyingAttribute
+      name="objectClass"
+      value="groupOfNames" />
+
+    <attribute
+      name="objectClass"
+      ref="staticGroupObjectclass" />
+
+    <attribute name="cn" />
+
+    <attribute name="description" />
+
+    <attribute
+      name="hasMember"
+      ref="hasMember" />
+
+    <references
+      name="member"
+      emptyValue="">
+
+      <reference
+        ref="membersLdap"
+        toObject="member" />
+
+      <reference
+        ref="membersGsa"
+        toObject="group" />
+
+    </references>
+
+  </pso>
+
+  <pso
+    id="member"
+    allSourceIdentifiersRef="memberSubjectIds">
+
+    <identifier
+      ref="memberDn"
+      targetId="ldap"
+      containerId="ou=people,dc=example,dc=edu" />
+
+    <identifyingAttribute
+      name="objectclass"
+      value="person" />
+
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <attribute
+      name="isMemberOf"
+      ref="memberIsMemberOf" />
+
+    <references name="memberOf">
+      <reference
+        ref="memberIsMemberOf"
+        toObject="group"
+        multipleResults="true" />
+    </references>
+
+  </pso>
+
+</psp>

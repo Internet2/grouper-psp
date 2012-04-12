@@ -1,0 +1,73 @@
+<psp:bulkDiffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:diffResponse status='success' requestID='2012/04/12-14:50:43.019'>
+    <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/04/12-14:50:43.156' targetId='ldap' returnData='everything'>
+      <psoID ID='cn=Group A,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+      <data>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+          <dsml:value>top</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+          <dsml:value>eduMember</dsml:value>
+        </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+          <dsml:value>Group A</dsml:value>
+        </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+          <dsml:value>test.subject.0</dsml:value>
+        </dsml:attr>
+      </data>
+      <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+        <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+          <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+        </spmlref:reference>
+      </capabilityData>
+    </addRequest>
+    <addRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/04/12-14:50:43.160' targetId='ldap' returnData='everything'>
+      <psoID ID='cn=Group A,ou=applications,${edu.vt.middleware.ldap.baseDn}' targetID='ldap'/>
+      <data>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+          <dsml:value>top</dsml:value>
+          <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+          <dsml:value>eduMember</dsml:value>
+        </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+          <dsml:value>Group A</dsml:value>
+        </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+          <dsml:value>test.subject.0</dsml:value>
+        </dsml:attr>
+      </data>
+      <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+        <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+          <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+        </spmlref:reference>
+      </capabilityData>
+    </addRequest>
+    <psp:id ID='edu:groupA'/>
+  </psp:diffResponse>
+  <psp:diffResponse status='success' requestID='2012/04/12-14:50:43.162'>
+    <modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='member' requestID='2012/04/12-14:50:43.256' returnData='everything'>
+      <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      <modification modificationMode='add'>
+        <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass' operation='add'>
+          <dsml:value>eduMember</dsml:value>
+        </dsml:modification>
+      </modification>
+      <modification modificationMode='add'>
+        <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf' operation='add'>
+          <dsml:value>edu:groupA</dsml:value>
+        </dsml:modification>
+      </modification>
+      <modification modificationMode='add'>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=Group A,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=Group A,ou=applications,${edu.vt.middleware.ldap.baseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </modification>
+    </modifyRequest>
+    <psp:id ID='test.subject.0'/>
+  </psp:diffResponse>
+</psp:bulkDiffResponse>
