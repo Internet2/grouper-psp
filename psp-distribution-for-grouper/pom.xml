@@ -16,7 +16,7 @@
 
   <!-- The name of the package produced for the Grouper installer should not have a qualifier. -->
   <properties>
-    <my.finalName>grouper.psp-2.1.0</my.finalName>
+    <my.finalName>grouper.psp-${grouper.version}</my.finalName>
   </properties>
 
   <dependencies>
