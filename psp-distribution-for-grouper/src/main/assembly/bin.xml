@@ -25,6 +25,8 @@
         <exclude>commons-lang:commons-lang</exclude>
         <exclude>log4j:log4j</exclude>
         <exclude>net.sf.ehcache:ehcache-core</exclude>
+        <exclude>org.slf4j:slf4j-api</exclude>
+        <exclude>org.slf4j:slf4j-log4j12</exclude>
       </excludes>
 
       <useProjectArtifact>false</useProjectArtifact>
