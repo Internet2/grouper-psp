@@ -79,6 +79,10 @@
   <resolver:DataConnector
     id="MemberDataConnector"
     xsi:type="grouper:MemberDataConnector">
+    <!-- Return members from the "ldap" source only. -->
+    <grouper:Filter
+      xsi:type="grouper:MemberSource"
+      sourceId="ldap" />
     <!-- Return the "dn" attribute of members whose subject source id is "ldap". -->
     <grouper:Attribute
       id="dn"
