@@ -61,11 +61,17 @@ public class ChangeLogAttributeAssignTypeFilter extends AbstractFilter<ChangeLog
      * 
      * {@inheritDoc}
      */
-    public boolean matches(ChangeLogEntry changeLogEntry) {
+    public boolean matches(Object o) {
 
-        if (changeLogEntry == null) {
+        if (o == null) {
             return false;
         }
+
+        if (!(o instanceof ChangeLogEntry)) {
+            return false;
+        }
+
+        ChangeLogEntry changeLogEntry = (ChangeLogEntry) o;
 
         String attributeAssignId = null;
         try {

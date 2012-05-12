@@ -62,11 +62,17 @@ public class ChangeLogExactAttributeFilter extends AbstractFilter<ChangeLogEntry
      * 
      * {@inheritDoc}
      */
-    public boolean matches(ChangeLogEntry changeLogEntry) {
+    public boolean matches(Object o) {
 
-        if (changeLogEntry == null) {
+        if (o == null) {
             return false;
         }
+
+        if (!(o instanceof ChangeLogEntry)) {
+            return false;
+        }
+
+        ChangeLogEntry changeLogEntry = (ChangeLogEntry) o;
 
         try {
             String retrievedValue = changeLogEntry.retrieveValueForLabel(name);
