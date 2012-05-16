@@ -146,7 +146,7 @@ public class PspCLI extends TimerTask {
             LOG.info("End of {} execution : {} ms", PspOptions.NAME, sw.getTime());
 
             // cancel if the number of desired iterations have been run
-            if (psp.getPspOptions().getIterations() > 0 && iterations++ >= psp.getPspOptions().getIterations()) {
+            if (psp.getPspOptions().getIterations() > 0 && ++iterations >= psp.getPspOptions().getIterations()) {
                 LOG.info("Finish {} execution : {} provisioning cycles performed.", PspOptions.NAME, iterations);
                 timer.cancel();
             }
@@ -210,10 +210,11 @@ public class PspCLI extends TimerTask {
                 Statistics stats = cacheManager.getCache(cacheName).getStatistics();
                 long h = stats.getCacheHits();
                 long m = stats.getCacheMisses();
+                int size = cacheManager.getCache(cacheName).getCacheConfiguration().getMaxElementsInMemory();
 
                 if (h + m != 0) {
                     String ratio = h + m == 0 ? "0%" : MessageFormat.format("{0,number,percent}", 1. * h / (h + m));
-                    String out = String.format("cache hit ratio %4s %6d hits %6d miss : %s", ratio, h, m, cacheName);
+                    String out = String.format("cache hit ratio %4s %6d hits %6d miss size %s : %s", ratio, h, m, size, cacheName);
                     // TODO probably should not assume cache names are unique
                     name2stats.put(cacheName, out);
                 }
