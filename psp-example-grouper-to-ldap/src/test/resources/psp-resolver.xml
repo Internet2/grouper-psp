@@ -46,6 +46,27 @@
     <grouper:Attribute id="groups" />
   </resolver:DataConnector>
 
+  <!-- The GroupWithoutMermbershipsDataConnector returns attributes representing the group whose name is the principal name. 
+    The returned group must be a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. Groups under 
+    the "etc" stem are omitted. No memberships (groups or members) should be returned by this data connector to improve performance 
+    of identifier resolution. -->
+  <resolver:DataConnector
+    id="GroupWithoutMermbershipsDataConnector"
+    xsi:type="grouper:GroupDataConnector">
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The GroupInStem filter matches groups which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
   <!-- The StemDataConnector returns attributes representing the stem whose name is the principal name. The returned stem 
     must be a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. The "etc" stem and all children 
     are omitted. -->
@@ -426,7 +447,7 @@
     xsi:type="grouper:FilteredName"
     sourceAttributeID="name">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
@@ -454,7 +475,7 @@
     baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
     baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependency which returns an "alternateName" attribute whose value is the old group name. -->
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group via the change log. For example, the DN of a group before it is renamed. -->
@@ -514,7 +535,7 @@
     id="cn"
     xsi:type="ad:Simple"
     sourceAttributeID="${edu.internet2.middleware.psp.cnSourceAttributeID}">
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The value of the group "description" attribute is the group description. -->
@@ -522,7 +543,7 @@
     id="groupDescription"
     xsi:type="ad:Simple"
     sourceAttributeID="description">
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 

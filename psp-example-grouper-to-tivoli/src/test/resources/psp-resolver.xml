@@ -46,6 +46,28 @@
     <grouper:Attribute id="groups" />
   </resolver:DataConnector>
 
+  <!-- The GroupWithoutMermbershipsDataConnector returns attributes representing the group whose name is the principal name. 
+    The returned group must be a child of the stem whose name is the edu.internet2.middleware.psp.baseStem property. Groups under 
+    the "etc" stem are omitted. No memberships (groups or members) should be returned by this data connector to improve performance 
+    of identifier resolution. -->
+  <resolver:DataConnector
+    id="GroupWithoutMermbershipsDataConnector"
+    xsi:type="grouper:GroupDataConnector">
+    <!-- The MINUS filter matches stems which match the first child filter and not the second. -->
+    <grouper:Filter xsi:type="grouper:MINUS">
+      <!-- The GroupInStem filter matches groups which are children of the given stem. -->
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="${edu.internet2.middleware.psp.baseStem}"
+        scope="SUB" />
+      <grouper:Filter
+        xsi:type="grouper:GroupInStem"
+        name="etc"
+        scope="SUB" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
+
   <!-- The MemberDataConnector returns attributes representing the member whose subject id or identifier is the principal 
     name. -->
   <resolver:DataConnector
@@ -61,6 +83,22 @@
       source="ldap" />
     <!-- The "groups" attribute values are equivalent to member.getGroups(). -->
     <grouper:Attribute id="groups" />
+  </resolver:DataConnector>
+
+  <!-- The MemberWithoutMembershipsDataConnector returns attributes representing the member whose subject id or identifier 
+    is the principal name. No memberships (groups) should be returned by this data connector to improve performance of identifier 
+    resolution. -->
+  <resolver:DataConnector
+    id="MemberWithoutMembershipsDataConnector"
+    xsi:type="grouper:MemberDataConnector">
+    <!-- Return members from the "ldap" source only. -->
+    <grouper:Filter
+      xsi:type="grouper:MemberSource"
+      sourceId="ldap" />
+    <!-- Return the "dn" attribute of members whose subject source id is "ldap". -->
+    <grouper:Attribute
+      id="dn"
+      source="ldap" />
   </resolver:DataConnector>
 
 
@@ -240,7 +278,7 @@
     xsi:type="grouper:FilteredName"
     sourceAttributeID="name">
     <!-- Dependencies which return a "name" attribute whose value is the group name. -->
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
     <resolver:Dependency ref="DeleteGroupChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupNameChangeLogDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
@@ -269,7 +307,7 @@
     baseDn="${edu.internet2.middleware.psp.groupsBaseDn}"
     baseStem="${edu.internet2.middleware.psp.baseStem}">
     <!-- Dependency which returns an "alternateName" attribute whose value is the old group name. -->
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The alternate LDAP DN of a group via the change log. For example, the DN of a group before it is renamed. -->
@@ -322,14 +360,14 @@
     id="cn"
     xsi:type="ad:Simple"
     sourceAttributeID="${edu.internet2.middleware.psp.cnSourceAttributeID}">
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The value of the group "description" attribute is the group description. -->
   <resolver:AttributeDefinition
     id="description"
     xsi:type="ad:Simple">
-    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="GroupWithoutMermbershipsDataConnector" />
     <resolver:Dependency ref="UpdateGroupDescriptionChangeLogDataConnector" />
   </resolver:AttributeDefinition>
 
@@ -389,7 +427,7 @@
     id="memberDn"
     xsi:type="psp:PSOIdentifier"
     sourceAttributeID="dn">
-    <resolver:Dependency ref="MemberDataConnector" />
+    <resolver:Dependency ref="MemberWithoutMembershipsDataConnector" />
   </resolver:AttributeDefinition>
 
   <!-- The group objectclass attribute. -->
