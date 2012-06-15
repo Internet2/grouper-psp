@@ -71,6 +71,7 @@ import edu.internet2.middleware.psp.spml.config.PsoReferences;
 import edu.internet2.middleware.psp.spml.request.AlternateIdentifier;
 import edu.internet2.middleware.psp.spml.request.DiffRequest;
 import edu.internet2.middleware.psp.spml.request.ProvisioningRequest;
+import edu.internet2.middleware.psp.spml.request.ProvisioningResponse;
 import edu.internet2.middleware.shibboleth.common.config.SpringConfigurationUtils;
 
 public class PSPUtil {
@@ -304,6 +305,10 @@ public class PSPUtil {
 
     public static String toString(ProvisioningRequest provisioningRequest) {
         return provisioningRequest.toString();
+    }
+    
+    public static String toString(ProvisioningResponse provisioningResponse) {
+        return provisioningResponse.toString();
     }
 
     public static String toString(DSMLModification dsmlModification) {

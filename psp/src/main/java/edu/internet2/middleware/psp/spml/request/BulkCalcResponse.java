@@ -102,8 +102,8 @@ public class BulkCalcResponse extends ProvisioningResponse {
   @Override
   public String toString() {
     ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+    toStringBuilder.appendSuper(super.toString());
     toStringBuilder.append("responses", this.getResponses().size());
-    toStringBuilder.appendSuper(PSPUtil.toString((ProvisioningResponse) this));
     return toStringBuilder.toString();
   }
 }
