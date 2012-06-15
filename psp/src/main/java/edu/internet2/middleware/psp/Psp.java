@@ -20,6 +20,7 @@ package edu.internet2.middleware.psp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -556,6 +557,10 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             return;
         }
 
+        // by creating the psp context here, references will be cached
+        PspContext pspContext = new PspContext();
+        pspContext.setCalcRequestMap(new HashMap<CalcRequest, CalcResponse>(identifiers.size()));
+
         // new CalcRequest for each identifier
         for (String identifier : identifiers.keySet()) {
             CalcRequest calcRequest = new CalcRequest();
@@ -564,7 +569,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             calcRequest.setReturnData(bulkCalcRequest.getReturnData());
             calcRequest.setSchemaEntities(identifiers.get(identifier));
 
-            CalcResponse calcResponse = execute(calcRequest);
+            CalcResponse calcResponse = execute(calcRequest, pspContext);
             bulkCalcResponse.addResponse(calcResponse);
 
             // first failure encountered, stop processing if OnError.EXIT
@@ -666,6 +671,10 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                 return;
             }
 
+            // by creating the psp context here, references will be cached
+            PspContext pspContext = new PspContext();
+            pspContext.setCalcRequestMap(new HashMap<CalcRequest, CalcResponse>(identifiers.size()));
+
             // new DiffRequest for each identifier
             for (String identifier : identifiers.keySet()) {
                 DiffRequest diffRequest = new DiffRequest();
@@ -674,7 +683,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                 diffRequest.setReturnData(bulkDiffRequest.getReturnData());
                 diffRequest.setSchemaEntities(identifiers.get(identifier));
 
-                DiffResponse diffResponse = execute(diffRequest);
+                DiffResponse diffResponse = execute(diffRequest, pspContext);
                 bulkDiffResponse.addResponse(diffResponse);
 
                 // first failure encountered, stop processing if OnError.EXIT
@@ -877,6 +886,17 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 
     /** {@inheritDoc} */
     public CalcResponse execute(CalcRequest calcRequest) {
+        return execute(calcRequest, new PspContext());
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * The psp context argument allows for the caching of references during bulk requests.
+     * 
+     * @param pspContext the psp context
+     */
+    public CalcResponse execute(CalcRequest calcRequest, PspContext pspContext) {
 
         // Start MDC logging.
         MDCHelper mdc = new MDCHelper(calcRequest).start();
@@ -906,7 +926,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 
         // If the validation was successful, execute the request.
         if (calcResponse.getStatus().equals(StatusCode.SUCCESS)) {
-            execute(calcRequest, calcResponse);
+            execute(calcRequest, calcResponse, pspContext);
         }
 
         // If the response is a success, log to INFO.
@@ -936,19 +956,23 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
     /**
      * Execute an {@link CalcRequest} and update the {@link CalcResponse}.
      * 
+     * The psp context argument allows for the caching of references during bulk requests.
+     * 
      * @param calcRequest the SPML calc request
      * @param calcResponse the SPML calc response
+     * @param pspContext the psp context
      */
-    public void execute(CalcRequest calcRequest, CalcResponse calcResponse) {
+    public void execute(CalcRequest calcRequest, CalcResponse calcResponse, PspContext pspContext) {
 
         try {
             // Set the response id.
             calcResponse.setId(calcRequest.getId());
 
             // provisioning context
-            PspContext pspContext = new PspContext();
+            // PspContext pspContext = new PspContext();
             pspContext.setProvisioningServiceProvider(this);
             pspContext.setProvisioningRequest(calcRequest);
+            pspContext.setAttributes(null);
 
             // attribute request context
             BaseSAMLProfileRequestContext attributeRequestContext = new BaseSAMLProfileRequestContext();
@@ -1022,6 +1046,17 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 
     /** {@inheritDoc} */
     public DiffResponse execute(DiffRequest diffRequest) {
+        return execute(diffRequest, new PspContext());
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * The psp context argument allows for the caching of references during bulk requests.
+     * 
+     * @param pspContext the psp context
+     */
+    public DiffResponse execute(DiffRequest diffRequest, PspContext pspContext) {
 
         // Start MDC logging.
         MDCHelper mdc = new MDCHelper(diffRequest).start();
@@ -1051,7 +1086,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 
         // If the validation was successful, execute the request.
         if (diffResponse.getStatus().equals(StatusCode.SUCCESS)) {
-            execute(diffRequest, diffResponse);
+            execute(diffRequest, diffResponse, pspContext);
         }
 
         // If the response is a success, log to INFO.
@@ -1081,10 +1116,13 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
     /**
      * Execute an {@link DiffRequest} and update the {@link DiffResponse}.
      * 
+     * The psp context argument allows for the caching of references during bulk requests.
+     * 
      * @param diffRequest the SPML diff request
      * @param diffResponse the SPML diff response
+     * @param pspContext the psp context
      */
-    public void execute(DiffRequest diffRequest, DiffResponse diffResponse) {
+    public void execute(DiffRequest diffRequest, DiffResponse diffResponse, PspContext pspContext) {
 
         diffResponse.setId(diffRequest.getId());
 
@@ -1096,7 +1134,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         calcRequest.setSchemaEntities(diffRequest.getSchemaEntities());
 
         // Execute the calc request.
-        CalcResponse calcResponse = execute(calcRequest);
+        CalcResponse calcResponse = execute(calcRequest, pspContext);
 
         if (calcResponse.getStatus().equals(StatusCode.FAILURE)) {
             fail(diffResponse, calcResponse.getError(), calcResponse.getErrorMessages());

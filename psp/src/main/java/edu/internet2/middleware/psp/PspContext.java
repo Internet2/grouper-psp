@@ -19,6 +19,8 @@ package edu.internet2.middleware.psp;
 
 import java.util.Map;
 
+import edu.internet2.middleware.psp.spml.request.CalcRequest;
+import edu.internet2.middleware.psp.spml.request.CalcResponse;
 import edu.internet2.middleware.psp.spml.request.ProvisioningRequest;
 import edu.internet2.middleware.shibboleth.common.attribute.BaseAttribute;
 
@@ -34,6 +36,9 @@ public class PspContext {
     /** The provisioning service provider. */
     private Psp provisioningServiceProvider;
 
+    /** The map of calc requests and responses. */
+    private Map<CalcRequest, CalcResponse> calcRequestMap;
+
     /**
      * Gets the attributes returned from the attribute authority.
      * 
@@ -44,12 +49,12 @@ public class PspContext {
     }
 
     /**
-     * Sets the attributes returned from the attribute authority.
+     * Gets the map of calc requests and responses.
      * 
-     * @param attributes the attributes returned from the attribute authority
+     * @return the map of calc requests and responses.
      */
-    public void setAttributes(Map<String, BaseAttribute<?>> attributes) {
-        this.attributes = attributes;
+    public Map<CalcRequest, CalcResponse> getCalcRequestMap() {
+        return calcRequestMap;
     }
 
     /**
@@ -62,21 +67,39 @@ public class PspContext {
     }
 
     /**
-     * Sets the provisioning request.
-     * 
-     * @param provisioningRequest the provisioning request
-     */
-    public void setProvisioningRequest(ProvisioningRequest provisioningRequest) {
-        this.provisioningRequest = provisioningRequest;
-    }
-
-    /**
      * Gets the provisioning service provider.
      * 
      * @return the provisioning service provider
      */
     public Psp getProvisioningServiceProvider() {
         return provisioningServiceProvider;
+    }
+
+    /**
+     * Sets the attributes returned from the attribute authority.
+     * 
+     * @param attributes the attributes returned from the attribute authority
+     */
+    public void setAttributes(Map<String, BaseAttribute<?>> attributes) {
+        this.attributes = attributes;
+    }
+
+    /**
+     * Sets the calc requests and responses map.
+     * 
+     * @param calcRequestMap the calc requests and responses map
+     */
+    public void setCalcRequestMap(Map<CalcRequest, CalcResponse> calcRequestMap) {
+        this.calcRequestMap = calcRequestMap;
+    }
+
+    /**
+     * Sets the provisioning request.
+     * 
+     * @param provisioningRequest the provisioning request
+     */
+    public void setProvisioningRequest(ProvisioningRequest provisioningRequest) {
+        this.provisioningRequest = provisioningRequest;
     }
 
     /**

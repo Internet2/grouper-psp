@@ -109,9 +109,30 @@ public class PsoReference {
             schemaEntityRef.setEntityName(getToObject().getId());
             calcRequest.addSchemaEntity(schemaEntityRef);
 
-            Response response = context.getProvisioningServiceProvider().execute(calcRequest);
+            LOG.debug("Pso reference '{}' - Get references for '{}' calculating identifier {}", new Object[] {getRef(),
+                    context.getProvisioningRequest().getId(), PSPUtil.toString(calcRequest),});
 
-            if (response.getStatus().equals(StatusCode.FAILURE)) {
+            CalcResponse calcResponse = null;
+
+            if (context.getCalcRequestMap() != null) {
+                calcResponse = context.getCalcRequestMap().get(calcRequest);
+                if (calcResponse != null) {
+                    LOG.debug("Pso reference '{}' - Get references for '{}' using cached response {}", new Object[] {
+                            getRef(), context.getProvisioningRequest().getId(), PSPUtil.toString(calcResponse),});
+                }
+            }
+
+            if (calcResponse == null) {
+                calcResponse = context.getProvisioningServiceProvider().execute(calcRequest);
+            }
+
+            if (context.getCalcRequestMap() != null) {
+                LOG.debug("Pso reference '{}' - Get references for '{}' caching response {}", new Object[] {getRef(),
+                        context.getProvisioningRequest().getId(), PSPUtil.toString(calcResponse),});
+                context.getCalcRequestMap().put(calcRequest, calcResponse);
+            }
+
+            if (calcResponse.getStatus().equals(StatusCode.FAILURE)) {
                 if (onNotFound.equals(OnNotFound.warn)) {
                     LOG.warn("Pso reference '{}' - Unable to resolve identifier '{}'", getRef(), value);
                 } else if (onNotFound.equals(OnNotFound.fail)) {
@@ -119,8 +140,6 @@ public class PsoReference {
                     throw new PspException("Unable to resolve identifier '" + value + "'");
                 }
             }
-
-            CalcResponse calcResponse = (CalcResponse) response;
 
             List<PSO> psos = calcResponse.getPSOs();
 
