@@ -212,6 +212,9 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     /** The change log consumer name from the processor metadata. */
     private String name;
 
+    /** Whether or not to retry a change log entry if an error occurs. */
+    private boolean retryOnError = false;
+
     /**
      * 
      * Constructor. Initializes the underlying {@link Psp}.
@@ -358,13 +361,29 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         if (psp == null) {
             PspOptions pspOptions = new PspOptions(null);
+
+            // custom configuration directory
             String confDir = GrouperLoaderConfig.getPropertyString("changeLog.consumer.psp.confDir");
             if (!confDir.isEmpty()) {
                 LOG.info("Configuration directory {} set via property changeLog.consumer.psp.confDir", confDir);
                 pspOptions.setConfDir(confDir);
             }
+
             psp = Psp.getPSP(pspOptions);
+
+            // retry on error
+            retryOnError = GrouperLoaderConfig.getPropertyBoolean("changeLog.consumer.psp.retryOnError", false);
+            LOG.debug("PSP Consumer - Setting retry on error to {}", retryOnError);
         }
+    }
+
+    /**
+     * Returns true if a change log entry should be retried upon error.
+     * 
+     * @return Returns true if a change log entry should be retried upon error.
+     */
+    public boolean isRetryOnError() {
+        return retryOnError;
     }
 
     /**
@@ -446,10 +465,14 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
                 lastContextId = changeLogEntry.getContextId();
             }
 
+            // whether or not an exception was thrown during processing of the change log entry
+            boolean errorOccurred = false;
+
             try {
                 // process the change log entry
                 processChangeLogEntry(changeLogEntry);
             } catch (Exception e) {
+                errorOccurred = true;
                 String message =
                         "PSP Consumer '" + name + "' - An error occurred processing sequence number " + sequenceNumber;
                 LOG.error(message, e);
@@ -469,6 +492,12 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             }
 
             lastContextId = changeLogEntry.getContextId();
+
+            // if an error occurs and retry on error is true, return the current sequence number minus 1
+            if (errorOccurred && retryOnError) {
+                sequenceNumber--;
+                break;
+            }
         }
 
         // stop the timer and log
@@ -484,7 +513,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         LOG.debug("PSP Consumer '{}' - Finished processing change log entries. Last sequence number '{}'", name,
                 sequenceNumber);
 
-        // return the change log id
+        // return the sequence number
         return sequenceNumber;
     }
 
@@ -679,43 +708,6 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     }
 
     /**
-     * Return a {@link ModifyRequest} for every {@link PSO} whose references or attributes need to be modified.
-     * 
-     * @param consumer the psp change log consumer
-     * @param changeLogEntry the change log entry
-     * @param modificationMode the modification mode
-     * @param returnData spmlv2 return data
-     * @return the possibly empty list of modify requests
-     * @throws Spml2Exception if an SPML error occurs
-     * @throws PspException if an error occurs processing the change log entry
-     */
-    public List<ModifyRequest> processModification(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry,
-            ModificationMode modificationMode, ReturnData returnData) throws Spml2Exception, PspException {
-
-        List<ModifyRequest> modifyRequests = new ArrayList<ModifyRequest>();
-
-        CalcRequest calcRequest = new CalcRequest();
-        calcRequest.setId(ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()));
-        calcRequest.setRequestID(PSPUtil.uniqueRequestId());
-        if (returnData != null) {
-            calcRequest.setReturnData(returnData);
-        }
-
-        CalcResponse calcResponse = consumer.getPsp().execute(calcRequest);
-
-        for (PSO pso : calcResponse.getPSOs()) {
-
-            ModifyRequest modifyRequest = processModification(pso, modificationMode, returnData);
-
-            if (modifyRequest != null) {
-                modifyRequests.add(modifyRequest);
-            }
-        }
-
-        return modifyRequests;
-    }
-
-    /**
      * Return a {@link ModifyRequest} for the given {@link PSO} whose references or attributes need to be modified.
      * 
      * @param pso the provisioned service object
@@ -763,6 +755,43 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         }
 
         return modifyRequest;
+    }
+
+    /**
+     * Return a {@link ModifyRequest} for every {@link PSO} whose references or attributes need to be modified.
+     * 
+     * @param consumer the psp change log consumer
+     * @param changeLogEntry the change log entry
+     * @param modificationMode the modification mode
+     * @param returnData spmlv2 return data
+     * @return the possibly empty list of modify requests
+     * @throws Spml2Exception if an SPML error occurs
+     * @throws PspException if an error occurs processing the change log entry
+     */
+    public List<ModifyRequest> processModification(PspChangeLogConsumer consumer, ChangeLogEntry changeLogEntry,
+            ModificationMode modificationMode, ReturnData returnData) throws Spml2Exception, PspException {
+
+        List<ModifyRequest> modifyRequests = new ArrayList<ModifyRequest>();
+
+        CalcRequest calcRequest = new CalcRequest();
+        calcRequest.setId(ChangeLogDataConnector.principalName(changeLogEntry.getSequenceNumber()));
+        calcRequest.setRequestID(PSPUtil.uniqueRequestId());
+        if (returnData != null) {
+            calcRequest.setReturnData(returnData);
+        }
+
+        CalcResponse calcResponse = consumer.getPsp().execute(calcRequest);
+
+        for (PSO pso : calcResponse.getPSOs()) {
+
+            ModifyRequest modifyRequest = processModification(pso, modificationMode, returnData);
+
+            if (modifyRequest != null) {
+                modifyRequests.add(modifyRequest);
+            }
+        }
+
+        return modifyRequests;
     }
 
     /**
@@ -1062,5 +1091,14 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
         LOG.debug("PSP Consumer '{}' - Change log entry '{}' Processing object update was successful.", name,
                 toString(changeLogEntry));
+    }
+
+    /**
+     * If true, retry a change log entry if an error occurs.
+     * 
+     * @param retryOnError If true, retry a change log entry if an error occurs.
+     */
+    public void setRetryOnError(boolean retryOnError) {
+        this.retryOnError = retryOnError;
     }
 }

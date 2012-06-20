@@ -23,6 +23,7 @@ import edu.internet2.middleware.grouper.Stem;
 import edu.internet2.middleware.grouper.StemFinder;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogTempToEntity;
 import edu.internet2.middleware.grouper.helper.StemHelper;
+import edu.internet2.middleware.grouper.misc.GrouperDAOFactory;
 import edu.internet2.middleware.psp.grouper.PspChangeLogConsumer;
 import edu.internet2.middleware.psp.helper.LdapTestHelper;
 
@@ -255,6 +256,47 @@ public class GrouperToLdapChangeLogTest extends BaseGrouperToLdapChangeLogTest {
 
         verifySpml(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapChangeLogTest.testGroupDescriptionDelete.after.ldif");
+
+        // TODO some postgres blocking issue ?
+        Thread.sleep(1000);
+    }
+
+    /**
+     * Test the retry on error configuration option.
+     * 
+     * @throws Exception
+     */
+    public void testRetryOnError() throws Exception {
+
+        pspConsumer.setRetryOnError(true);
+
+        edu = setUpEdu();
+
+        groupA = StemHelper.addChildGroup(edu, "groupA", "Group A");
+        groupA.setDescription("descriptionA");
+        groupA.store();
+
+        clearChangeLog();
+
+        groupA.setDescription("description");
+        groupA.store();
+
+        ChangeLogTempToEntity.convertRecords();
+        runChangeLog();
+
+        long sequenceNumber0 =
+                GrouperDAOFactory.getFactory().getChangeLogConsumer().findByName("psp", true)
+                        .getLastSequenceProcessed();
+
+        pspConsumer.setRetryOnError(false);
+
+        runChangeLog();
+
+        long sequenceNumber1 =
+                GrouperDAOFactory.getFactory().getChangeLogConsumer().findByName("psp", true)
+                        .getLastSequenceProcessed();
+
+        assertEquals(1, sequenceNumber1 - sequenceNumber0);
 
         // TODO some postgres blocking issue ?
         Thread.sleep(1000);

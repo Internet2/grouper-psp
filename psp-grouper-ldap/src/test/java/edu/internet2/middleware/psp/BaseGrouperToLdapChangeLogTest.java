@@ -56,7 +56,7 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
     private File tmpFile;
 
     /** The PSP change log consumer. */
-    private PspChangeLogConsumer pspConsumer;
+    protected PspChangeLogConsumer pspConsumer;
 
     /**
      * Constructor
