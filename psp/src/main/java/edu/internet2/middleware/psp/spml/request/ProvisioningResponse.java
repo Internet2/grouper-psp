@@ -26,52 +26,51 @@ import edu.internet2.middleware.psp.util.PSPUtil;
 
 public abstract class ProvisioningResponse extends Response {
 
-  /** The identifier of the object to be provisioned. */
-  private ID m_id;
+    /** The identifier of the object to be provisioned. */
+    private ID m_id;
 
-  public String getId() {
-    return m_id == null ? null : m_id.getID();
-  }
-
-  public void setId(String id) {
-    this.m_id = new ID(id);
-  }
-
-  public PrefixAndNamespaceTuple[] getNamespacesInfo() {
-    return PspMarshallableCreator.staticGetNamespacesInfo();
-  }
-
-  public int hashCode() {
-    int result = super.hashCode();
-    result = 29 * result + (m_id != null ? m_id.hashCode() : 0);
-    return result;
-  }
-
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof ProvisioningResponse)) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
+    public String getId() {
+        return m_id == null ? null : m_id.getID();
     }
 
-    final ProvisioningResponse that = (ProvisioningResponse) o;
-
-    if (m_id != null ? !m_id.equals(that.m_id) : that.m_id != null) {
-      return false;
+    public void setId(String id) {
+        this.m_id = new ID(id);
     }
 
-    return true;
-  }
+    public PrefixAndNamespaceTuple[] getNamespacesInfo() {
+        return PspMarshallableCreator.staticGetNamespacesInfo();
+    }
 
-  @Override
-  public String toString() {
-    ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    toStringBuilder.append("id", this.getId());
-    toStringBuilder.appendSuper(PSPUtil.toString((Response) this));
-    return toStringBuilder.toString();
-  }
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 29 * result + (m_id != null ? m_id.hashCode() : 0);
+        return result;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProvisioningResponse)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        final ProvisioningResponse that = (ProvisioningResponse) o;
+
+        if (m_id != null ? !m_id.equals(that.m_id) : that.m_id != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.append("id", this.getId());
+        toStringBuilder.appendSuper(PSPUtil.toString((Response) this));
+        return toStringBuilder.toString();
+    }
 }

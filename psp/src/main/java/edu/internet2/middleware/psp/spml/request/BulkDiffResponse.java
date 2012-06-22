@@ -24,51 +24,48 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.openspml.v2.util.xml.ArrayListWithType;
 import org.openspml.v2.util.xml.ListWithType;
 
-import edu.internet2.middleware.psp.util.PSPUtil;
-
 public class BulkDiffResponse extends ProvisioningResponse {
 
-  private ListWithType m_response = new ArrayListWithType(DiffResponse.class);
+    private ListWithType m_response = new ArrayListWithType(DiffResponse.class);
 
-  public List<DiffResponse> getResponses() {
-    return m_response;
-  }
-
-  public void addResponse(DiffResponse response) {
-    m_response.add(response);
-  }
-
-  public int hashCode() {
-    int result = super.hashCode();
-    result = 29 * result + (m_response != null ? m_response.hashCode() : 0);
-    return result;
-  }
-
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof BulkDiffResponse)) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
+    public List<DiffResponse> getResponses() {
+        return m_response;
     }
 
-    final BulkDiffResponse that = (BulkDiffResponse) o;
-
-    if (m_response != null ? !m_response.equals(that.m_response) : that.m_response != null) {
-      return false;
+    public void addResponse(DiffResponse response) {
+        m_response.add(response);
     }
 
-    return true;
-  }
-  
-  @Override
-  public String toString() {
-    ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    toStringBuilder.appendSuper(super.toString());
-    toStringBuilder.append("responses", this.getResponses().size());
-    return toStringBuilder.toString();
-  }
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 29 * result + (m_response != null ? m_response.hashCode() : 0);
+        return result;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof BulkDiffResponse)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        final BulkDiffResponse that = (BulkDiffResponse) o;
+
+        if (m_response != null ? !m_response.equals(that.m_response) : that.m_response != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.appendSuper(super.toString());
+        toStringBuilder.append("responses", this.getResponses().size());
+        return toStringBuilder.toString();
+    }
 }

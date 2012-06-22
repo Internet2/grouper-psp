@@ -32,106 +32,105 @@ import edu.internet2.middleware.psp.util.PSPUtil;
 
 public abstract class ProvisioningRequest extends BatchableRequest {
 
-  /** The identifier of the object to be provisioned. */
-  private ID m_id;
+    /** The identifier of the object to be provisioned. */
+    private ID m_id;
 
-  /** The return data. */
-  private ReturnData m_returnData = ReturnData.EVERYTHING;
+    /** The return data. */
+    private ReturnData m_returnData = ReturnData.EVERYTHING;
 
-  /** The schema entities to be considered. */
-  private ListWithType m_schemaEntity = new ArrayListWithType(SchemaEntityRef.class);
+    /** The schema entities to be considered. */
+    private ListWithType m_schemaEntity = new ArrayListWithType(SchemaEntityRef.class);
 
-  public ProvisioningRequest() {
-  };
+    public ProvisioningRequest() {
+    };
 
-  public PrefixAndNamespaceTuple[] getNamespacesInfo() {
-    return PspMarshallableCreator.staticGetNamespacesInfo();
-  }
-
-  public String getId() {
-    return m_id == null ? null : m_id.getID();
-  }
-
-  public void setId(String id) {
-    this.m_id = new ID(id);
-  }
-
-  public ReturnData getReturnData() {
-    return m_returnData;
-  }
-
-  public void setReturnData(ReturnData data) {
-    m_returnData = data;
-  }
-
-  public void addSchemaEntity(SchemaEntityRef se) {
-    if (se != null) {
-      m_schemaEntity.add(se);
-    }
-  }
-
-  public void setSchemaEntities(List<SchemaEntityRef> se) {
-    m_schemaEntity.clear();
-    for (SchemaEntityRef s : se) {
-      this.addSchemaEntity(s);
-    }
-  }
-
-  public List<SchemaEntityRef> getSchemaEntities() {
-    return m_schemaEntity;
-  }
-
-  public int hashCode() {
-    int result = super.hashCode();
-    result = 29 * result + (m_id != null ? m_id.hashCode() : 0);
-    result = 29 * result + (m_returnData != null ? m_returnData.hashCode() : 0);
-    result = 29 * result + (m_schemaEntity != null ? m_schemaEntity.hashCode() : 0);
-    return result;
-  }
-
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof ProvisioningRequest)) {
-      return false;
-    }
-    if (!super.equals(o)) {
-      return false;
+    public PrefixAndNamespaceTuple[] getNamespacesInfo() {
+        return PspMarshallableCreator.staticGetNamespacesInfo();
     }
 
-    final ProvisioningRequest that = (ProvisioningRequest) o;
-
-    if (!m_id.equals(that.m_id)) {
-      return false;
-    }
-    if (m_returnData != null ? !m_returnData.equals(that.m_returnData) : that.m_returnData != null) {
-      return false;
-    }
-    if (m_schemaEntity != null ? !m_schemaEntity.equals(that.m_schemaEntity) : that.m_schemaEntity != null) {
-      return false;
+    public String getId() {
+        return m_id == null ? null : m_id.getID();
     }
 
-    return true;
-  }
-
-  public boolean isValid() {
-    // TODO better validity checking
-    if (m_id != null) {
-      return true;
+    public void setId(String id) {
+        this.m_id = new ID(id);
     }
-    return false;
-  }
 
-  @Override
-  public String toString() {
-    ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    toStringBuilder.append("id", this.getId());
-    toStringBuilder.append("requestID", this.getRequestID());
-    toStringBuilder.append("returnData", this.getReturnData());
-    for (SchemaEntityRef s : this.getSchemaEntities()) {
-      toStringBuilder.append("schemaEntityRef", PSPUtil.toString(s));
+    public ReturnData getReturnData() {
+        return m_returnData;
     }
-    return toStringBuilder.toString();
-  }
+
+    public void setReturnData(ReturnData data) {
+        m_returnData = data;
+    }
+
+    public void addSchemaEntity(SchemaEntityRef se) {
+        if (se != null) {
+            m_schemaEntity.add(se);
+        }
+    }
+
+    public void setSchemaEntities(List<SchemaEntityRef> se) {
+        m_schemaEntity.clear();
+        for (SchemaEntityRef s : se) {
+            this.addSchemaEntity(s);
+        }
+    }
+
+    public List<SchemaEntityRef> getSchemaEntities() {
+        return m_schemaEntity;
+    }
+
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 29 * result + (m_id != null ? m_id.hashCode() : 0);
+        result = 29 * result + (m_returnData != null ? m_returnData.hashCode() : 0);
+        result = 29 * result + (m_schemaEntity != null ? m_schemaEntity.hashCode() : 0);
+        return result;
+    }
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof ProvisioningRequest)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+
+        final ProvisioningRequest that = (ProvisioningRequest) o;
+
+        if (!m_id.equals(that.m_id)) {
+            return false;
+        }
+        if (m_returnData != null ? !m_returnData.equals(that.m_returnData) : that.m_returnData != null) {
+            return false;
+        }
+        if (m_schemaEntity != null ? !m_schemaEntity.equals(that.m_schemaEntity) : that.m_schemaEntity != null) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isValid() {
+        // TODO better validity checking
+        if (m_id != null) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.append("id", this.getId());
+        toStringBuilder.append("requestID", this.getRequestID());
+        toStringBuilder.append("returnData", this.getReturnData());
+        for (SchemaEntityRef s : this.getSchemaEntities()) {
+            toStringBuilder.append("schemaEntityRef", PSPUtil.toString(s));
+        }
+        return toStringBuilder.toString();
+    }
 }

@@ -21,12 +21,12 @@ import org.openspml.v2.msg.spml.Identifier;
 
 public class ID extends Identifier {
 
-  public ID() {
-    super();
-  }
+    public ID() {
+        super();
+    }
 
-  public ID(String id) {
-    super(id);
-  }
+    public ID(String id) {
+        super(id);
+    }
 
 }

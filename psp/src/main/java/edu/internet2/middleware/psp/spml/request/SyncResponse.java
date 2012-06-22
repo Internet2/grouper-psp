@@ -38,212 +38,216 @@ import edu.internet2.middleware.psp.util.PSPUtil;
 
 public class SyncResponse extends ProvisioningResponse {
 
-  public void addResponse(AddResponse addResponse) throws Spml2Exception {
-    addOpenContentElement(new OCEtoMarshallableAdapter(addResponse));
-  }
-
-  public void addResponse(ModifyResponse modifyResponse) throws Spml2Exception {
-    addOpenContentElement(new OCEtoMarshallableAdapter(modifyResponse));
-  }
-
-  public void addResponse(DeleteResponse deleteResponse) throws Spml2Exception {
-    addOpenContentElement(new OCEtoMarshallableAdapter(deleteResponse));
-  }
-
-  public void addResponse(Response response) throws PspException, Spml2Exception {
-    if (response instanceof AddResponse) {
-      addResponse((AddResponse) response);
-    } else if (response instanceof DeleteResponse) {
-      addResponse((DeleteResponse) response);
-    } else if (response instanceof ModifyResponse) {
-      addResponse((ModifyResponse) response);
-    } else if (response instanceof SynchronizedResponse) {
-      addResponse((SynchronizedResponse) response);
-    } else {
-      throw new PspException("Response " + response.getClass() + " is not supported.");
-    }
-  }
-
-  public void addResponse(SynchronizedResponse synchronizedResponse) throws Spml2Exception {
-    addOpenContentElement(new OCEtoMarshallableAdapter(synchronizedResponse));
-  }
-
-  public List<AddResponse> getAddResponses() {
-    List<AddResponse> requests = new ArrayList<AddResponse>();
-    for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
-      Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
-      if (o instanceof AddResponse) {
-        requests.add((AddResponse) o);
-      }
+    public void addResponse(AddResponse addResponse) throws Spml2Exception {
+        addOpenContentElement(new OCEtoMarshallableAdapter(addResponse));
     }
 
-    return requests;
-  }
-
-  public List<DeleteResponse> getDeleteResponses() {
-    List<DeleteResponse> requests = new ArrayList<DeleteResponse>();
-    for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
-      Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
-      if (o instanceof DeleteResponse) {
-        requests.add((DeleteResponse) o);
-      }
+    public void addResponse(ModifyResponse modifyResponse) throws Spml2Exception {
+        addOpenContentElement(new OCEtoMarshallableAdapter(modifyResponse));
     }
 
-    return requests;
-  }
-
-  public List<ModifyResponse> getModifyResponses() {
-    List<ModifyResponse> requests = new ArrayList<ModifyResponse>();
-    for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
-      Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
-      if (o instanceof ModifyResponse) {
-        requests.add((ModifyResponse) o);
-      }
+    public void addResponse(DeleteResponse deleteResponse) throws Spml2Exception {
+        addOpenContentElement(new OCEtoMarshallableAdapter(deleteResponse));
     }
 
-    return requests;
-  }
-
-  public List<Response> getAddDeleteModifyResponses() {
-    List<Response> responses = new ArrayList<Response>();
-    responses.addAll(this.getAddResponses());
-    responses.addAll(this.getDeleteResponses());
-    responses.addAll(this.getModifyResponses());
-    return responses;
-  }
-
-  public Map<PSOIdentifier, Response> getResponseMap() {
-    Map<PSOIdentifier, Response> map = new HashMap<PSOIdentifier, Response>();
-    for (AddResponse response : this.getAddResponses()) {
-      map.put(response.getPso().getPsoID(), response);
-    }
-    for (ModifyResponse response : this.getModifyResponses()) {
-      map.put(response.getPso().getPsoID(), response);
-    }
-    // TODO deleteResponses with no psoID ?
-    return map;
-  }
-
-  public List<SynchronizedResponse> getSynchronizedResponses() {
-    List<SynchronizedResponse> responses = new ArrayList<SynchronizedResponse>();
-    for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
-      Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
-      if (o instanceof SynchronizedResponse) {
-        responses.add((SynchronizedResponse) o);
-      }
-    }
-    return responses;
-  }
-
-  public int hashCode() {
-    int result = 1;
-    result = 29 * result + (this.getId() != null ? this.getId().hashCode() : 0);
-    result = 29 * result + (this.getError() != null ? this.getError().hashCode() : 0);
-    result = 29 * result + (this.getErrorMessages() != null ? Arrays.asList(this.getErrorMessages()).hashCode() : 0);
-    result = 29 * result + (this.getRequestID() != null ? this.getRequestID().hashCode() : 0);
-    result = 29 * result + (this.getStatus() != null ? this.getStatus().hashCode() : 0);
-    result = 29 * result
-        + (this.getOpenContentAttrs() != null ? Arrays.asList(this.getOpenContentAttrs()).hashCode() : 0);
-    for (Response response : this.getAddDeleteModifyResponses()) {
-      result = 29 * result + response.hashCode();
-    }
-    for (Response response : this.getSynchronizedResponses()) {
-      result = 29 * result + response.hashCode();
-    }
-    return result;
-  }
-
-  public boolean equals(Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof SyncResponse)) {
-      return false;
+    public void addResponse(Response response) throws PspException, Spml2Exception {
+        if (response instanceof AddResponse) {
+            addResponse((AddResponse) response);
+        } else if (response instanceof DeleteResponse) {
+            addResponse((DeleteResponse) response);
+        } else if (response instanceof ModifyResponse) {
+            addResponse((ModifyResponse) response);
+        } else if (response instanceof SynchronizedResponse) {
+            addResponse((SynchronizedResponse) response);
+        } else {
+            throw new PspException("Response " + response.getClass() + " is not supported.");
+        }
     }
 
-    // TODO calling super.equals() fails for some reason, e.g. OCEtoMarshallableAdapters
-
-    final SyncResponse that = (SyncResponse) o;
-
-    // ProvisioningResponse
-    if (this.getId() != null ? !this.getId().equals(that.getId()) : that.getId() != null) {
-      return false;
+    public void addResponse(SynchronizedResponse synchronizedResponse) throws Spml2Exception {
+        addOpenContentElement(new OCEtoMarshallableAdapter(synchronizedResponse));
     }
 
-    // Response
-    if (this.getError() != null ? !this.getError().equals(that.getError()) : that.getError() != null) {
-      return false;
-    }
-    if (this.getErrorMessages() != null ? !Arrays.asList(this.getErrorMessages()).equals(
-        Arrays.asList(that.getErrorMessages())) : that.getErrorMessages() != null) {
-      return false;
-    }
-    if (this.getRequestID() != null ? !this.getRequestID().equals(that.getRequestID()) : that.getRequestID() != null) {
-      return false;
-    }
-    if (this.getStatus() != null ? !this.getStatus().equals(that.getStatus()) : that.getStatus() != null) {
-      return false;
+    public List<AddResponse> getAddResponses() {
+        List<AddResponse> requests = new ArrayList<AddResponse>();
+        for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
+            Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
+            if (o instanceof AddResponse) {
+                requests.add((AddResponse) o);
+            }
+        }
+
+        return requests;
     }
 
-    if (this.getOpenContentAttrs() != null ? !Arrays.asList(this.getOpenContentAttrs()).equals(
-        Arrays.asList(that.getOpenContentAttrs())) : that.getOpenContentAttrs() != null) {
-      return false;
+    public List<DeleteResponse> getDeleteResponses() {
+        List<DeleteResponse> requests = new ArrayList<DeleteResponse>();
+        for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
+            Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
+            if (o instanceof DeleteResponse) {
+                requests.add((DeleteResponse) o);
+            }
+        }
+
+        return requests;
     }
 
-    // custom OCE equality
+    public List<ModifyResponse> getModifyResponses() {
+        List<ModifyResponse> requests = new ArrayList<ModifyResponse>();
+        for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
+            Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
+            if (o instanceof ModifyResponse) {
+                requests.add((ModifyResponse) o);
+            }
+        }
 
-    Map<PSOIdentifier, Response> thisResponseMap = this.getResponseMap();
-    Map<PSOIdentifier, Response> thatResponseMap = that.getResponseMap();
-    for (PSOIdentifier psoID : thisResponseMap.keySet()) {
-      Response other = thatResponseMap.get(psoID);
-      if (other == null) {
-        return false;
-      }
-      if (!thisResponseMap.get(psoID).equals(other)) {
-        return false;
-      }
-    }
-    for (PSOIdentifier psoID : thatResponseMap.keySet()) {
-      Response other = thisResponseMap.get(psoID);
-      if (other == null) {
-        return false;
-      }
-      if (!thatResponseMap.get(psoID).equals(other)) {
-        return false;
-      }
+        return requests;
     }
 
-    if (this.getDeleteResponses().isEmpty()) {
-      if (!that.getDeleteResponses().isEmpty()) {
-        return false;
-      }
-    } else {
-      if (!this.getDeleteResponses().equals(that.getDeleteResponses())) {
-        return false;
-      }
+    public List<Response> getAddDeleteModifyResponses() {
+        List<Response> responses = new ArrayList<Response>();
+        responses.addAll(this.getAddResponses());
+        responses.addAll(this.getDeleteResponses());
+        responses.addAll(this.getModifyResponses());
+        return responses;
     }
 
-    // TODO synchronized responses ?
+    public Map<PSOIdentifier, Response> getResponseMap() {
+        Map<PSOIdentifier, Response> map = new HashMap<PSOIdentifier, Response>();
+        for (AddResponse response : this.getAddResponses()) {
+            map.put(response.getPso().getPsoID(), response);
+        }
+        for (ModifyResponse response : this.getModifyResponses()) {
+            map.put(response.getPso().getPsoID(), response);
+        }
+        // TODO deleteResponses with no psoID ?
+        return map;
+    }
 
-    return true;
-  }
+    public List<SynchronizedResponse> getSynchronizedResponses() {
+        List<SynchronizedResponse> responses = new ArrayList<SynchronizedResponse>();
+        for (Object oce : this.getOpenContentElements(OCEtoMarshallableAdapter.class)) {
+            Object o = ((OCEtoMarshallableAdapter) oce).getAdaptedObject();
+            if (o instanceof SynchronizedResponse) {
+                responses.add((SynchronizedResponse) o);
+            }
+        }
+        return responses;
+    }
 
-  @Override
-  public String toString() {
-    ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    toStringBuilder.appendSuper(super.toString());
-    for (AddResponse response : this.getAddResponses()) {
-      toStringBuilder.append(PSPUtil.toString(response));
+    public int hashCode() {
+        int result = 1;
+        result = 29 * result + (this.getId() != null ? this.getId().hashCode() : 0);
+        result = 29 * result + (this.getError() != null ? this.getError().hashCode() : 0);
+        result =
+                29 * result + (this.getErrorMessages() != null ? Arrays.asList(this.getErrorMessages()).hashCode() : 0);
+        result = 29 * result + (this.getRequestID() != null ? this.getRequestID().hashCode() : 0);
+        result = 29 * result + (this.getStatus() != null ? this.getStatus().hashCode() : 0);
+        result =
+                29
+                        * result
+                        + (this.getOpenContentAttrs() != null ? Arrays.asList(this.getOpenContentAttrs()).hashCode()
+                                : 0);
+        for (Response response : this.getAddDeleteModifyResponses()) {
+            result = 29 * result + response.hashCode();
+        }
+        for (Response response : this.getSynchronizedResponses()) {
+            result = 29 * result + response.hashCode();
+        }
+        return result;
     }
-    for (ModifyResponse response : this.getModifyResponses()) {
-      toStringBuilder.append(PSPUtil.toString(response));
+
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof SyncResponse)) {
+            return false;
+        }
+
+        // TODO calling super.equals() fails for some reason, e.g. OCEtoMarshallableAdapters
+
+        final SyncResponse that = (SyncResponse) o;
+
+        // ProvisioningResponse
+        if (this.getId() != null ? !this.getId().equals(that.getId()) : that.getId() != null) {
+            return false;
+        }
+
+        // Response
+        if (this.getError() != null ? !this.getError().equals(that.getError()) : that.getError() != null) {
+            return false;
+        }
+        if (this.getErrorMessages() != null ? !Arrays.asList(this.getErrorMessages()).equals(
+                Arrays.asList(that.getErrorMessages())) : that.getErrorMessages() != null) {
+            return false;
+        }
+        if (this.getRequestID() != null ? !this.getRequestID().equals(that.getRequestID())
+                : that.getRequestID() != null) {
+            return false;
+        }
+        if (this.getStatus() != null ? !this.getStatus().equals(that.getStatus()) : that.getStatus() != null) {
+            return false;
+        }
+
+        if (this.getOpenContentAttrs() != null ? !Arrays.asList(this.getOpenContentAttrs()).equals(
+                Arrays.asList(that.getOpenContentAttrs())) : that.getOpenContentAttrs() != null) {
+            return false;
+        }
+
+        // custom OCE equality
+
+        Map<PSOIdentifier, Response> thisResponseMap = this.getResponseMap();
+        Map<PSOIdentifier, Response> thatResponseMap = that.getResponseMap();
+        for (PSOIdentifier psoID : thisResponseMap.keySet()) {
+            Response other = thatResponseMap.get(psoID);
+            if (other == null) {
+                return false;
+            }
+            if (!thisResponseMap.get(psoID).equals(other)) {
+                return false;
+            }
+        }
+        for (PSOIdentifier psoID : thatResponseMap.keySet()) {
+            Response other = thisResponseMap.get(psoID);
+            if (other == null) {
+                return false;
+            }
+            if (!thatResponseMap.get(psoID).equals(other)) {
+                return false;
+            }
+        }
+
+        if (this.getDeleteResponses().isEmpty()) {
+            if (!that.getDeleteResponses().isEmpty()) {
+                return false;
+            }
+        } else {
+            if (!this.getDeleteResponses().equals(that.getDeleteResponses())) {
+                return false;
+            }
+        }
+
+        // TODO synchronized responses ?
+
+        return true;
     }
-    for (DeleteResponse response : this.getDeleteResponses()) {
-      toStringBuilder.append(PSPUtil.toString(response));
+
+    @Override public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.appendSuper(super.toString());
+        for (AddResponse response : this.getAddResponses()) {
+            toStringBuilder.append(PSPUtil.toString(response));
+        }
+        for (ModifyResponse response : this.getModifyResponses()) {
+            toStringBuilder.append(PSPUtil.toString(response));
+        }
+        for (DeleteResponse response : this.getDeleteResponses()) {
+            toStringBuilder.append(PSPUtil.toString(response));
+        }
+        for (SynchronizedResponse response : this.getSynchronizedResponses()) {
+            toStringBuilder.append(response);
+        }
+        return toStringBuilder.toString();
     }
-    for (SynchronizedResponse response : this.getSynchronizedResponses()) {
-      toStringBuilder.append(response);
-    }
-    return toStringBuilder.toString();
-  }
 }

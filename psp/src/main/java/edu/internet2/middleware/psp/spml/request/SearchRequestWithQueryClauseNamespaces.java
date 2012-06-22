@@ -36,37 +36,35 @@ import org.openspml.v2.msg.spmlsearch.SearchRequest;
  */
 public class SearchRequestWithQueryClauseNamespaces extends SearchRequest {
 
-  /**
-   * {@inheritDoc}
-   * 
-   * The element name is set to "SearchRequest".
-   */
-  @Override
-  public String getElementName() {
-    return "SearchRequest";
-  }
-
-  /**
-   * {@inheritDoc}
-   * 
-   * Much like the {@link Query} class, namespace info is gathered from {@link QueryClauses}.
-   */
-  @Override
-  public PrefixAndNamespaceTuple[] getNamespacesInfo() {
-
-    // the set of PrefixAndNamespaceTuple objects to be returned
-    Set<PrefixAndNamespaceTuple> set = new LinkedHashSet<PrefixAndNamespaceTuple>();
-
-    // add PrefixAndNamespaceTuples from super class, SearchRequst
-    set.addAll(Arrays.asList(super.getNamespacesInfo()));
-
-    // for every QueryClause, add PrefixAndNamespaceTuples to the set to be returned
-    if (this.getQuery() != null && this.getQuery().getQueryClauses() != null) {
-      for (QueryClause queryClause : this.getQuery().getQueryClauses()) {
-        set.addAll(Arrays.asList(queryClause.getNamespacesInfo()));
-      }
+    /**
+     * {@inheritDoc}
+     * 
+     * The element name is set to "SearchRequest".
+     */
+    @Override public String getElementName() {
+        return "SearchRequest";
     }
 
-    return set.toArray(new PrefixAndNamespaceTuple[set.size()]);
-  }
+    /**
+     * {@inheritDoc}
+     * 
+     * Much like the {@link Query} class, namespace info is gathered from {@link QueryClauses}.
+     */
+    @Override public PrefixAndNamespaceTuple[] getNamespacesInfo() {
+
+        // the set of PrefixAndNamespaceTuple objects to be returned
+        Set<PrefixAndNamespaceTuple> set = new LinkedHashSet<PrefixAndNamespaceTuple>();
+
+        // add PrefixAndNamespaceTuples from super class, SearchRequst
+        set.addAll(Arrays.asList(super.getNamespacesInfo()));
+
+        // for every QueryClause, add PrefixAndNamespaceTuples to the set to be returned
+        if (this.getQuery() != null && this.getQuery().getQueryClauses() != null) {
+            for (QueryClause queryClause : this.getQuery().getQueryClauses()) {
+                set.addAll(Arrays.asList(queryClause.getNamespacesInfo()));
+            }
+        }
+
+        return set.toArray(new PrefixAndNamespaceTuple[set.size()]);
+    }
 }

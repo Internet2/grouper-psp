@@ -29,31 +29,30 @@ import edu.internet2.middleware.psp.util.PSPUtil;
 
 public class CalcResponse extends ProvisioningResponse {
 
-  private ListWithType m_pso = new ArrayListWithType(PSO.class);
+    private ListWithType m_pso = new ArrayListWithType(PSO.class);
 
-  public List<PSO> getPSOs() {
-    return m_pso;
-  }
-
-  public void addPSO(PSO pso) {
-    if (pso != null) {
-      m_pso.add(pso);
+    public List<PSO> getPSOs() {
+        return m_pso;
     }
-  }
 
-  public void setPSOs(List<PSO> pso) {
-    if (pso != null) {
-      m_pso.addAll(pso);
+    public void addPSO(PSO pso) {
+        if (pso != null) {
+            m_pso.add(pso);
+        }
     }
-  }
 
-  @Override
-  public String toString() {
-    ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
-    toStringBuilder.appendSuper(super.toString());
-    for (PSO pso : this.getPSOs()) {
-      toStringBuilder.append("pso", PSPUtil.toString(pso));
+    public void setPSOs(List<PSO> pso) {
+        if (pso != null) {
+            m_pso.addAll(pso);
+        }
     }
-    return toStringBuilder.toString();
-  }
+
+    @Override public String toString() {
+        ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
+        toStringBuilder.appendSuper(super.toString());
+        for (PSO pso : this.getPSOs()) {
+            toStringBuilder.append("pso", PSPUtil.toString(pso));
+        }
+        return toStringBuilder.toString();
+    }
 }
