@@ -22,9 +22,6 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.openspml.v2.msg.spmlbatch.BatchRequest;
 import org.openspml.v2.msg.spmlbatch.OnError;
 
-/**
- *
- */
 public abstract class BulkProvisioningRequest extends ProvisioningRequest {
 
     // TODO extend BatchRequest ?
@@ -34,6 +31,12 @@ public abstract class BulkProvisioningRequest extends ProvisioningRequest {
 
     /** The ID of all bulk requests. */
     public static final String BULK_REQUEST_ID = BulkProvisioningRequest.class.getName();
+
+    /** Whether or not to return diff responses in bulk response. */
+    private boolean m_returnDiffResponses = true;
+
+    /** Whether or not to return sync responses in bulk response. */
+    private boolean m_returnSyncResponses = true;
 
     /** What to do on error, copied from {@link BatchRequest}. */
     private OnError m_onError = OnError.RESUME;
@@ -60,6 +63,14 @@ public abstract class BulkProvisioningRequest extends ProvisioningRequest {
             return false;
         }
 
+        if (m_returnDiffResponses != that.m_returnDiffResponses) {
+            return false;
+        }
+
+        if (m_returnSyncResponses != that.m_returnSyncResponses) {
+            return false;
+        }
+
         return true;
     }
 
@@ -73,6 +84,22 @@ public abstract class BulkProvisioningRequest extends ProvisioningRequest {
         return result;
     }
 
+    public boolean returnDiffResponses() {
+        return m_returnDiffResponses;
+    }
+
+    public boolean returnSyncResponses() {
+        return m_returnSyncResponses;
+    }
+
+    public void setReturnDiffResponses(boolean returnDiffResponses) {
+        m_returnDiffResponses = returnDiffResponses;
+    }
+
+    public void setReturnSyncResponses(boolean returnSyncResponses) {
+        m_returnSyncResponses = returnSyncResponses;
+    }
+
     public void setOnError(OnError onError) {
         m_onError = onError;
     }
@@ -81,6 +108,8 @@ public abstract class BulkProvisioningRequest extends ProvisioningRequest {
         ToStringBuilder toStringBuilder = new ToStringBuilder(this, ToStringStyle.SHORT_PREFIX_STYLE);
         toStringBuilder.appendSuper(super.toString());
         toStringBuilder.append("onError", this.getOnError());
+        toStringBuilder.append("returnDiffResponses", this.returnDiffResponses());
+        toStringBuilder.append("returnSyncResponses", this.returnSyncResponses());
         return toStringBuilder.toString();
     }
 }

@@ -26,7 +26,7 @@ import org.openspml.v2.util.xml.ListWithType;
 
 import edu.internet2.middleware.psp.util.PSPUtil;
 
-public class BulkSyncResponse extends ProvisioningResponse {
+public class BulkSyncResponse extends BulkProvisioningResponse {
 
     private ListWithType m_response = new ArrayListWithType(SyncResponse.class);
 

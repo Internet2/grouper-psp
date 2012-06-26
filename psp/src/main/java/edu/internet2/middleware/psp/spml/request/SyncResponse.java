@@ -38,6 +38,8 @@ import edu.internet2.middleware.psp.util.PSPUtil;
 
 public class SyncResponse extends ProvisioningResponse {
 
+    private DiffResponse diffResponse;
+
     public void addResponse(AddResponse addResponse) throws Spml2Exception {
         addOpenContentElement(new OCEtoMarshallableAdapter(addResponse));
     }
@@ -133,6 +135,24 @@ public class SyncResponse extends ProvisioningResponse {
             }
         }
         return responses;
+    }
+
+    /**
+     * Returns the diff response.
+     * 
+     * @return Returns the diff response.
+     */
+    public DiffResponse getDiffResponse() {
+        return diffResponse;
+    }
+
+    /**
+     * Sets the diff response.
+     * 
+     * @param diffResponse the diff response.
+     */
+    public void setDiffResponse(DiffResponse diffResponse) {
+        this.diffResponse = diffResponse;
     }
 
     public int hashCode() {

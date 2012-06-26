@@ -1,6 +1,6 @@
 <psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:08.914'>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.276'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.365'>
       <pso entityName='stem1'>
         <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
         <data>
@@ -20,10 +20,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='edu'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:08.922'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.379'>
       <pso entityName='stem2'>
         <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
         <data>
@@ -43,10 +40,7 @@
         </data>
       </pso>
     </addResponse>
-    <psp:id ID='edu'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:08.930'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.389'>
       <pso entityName='stem3'>
         <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap3'/>
         <data>
@@ -68,8 +62,8 @@
     </addResponse>
     <psp:id ID='edu'/>
   </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.164'>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.463'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.685'>
       <pso entityName='group1'>
         <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
         <data>
@@ -96,10 +90,7 @@
         </capabilityData>
       </pso>
     </addResponse>
-    <psp:id ID='edu:groupA'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.173'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.694'>
       <pso entityName='group2'>
         <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
         <data>
@@ -126,10 +117,7 @@
         </capabilityData>
       </pso>
     </addResponse>
-    <psp:id ID='edu:groupA'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.181'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.702'>
       <pso entityName='group3'>
         <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap3'/>
         <data>
@@ -158,8 +146,8 @@
     </addResponse>
     <psp:id ID='edu:groupA'/>
   </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.280'>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.760'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.871'>
       <pso entityName='group1'>
         <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
         <data>
@@ -185,10 +173,7 @@
         </capabilityData>
       </pso>
     </addResponse>
-    <psp:id ID='edu:groupB'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.290'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.878'>
       <pso entityName='group2'>
         <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
         <data>
@@ -214,10 +199,7 @@
         </capabilityData>
       </pso>
     </addResponse>
-    <psp:id ID='edu:groupB'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.299'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.884'>
       <pso entityName='group3'>
         <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap3'/>
         <data>
@@ -245,8 +227,8 @@
     </addResponse>
     <psp:id ID='edu:groupB'/>
   </psp:syncResponse>
-  <psp:syncResponse>
-    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.531'>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.953'>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.042'>
       <pso entityName='member1'>
         <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap1'/>
         <data>
@@ -268,10 +250,7 @@
         </capabilityData>
       </pso>
     </modifyResponse>
-    <psp:id ID='test.subject.0'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.540'>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.050'>
       <pso entityName='member2'>
         <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap2'/>
         <data>
@@ -295,8 +274,8 @@
     </modifyResponse>
     <psp:id ID='test.subject.0'/>
   </psp:syncResponse>
-  <psp:syncResponse>
-    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.723'>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:34.089'>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.159'>
       <pso entityName='member1'>
         <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap1'/>
         <data>
@@ -318,10 +297,7 @@
         </capabilityData>
       </pso>
     </modifyResponse>
-    <psp:id ID='test.subject.1'/>
-  </psp:syncResponse>
-  <psp:syncResponse>
-    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-16:19:09.732'>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.167'>
       <pso entityName='member2'>
         <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap2'/>
         <data>

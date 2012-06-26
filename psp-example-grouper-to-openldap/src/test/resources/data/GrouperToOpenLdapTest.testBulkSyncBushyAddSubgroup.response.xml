@@ -1,5 +1,5 @@
 <psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-13:26:42.403'>
       <pso entityName='stem'>
         <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -22,7 +22,7 @@
     </addResponse>
     <psp:id ID='edu'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-13:26:42.650'>
       <pso entityName='group'>
         <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -60,7 +60,7 @@
     </addResponse>
     <psp:id ID='edu:groupA'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-13:26:42.760'>
       <pso entityName='group'>
         <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -95,7 +95,7 @@
     </addResponse>
     <psp:id ID='edu:groupB'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-13:26:42.843'>
       <pso entityName='member'>
         <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
@@ -120,7 +120,7 @@
     </modifyResponse>
     <psp:id ID='test.subject.0'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/03/11-13:26:43.008'>
       <pso entityName='member'>
         <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>

@@ -671,40 +671,46 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                 return;
             }
 
-            // by creating the psp context here, references will be cached
-            PspContext pspContext = new PspContext();
-            pspContext.setCalcRequestMap(new HashMap<CalcRequest, CalcResponse>(identifiers.size()));
-
-            // new DiffRequest for each identifier
-            for (String identifier : identifiers.keySet()) {
-                DiffRequest diffRequest = new DiffRequest();
-                diffRequest.setId(identifier);
-                diffRequest.setRequestID(PSPUtil.uniqueRequestId());
-                diffRequest.setReturnData(bulkDiffRequest.getReturnData());
-                diffRequest.setSchemaEntities(identifiers.get(identifier));
-
-                DiffResponse diffResponse = execute(diffRequest, pspContext);
-                bulkDiffResponse.addResponse(diffResponse);
-
-                // first failure encountered, stop processing if OnError.EXIT
-                if (diffResponse.getStatus() != StatusCode.SUCCESS
-                        && bulkDiffResponse.getStatus() != StatusCode.FAILURE) {
-                    bulkDiffResponse.setStatus(StatusCode.FAILURE);
-                    if (bulkDiffRequest.getOnError().equals(OnError.EXIT)) {
-                        return;
-                    }
-                }
-            }
-
-            // reconciliation
-
             // PSOIdentifiers that should exist
             Set<PSOIdentifier> correctPsoIds = new LinkedHashSet<PSOIdentifier>();
 
             // PSOIdentifiers to be deleted
             Set<PSOIdentifier> psoIdsToBeDeleted = new LinkedHashSet<PSOIdentifier>();
 
-            for (DiffResponse diffResponse : bulkDiffResponse.getResponses()) {
+            // by creating the psp context here, references will be cached
+            PspContext pspContext = new PspContext();
+            pspContext.setCalcRequestMap(new HashMap<CalcRequest, CalcResponse>(identifiers.size()));
+
+            // diff each identifier
+            for (String identifier : identifiers.keySet()) {
+
+                // new diff request
+                DiffRequest diffRequest = new DiffRequest();
+                diffRequest.setId(identifier);
+                diffRequest.setRequestID(PSPUtil.uniqueRequestId());
+                diffRequest.setReturnData(bulkDiffRequest.getReturnData());
+                diffRequest.setSchemaEntities(identifiers.get(identifier));
+
+                // execute diff request
+                DiffResponse diffResponse = execute(diffRequest, pspContext);
+
+                // add diff response to bulk response ?
+                boolean addToBulkResponse = false;
+                if (bulkDiffRequest.returnDiffResponses()) {
+                    if (!diffResponse.getRequests().isEmpty()) {
+                        addToBulkResponse = true;
+                    }
+                }
+                if (bulkDiffRequest.returnSyncResponses()) {
+                    if (!diffResponse.getSynchronizedResponses().isEmpty()) {
+                        addToBulkResponse = true;
+                    }
+                }
+                if (addToBulkResponse) {
+                    bulkDiffResponse.addResponse(diffResponse);
+                }
+
+                // store correct ids and ids to be deleted for reconciliation
                 for (AddRequest addRequest : diffResponse.getAddRequests()) {
                     correctPsoIds.add(addRequest.getPsoID());
                 }
@@ -716,6 +722,15 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                 }
                 for (SynchronizedResponse synchronizedResponse : diffResponse.getSynchronizedResponses()) {
                     correctPsoIds.add(synchronizedResponse.getPsoID());
+                }
+
+                // first failure encountered, stop processing if OnError.EXIT
+                if (diffResponse.getStatus() != StatusCode.SUCCESS
+                        && bulkDiffResponse.getStatus() != StatusCode.FAILURE) {
+                    bulkDiffResponse.setStatus(StatusCode.FAILURE);
+                    if (bulkDiffRequest.getOnError().equals(OnError.EXIT)) {
+                        return;
+                    }
                 }
             }
 
@@ -816,50 +831,117 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
     public void execute(BulkSyncRequest bulkSyncRequest, BulkSyncResponse bulkSyncResponse) {
 
         try {
-            BulkDiffRequest bulkDiffRequest = new BulkDiffRequest();
-            bulkDiffRequest.setOnError(bulkSyncRequest.getOnError());
-            bulkDiffRequest.setRequestID(PSPUtil.uniqueRequestId());
-            bulkDiffRequest.setReturnData(bulkSyncRequest.getReturnData());
-            bulkDiffRequest.setSchemaEntities(bulkSyncRequest.getSchemaEntities());
-
-            BulkDiffResponse bulkDiffResponse = this.execute(bulkDiffRequest);
-
-            if (bulkDiffResponse.getStatus() != StatusCode.SUCCESS && bulkSyncRequest.getOnError().equals(OnError.EXIT)) {
-                fail(bulkSyncResponse, bulkDiffResponse.getError(), bulkDiffResponse.getErrorMessages());
+            // get all identifiers
+            Map<String, List<SchemaEntityRef>> identifiers = null;
+            try {
+                identifiers = getAllSourceIdentifiers(bulkSyncRequest);
+            } catch (AttributeRequestException e) {
+                fail(bulkSyncResponse, ErrorCode.CUSTOM_ERROR, e);
+                return;
+            } catch (PspException e) {
+                fail(bulkSyncResponse, ErrorCode.CUSTOM_ERROR, e);
+                return;
+            }
+            if (identifiers == null) {
+                fail(bulkSyncResponse, ErrorCode.CUSTOM_ERROR, "Unable to resolve source identifiers.");
                 return;
             }
 
-            for (DiffResponse diffResponse : bulkDiffResponse.getResponses()) {
-                for (Request request : diffResponse.getRequests()) {
-                    String targetId = null;
-                    if (request instanceof AddRequest) {
-                        targetId = ((AddRequest) request).getTargetId();
-                    } else if (request instanceof ModifyRequest) {
-                        targetId = ((ModifyRequest) request).getPsoID().getTargetID();
-                    } else if (request instanceof DeleteRequest) {
-                        targetId = ((DeleteRequest) request).getPsoID().getTargetID();
-                    } else {
-                        fail(bulkSyncResponse, ErrorCode.UNSUPPORTED_OPERATION,
-                                "Unsupported request " + request.getClass());
+            // PSOIdentifiers that should exist
+            Set<PSOIdentifier> correctPsoIds = new LinkedHashSet<PSOIdentifier>();
+
+            // PSOIdentifiers to be deleted
+            Set<PSOIdentifier> psoIdsToBeDeleted = new LinkedHashSet<PSOIdentifier>();
+
+            // by creating the psp context here, references will be cached
+            PspContext pspContext = new PspContext();
+            pspContext.setCalcRequestMap(new HashMap<CalcRequest, CalcResponse>(identifiers.size()));
+
+            // sync each identifier
+            for (String identifier : identifiers.keySet()) {
+
+                // new sync request
+                SyncRequest syncRequest = new SyncRequest();
+                syncRequest.setId(identifier);
+                syncRequest.setRequestID(PSPUtil.uniqueRequestId());
+                syncRequest.setReturnData(bulkSyncRequest.getReturnData());
+                syncRequest.setSchemaEntities(identifiers.get(identifier));
+
+                // execute sync request
+                SyncResponse syncResponse = execute(syncRequest, pspContext);
+
+                // add sync response to bulk response ?
+                boolean addToBulkResponse = false;
+                if (bulkSyncRequest.returnDiffResponses()) {
+                    if (!syncResponse.getAddDeleteModifyResponses().isEmpty()) {
+                        addToBulkResponse = true;
+                    }
+                }
+                if (bulkSyncRequest.returnSyncResponses()) {
+                    if (!syncResponse.getSynchronizedResponses().isEmpty()) {
+                        addToBulkResponse = true;
+                    }
+                }
+                if (addToBulkResponse) {
+                    bulkSyncResponse.addResponse(syncResponse);
+                }
+
+                // store correct ids and ids to be deleted for reconciliation
+                DiffResponse diffResponse = syncResponse.getDiffResponse();
+                for (AddRequest addRequest : diffResponse.getAddRequests()) {
+                    correctPsoIds.add(addRequest.getPsoID());
+                }
+                for (ModifyRequest modifyRequest : diffResponse.getModifyRequests()) {
+                    correctPsoIds.add(modifyRequest.getPsoID());
+                }
+                for (DeleteRequest deleteRequest : diffResponse.getDeleteRequests()) {
+                    psoIdsToBeDeleted.add(deleteRequest.getPsoID());
+                }
+                for (SynchronizedResponse synchronizedResponse : diffResponse.getSynchronizedResponses()) {
+                    correctPsoIds.add(synchronizedResponse.getPsoID());
+                }
+
+                // first failure encountered, stop processing if OnError.EXIT
+                if (syncResponse.getStatus() != StatusCode.SUCCESS
+                        && bulkSyncResponse.getStatus() != StatusCode.FAILURE) {
+                    bulkSyncResponse.setStatus(StatusCode.FAILURE);
+                    if (bulkSyncRequest.getOnError().equals(OnError.EXIT)) {
                         return;
                     }
+                }
+            }
 
-                    // execute each request
-                    SpmlTarget target = targets.get(targetId);
-                    if (target == null) {
-                        fail(bulkSyncResponse, ErrorCode.NO_SUCH_IDENTIFIER, "Unknown target id '" + targetId + "'");
-                        return;
-                    }
+            // get the PSOIdentifiers which currently exist
+            Set<PSOIdentifier> currentPsoIds = getAllTargetIdentifiers(bulkSyncRequest, bulkSyncResponse);
+            if (currentPsoIds == null) {
+                return;
+            }
 
-                    Response response = target.execute(request);
+            // DeleteRequests for identifiers which exist but shouldn't, and which are not already being deleted
+            for (PSOIdentifier psoId : currentPsoIds) {
+                if (!correctPsoIds.contains(psoId) && !psoIdsToBeDeleted.contains(psoId)) {
+                    DeleteRequest deleteRequest = new DeleteRequest();
+                    deleteRequest.setPsoID(psoId);
+                    deleteRequest.setRequestID(PSPUtil.uniqueRequestId());
+
+                    DeleteResponse deleteResponse = execute(deleteRequest);
 
                     SyncResponse syncResponse = new SyncResponse();
-                    syncResponse.setId(diffResponse.getId());
-                    syncResponse.addResponse(response);
-                    bulkSyncResponse.addResponse(syncResponse);
+                    syncResponse.setId(psoId.getID());
+                    syncResponse.addResponse(deleteResponse);
+                    syncResponse.setRequestID(deleteResponse.getRequestID());
+                    syncResponse.setStatus(deleteResponse.getStatus());
+
+                    if (deleteResponse.getStatus().equals(StatusCode.FAILURE)) {
+                        fail(syncResponse, deleteResponse.getError(), deleteResponse.getErrorMessages());
+                    }
+
+                    if (bulkSyncRequest.returnDiffResponses()) {
+                        bulkSyncResponse.addResponse(syncResponse);
+                    }
 
                     // first failure encountered, stop processing if OnError.EXIT
-                    if (response.getStatus() != StatusCode.SUCCESS
+                    if (syncResponse.getStatus() != StatusCode.SUCCESS
                             && bulkSyncResponse.getStatus() != StatusCode.FAILURE) {
                         bulkSyncResponse.setStatus(StatusCode.FAILURE);
                         if (bulkSyncRequest.getOnError().equals(OnError.EXIT)) {
@@ -867,16 +949,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                         }
                     }
                 }
-
-                // include synchronized responses
-                for (SynchronizedResponse synchronizedResponse : diffResponse.getSynchronizedResponses()) {
-                    SyncResponse syncResponse = new SyncResponse();
-                    syncResponse.setId(diffResponse.getId());
-                    syncResponse.addResponse(synchronizedResponse);
-                    bulkSyncResponse.addResponse(syncResponse);
-                }
             }
-
         } catch (PspException e) {
             fail(bulkSyncResponse, ErrorCode.CUSTOM_ERROR, e);
         } catch (Spml2Exception e) {
@@ -1311,6 +1384,17 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 
     /** {@inheritDoc} */
     public SyncResponse execute(SyncRequest syncRequest) {
+        return execute(syncRequest, new PspContext());
+    }
+
+    /**
+     * {@inheritDoc}
+     * 
+     * The psp context argument allows for the caching of references during bulk requests.
+     * 
+     * @param pspContext the psp context
+     */
+    public SyncResponse execute(SyncRequest syncRequest, PspContext pspContext) {
 
         // Start MDC logging.
         MDCHelper mdc = new MDCHelper(syncRequest).start();
@@ -1340,7 +1424,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 
         // If the validation was successful, execute the request.
         if (syncResponse.getStatus().equals(StatusCode.SUCCESS)) {
-            execute(syncRequest, syncResponse);
+            execute(syncRequest, syncResponse, pspContext);
         }
 
         // If the response is a success, log to INFO.
@@ -1373,7 +1457,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
      * @param syncRequest the SPML sync request
      * @param syncResponse the SPML sync response
      */
-    public void execute(SyncRequest syncRequest, SyncResponse syncResponse) {
+    public void execute(SyncRequest syncRequest, SyncResponse syncResponse, PspContext pspContext) {
 
         // Set the response id.
         syncResponse.setId(syncRequest.getId());
@@ -1386,7 +1470,10 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
         diffRequest.setSchemaEntities(syncRequest.getSchemaEntities());
 
         // Execute the diff request.
-        DiffResponse diffResponse = execute(diffRequest);
+        DiffResponse diffResponse = execute(diffRequest, pspContext);
+
+        // Store the diff response.
+        syncResponse.setDiffResponse(diffResponse);
 
         // Return if the diff response is not successful.
         if (!diffResponse.getStatus().equals(StatusCode.SUCCESS)) {
@@ -1394,24 +1481,34 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             return;
         }
 
-        // Execute the requests in the diff response.
-        for (Request request : diffResponse.getRequests()) {
+        try {
+            // Execute the requests in the diff response.
+            for (Request request : diffResponse.getRequests()) {
 
-            Response response = execute(request);
-            try {
+                Response response = execute(request);
+
                 syncResponse.addResponse(response);
-            } catch (PspException e) {
-                fail(syncResponse, ErrorCode.CUSTOM_ERROR, e);
-                return;
-            } catch (Spml2Exception e) {
-                fail(syncResponse, ErrorCode.CUSTOM_ERROR, e);
-                return;
+
+                if (request instanceof DeleteRequest) {
+                    syncResponse.setId(((DeleteRequest) request).getPsoID().getID());
+                }
+
+                if (response.getStatus().equals(StatusCode.FAILURE)) {
+                    fail(syncResponse, response.getError(), response.getErrorMessages());
+                    return;
+                }
             }
 
-            if (response.getStatus().equals(StatusCode.FAILURE)) {
-                fail(syncResponse, response.getError(), response.getErrorMessages());
-                return;
+            for (SynchronizedResponse synchronizedResponse : diffResponse.getSynchronizedResponses()) {
+                syncResponse.addResponse(synchronizedResponse);
             }
+
+        } catch (PspException e) {
+            fail(syncResponse, ErrorCode.CUSTOM_ERROR, e);
+            return;
+        } catch (Spml2Exception e) {
+            fail(syncResponse, ErrorCode.CUSTOM_ERROR, e);
+            return;
         }
     }
 

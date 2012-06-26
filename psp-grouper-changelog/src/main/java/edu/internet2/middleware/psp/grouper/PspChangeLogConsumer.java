@@ -215,6 +215,12 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
     /** Whether or not to retry a change log entry if an error occurs. */
     private boolean retryOnError = false;
 
+    /** Whether or not to omit diff responses in a bulk response. */
+    private boolean omitDiffResponses = false;
+
+    /** Whether or not to omit sync responses in a bulk response. */
+    private boolean omitSyncResponses = false;
+
     /**
      * 
      * Constructor. Initializes the underlying {@link Psp}.
@@ -318,7 +324,15 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();
 
-        BulkSyncResponse response = psp.execute(new BulkSyncRequest());
+        // Perform bulk sync request without responses to conserve memory.
+        BulkSyncRequest request = new BulkSyncRequest();
+        if (omitDiffResponses) {
+            request.setReturnDiffResponses(false);
+        }
+        if (omitSyncResponses) {
+            request.setReturnSyncResponses(false);
+        }
+        BulkSyncResponse response = psp.execute(request);
 
         stopWatch.stop();
 
@@ -374,6 +388,16 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             // retry on error
             retryOnError = GrouperLoaderConfig.getPropertyBoolean("changeLog.consumer.psp.retryOnError", false);
             LOG.debug("PSP Consumer - Setting retry on error to {}", retryOnError);
+
+            // omit diff responses
+            omitDiffResponses =
+                    GrouperLoaderConfig.getPropertyBoolean("changeLog.psp.fullSync.omitDiffResponses", false);
+            LOG.debug("PSP Consumer - Setting omit diff responses to {}", omitDiffResponses);
+
+            // omit sync responses
+            omitSyncResponses =
+                    GrouperLoaderConfig.getPropertyBoolean("changeLog.psp.fullSync.omitSyncResponses", false);
+            LOG.debug("PSP Consumer - Setting omit sync responses to {}", omitSyncResponses);
         }
     }
 

@@ -1,5 +1,5 @@
 <psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:53.892'>
       <pso entityName='group'>
         <psoID ID='cn=edu:courses:fall:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -29,7 +29,7 @@
     </addResponse>
     <psp:id ID='edu:courses:fall:courseA'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:53.957'>
       <pso entityName='group'>
         <psoID ID='cn=edu:courses:fall:courseB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -55,7 +55,7 @@
     </addResponse>
     <psp:id ID='edu:courses:fall:courseB'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.028'>
       <pso entityName='group'>
         <psoID ID='cn=edu:courses:spring:courseA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -85,7 +85,7 @@
     </addResponse>
     <psp:id ID='edu:courses:spring:courseA'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.081'>
       <pso entityName='group'>
         <psoID ID='cn=edu:courses:spring:courseB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -111,7 +111,7 @@
     </addResponse>
     <psp:id ID='edu:courses:spring:courseB'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.140'>
       <pso entityName='group'>
         <psoID ID='cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -137,7 +137,7 @@
     </addResponse>
     <psp:id ID='edu:groupA'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.189'>
       <pso entityName='group'>
         <psoID ID='cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
@@ -166,7 +166,7 @@
     </addResponse>
     <psp:id ID='edu:groupB'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.287'>
       <pso entityName='member'>
         <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
@@ -199,7 +199,7 @@
     </modifyResponse>
     <psp:id ID='test.subject.0'/>
   </psp:syncResponse>
-  <psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
     <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/01/24-02:12:54.432'>
       <pso entityName='member'>
         <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>

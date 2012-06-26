@@ -24,7 +24,7 @@ import org.apache.commons.lang.builder.ToStringStyle;
 import org.openspml.v2.util.xml.ArrayListWithType;
 import org.openspml.v2.util.xml.ListWithType;
 
-public class BulkDiffResponse extends ProvisioningResponse {
+public class BulkDiffResponse extends BulkProvisioningResponse {
 
     private ListWithType m_response = new ArrayListWithType(DiffResponse.class);
 

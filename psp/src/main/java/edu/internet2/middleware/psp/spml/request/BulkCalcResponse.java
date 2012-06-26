@@ -28,7 +28,7 @@ import org.openspml.v2.msg.spml.PSOIdentifier;
 import org.openspml.v2.util.xml.ArrayListWithType;
 import org.openspml.v2.util.xml.ListWithType;
 
-public class BulkCalcResponse extends ProvisioningResponse {
+public class BulkCalcResponse extends BulkProvisioningResponse {
 
     private ListWithType m_response = new ArrayListWithType(CalcResponse.class);
 

@@ -143,6 +143,8 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
 
         LdapTestHelper.deleteCn(LdapSubjectTestHelper.SUBJ2_ID, ldap);
 
+        SubjectFinder.flushCache();
+
         BulkCalcRequest request = new BulkCalcRequest();
         request.setRequestID("REQUESTID_TEST");
         BulkCalcResponse response = psp.execute(request);

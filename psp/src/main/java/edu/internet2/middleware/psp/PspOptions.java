@@ -35,6 +35,7 @@ import org.openspml.v2.msg.spml.SchemaEntityRef;
 
 import edu.internet2.middleware.psp.spml.request.BulkCalcRequest;
 import edu.internet2.middleware.psp.spml.request.BulkDiffRequest;
+import edu.internet2.middleware.psp.spml.request.BulkProvisioningRequest;
 import edu.internet2.middleware.psp.spml.request.BulkSyncRequest;
 import edu.internet2.middleware.psp.spml.request.CalcRequest;
 import edu.internet2.middleware.psp.spml.request.DiffRequest;
@@ -323,6 +324,52 @@ public class PspOptions {
             public void handle(PspOptions pspOptions, CommandLine line) {
                 if (line.hasOption(this.getOpt())) {
                     pspOptions.setLogSpml(true);
+                }
+            }
+        },
+
+        /** omit diff responses from bulk response */
+        omitDiffResponses {
+
+            /**
+             * {@inheritDoc}
+             */
+            public Option getOption() {
+                return new Option("omitDiffResponses", "Omit diff responses from bulk response.");
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            public void handle(PspOptions pspOptions, CommandLine line) {
+
+                for (ProvisioningRequest request : pspOptions.getRequests()) {
+                    if (request instanceof BulkProvisioningRequest) {
+                        ((BulkProvisioningRequest) request).setReturnDiffResponses(false);
+                    }
+                }
+            }
+        },
+
+        /** omit sync responses from bulk response */
+        omitSyncResponses {
+
+            /**
+             * {@inheritDoc}
+             */
+            public Option getOption() {
+                return new Option("omitSyncResponses", "Omit sync responses from bulk response.");
+            }
+
+            /**
+             * {@inheritDoc}
+             */
+            public void handle(PspOptions pspOptions, CommandLine line) {
+
+                for (ProvisioningRequest request : pspOptions.getRequests()) {
+                    if (request instanceof BulkProvisioningRequest) {
+                        ((BulkProvisioningRequest) request).setReturnSyncResponses(false);
+                    }
                 }
             }
         },
@@ -623,6 +670,8 @@ public class PspOptions {
         options.addOption(Opts.requestID.getOption());
         options.addOption(Opts.printRequests.getOption());
         options.addOption(Opts.targetID.getOption());
+        options.addOption(Opts.omitDiffResponses.getOption());
+        options.addOption(Opts.omitSyncResponses.getOption());
     }
 
     /**
