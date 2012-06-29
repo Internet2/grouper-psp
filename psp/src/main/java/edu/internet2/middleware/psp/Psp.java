@@ -743,13 +743,15 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             // DeleteRequests for identifiers which exist but shouldn't, and which are not already being deleted
             for (PSOIdentifier psoId : currentPsoIds) {
                 if (!correctPsoIds.contains(psoId) && !psoIdsToBeDeleted.contains(psoId)) {
-                    DeleteRequest deleteRequest = new DeleteRequest();
-                    deleteRequest.setPsoID(psoId);
-                    deleteRequest.setRequestID(PSPUtil.uniqueRequestId());
-                    DiffResponse diffResponse = new DiffResponse();
-                    diffResponse.setId(psoId.getID());
-                    diffResponse.addRequest(deleteRequest);
-                    bulkDiffResponse.addResponse(diffResponse);
+                    if (bulkDiffRequest.returnDiffResponses()) {
+                        DeleteRequest deleteRequest = new DeleteRequest();
+                        deleteRequest.setPsoID(psoId);
+                        deleteRequest.setRequestID(PSPUtil.uniqueRequestId());
+                        DiffResponse diffResponse = new DiffResponse();
+                        diffResponse.setId(psoId.getID());
+                        diffResponse.addRequest(deleteRequest);
+                        bulkDiffResponse.addResponse(diffResponse);
+                    }
                 }
             }
         } catch (PspException e) {
