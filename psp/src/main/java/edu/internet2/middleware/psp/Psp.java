@@ -655,7 +655,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
     public void execute(BulkDiffRequest bulkDiffRequest, BulkDiffResponse bulkDiffResponse) {
 
         try {
-            // get all identifiers
+            // get all source identifiers
             Map<String, List<SchemaEntityRef>> identifiers = null;
             try {
                 identifiers = getAllSourceIdentifiers(bulkDiffRequest);
@@ -668,6 +668,12 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             }
             if (identifiers == null) {
                 fail(bulkDiffResponse, ErrorCode.CUSTOM_ERROR, "Unable to resolve source identifiers.");
+                return;
+            }
+
+            // get target identifiers which currently exist
+            Set<PSOIdentifier> currentPsoIds = getAllTargetIdentifiers(bulkDiffRequest, bulkDiffResponse);
+            if (currentPsoIds == null) {
                 return;
             }
 
@@ -732,12 +738,6 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                         return;
                     }
                 }
-            }
-
-            // get the PSOIdentifiers which currently exist
-            Set<PSOIdentifier> currentPsoIds = getAllTargetIdentifiers(bulkDiffRequest, bulkDiffResponse);
-            if (currentPsoIds == null) {
-                return;
             }
 
             // DeleteRequests for identifiers which exist but shouldn't, and which are not already being deleted
@@ -833,7 +833,7 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
     public void execute(BulkSyncRequest bulkSyncRequest, BulkSyncResponse bulkSyncResponse) {
 
         try {
-            // get all identifiers
+            // get all source identifiers
             Map<String, List<SchemaEntityRef>> identifiers = null;
             try {
                 identifiers = getAllSourceIdentifiers(bulkSyncRequest);
@@ -846,6 +846,12 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             }
             if (identifiers == null) {
                 fail(bulkSyncResponse, ErrorCode.CUSTOM_ERROR, "Unable to resolve source identifiers.");
+                return;
+            }
+
+            // get target identifiers which currently exist
+            Set<PSOIdentifier> currentPsoIds = getAllTargetIdentifiers(bulkSyncRequest, bulkSyncResponse);
+            if (currentPsoIds == null) {
                 return;
             }
 
@@ -911,12 +917,6 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
                         return;
                     }
                 }
-            }
-
-            // get the PSOIdentifiers which currently exist
-            Set<PSOIdentifier> currentPsoIds = getAllTargetIdentifiers(bulkSyncRequest, bulkSyncResponse);
-            if (currentPsoIds == null) {
-                return;
             }
 
             // DeleteRequests for identifiers which exist but shouldn't, and which are not already being deleted
