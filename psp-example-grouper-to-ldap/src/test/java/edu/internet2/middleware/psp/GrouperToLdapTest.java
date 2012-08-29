@@ -72,7 +72,7 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
      */
     public static void main(String[] args) {
         // TestRunner.run(GrouperToLdapTest.class);
-        TestRunner.run(new GrouperToLdapTest("testBulkCalcBushyAddSubjectNotFoundFail"));
+        TestRunner.run(new GrouperToLdapTest("testBulkSyncBushyAddTwoRuns"));
     }
 
     public void setUp() {
@@ -288,6 +288,20 @@ public class GrouperToLdapTest extends BaseGrouperLdapTest {
         BulkSyncResponse response = psp.execute(request);
 
         verifySpml(response, DATA_PATH + "GrouperToLdapTest.testBulkSyncBushyAdd.response.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapTest.testBulkSyncBushyAdd.after.ldif");
+    }
+    
+    public void testBulkSyncBushyAddTwoRuns() throws Exception {
+
+        BulkSyncRequest request = new BulkSyncRequest();
+        request.setRequestID("REQUESTID_TEST");
+        BulkSyncResponse response = psp.execute(request);
+
+        verifySpml(response, DATA_PATH + "GrouperToLdapTest.testBulkSyncBushyAdd.response.xml");
+        verifyLdif(DATA_PATH + "GrouperToLdapTest.testBulkSyncBushyAdd.after.ldif");
+        
+        BulkSyncResponse response2 = psp.execute(request);
+        verifySpml(response2, DATA_PATH + "GrouperToLdapTest.testBulkSyncBushyAddTwoRuns.response.xml");
         verifyLdif(DATA_PATH + "GrouperToLdapTest.testBulkSyncBushyAdd.after.ldif");
     }
 

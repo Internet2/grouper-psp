@@ -68,5 +68,9 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinitionBeanDefinition
         String rdnAttributeName = pluginConfig.getAttributeNS(null, "rdnAttributeName");
         LOG.debug("Setting rdnAttributeName of element '{}' to: '{}'", pluginConfig.getLocalName(), rdnAttributeName);
         pluginBuilder.addPropertyValue("rdnAttributeName", rdnAttributeName);
+        
+        String stemRdnAttributeName = pluginConfig.getAttributeNS(null, "stemRdnAttributeName");
+        LOG.debug("Setting stemRdnAttributeName of element '{}' to: '{}'", pluginConfig.getLocalName(), stemRdnAttributeName);
+        pluginBuilder.addPropertyValue("stemRdnAttributeName", stemRdnAttributeName);
     }
 }

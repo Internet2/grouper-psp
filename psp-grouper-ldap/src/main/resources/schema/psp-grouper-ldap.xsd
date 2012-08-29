@@ -81,6 +81,17 @@
             </documentation>
           </annotation>
         </attribute>
+        <attribute
+          name="stemRdnAttributeName"
+          type="string"
+          use="optional"
+          default="ou">
+          <annotation>
+            <documentation>
+              The LDAP RDN attribute name for stems.
+            </documentation>
+          </annotation>
+        </attribute>
       </extension>
     </complexContent>
   </complexType>

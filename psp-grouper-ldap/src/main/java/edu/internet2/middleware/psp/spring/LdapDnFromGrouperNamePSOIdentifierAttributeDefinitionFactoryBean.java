@@ -33,6 +33,9 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinitionFactoryBean ex
 
     /** The LDAP RDN attribute name. */
     private String rdnAttributeName;
+    
+    /** The LDAP RDN attribute name for stems. */
+    private String stemRdnAttributeName;
 
     /** The Grouper DN structure. */
     private GroupDnStructure structure;
@@ -90,6 +93,24 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinitionFactoryBean ex
     public void setRdnAttributeName(String rdnAttributeName) {
         this.rdnAttributeName = rdnAttributeName;
     }
+    
+    /**
+     * Get the LDAP RDN attribute name for stems.
+     * 
+     * @return the RDN attribute name for stems
+     */
+    public String getStemRdnAttributeName() {
+        return stemRdnAttributeName;
+    }
+
+    /**
+     * Set the LDAP RDN attribute name for stems.
+     * 
+     * @param rdnAttributeName the RDN attribute name for stems
+     */
+    public void setStemRdnAttributeName(String stemRdnAttributeName) {
+        this.stemRdnAttributeName = stemRdnAttributeName;
+    }
 
     /**
      * Get the Grouper DN structure.
@@ -118,6 +139,7 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinitionFactoryBean ex
         definition.setBaseStem(baseStem);
         definition.setStructure(structure);
         definition.setRdnAttributeName(rdnAttributeName);
+        definition.setStemRdnAttributeName(stemRdnAttributeName);
         return definition;
     }
 

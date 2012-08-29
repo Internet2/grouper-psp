@@ -50,9 +50,6 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
     /** The logger. */
     private static Logger LOG = LoggerFactory.getLogger(LdapDnFromGrouperNamePSOIdentifierAttributeDefinition.class);
 
-    /** The RDN attribute name used to build LDAP DNs. */
-    public static final String STEM_RDN_ATTRIBUTE = "ou";
-
     /** The LDAP DN base. */
     private String baseDn;
 
@@ -61,6 +58,9 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
 
     /** The LDAP RDN attribute name. */
     private String rdnAttributeName;
+
+    /** The LDAP RDN attribute name for stems. */
+    private String stemRdnAttributeName;
 
     /** The Grouper DN structure. */
     private GroupDnStructure structure;
@@ -120,6 +120,24 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
     }
 
     /**
+     * Get the LDAP RDN attribute name for stems.
+     * 
+     * @return the RDN attribute name for stems
+     */
+    public String getStemRdnAttributeName() {
+        return stemRdnAttributeName;
+    }
+
+    /**
+     * Set the LDAP RDN attribute name for stems.
+     * 
+     * @param rdnAttributeName the RDN attribute name for stems
+     */
+    public void setStemRdnAttributeName(String stemRdnAttributeName) {
+        this.stemRdnAttributeName = stemRdnAttributeName;
+    }
+
+    /**
      * Get the Grouper DN structure.
      * 
      * @return the DN structure
@@ -152,7 +170,7 @@ public class LdapDnFromGrouperNamePSOIdentifierAttributeDefinition extends BaseA
 
         while (stemTokens.hasMoreTokens()) {
             try {
-                rdns.add(new Rdn(STEM_RDN_ATTRIBUTE, stemTokens.nextToken()));
+                rdns.add(new Rdn(getStemRdnAttributeName(), stemTokens.nextToken()));
             } catch (InvalidNameException e) {
                 LOG.error("An error occurred creating an rdn.", e);
                 throw new AttributeResolutionException("An error occurred creating an rdn.", e);
