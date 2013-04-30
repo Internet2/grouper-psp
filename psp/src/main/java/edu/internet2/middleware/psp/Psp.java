@@ -1012,9 +1012,21 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             }
             // If the response is not a success, log to ERROR.
         } else {
-            LOG.error("Psp '{}' - Calc {}", getId(), PSPUtil.toString(calcResponse));
-            if (isLogSpml()) {
-                LOG.error("Psp '{}' - Calc XML:\n{}", getId(), toXML(calcResponse));
+            String errorMsg = PSPUtil.toString(calcResponse);
+            // Special case the Unable to calculate provisioned object error. 
+            // this typically happens because the action to the object happens
+            // outside of an area the PSP has knowledge of.  GRP-811 
+            if(errorMsg.contains("Unable to calculate provisioned object.")){
+                LOG.info("Psp '{}' - Calc {}", getId(), errorMsg);
+                if (isLogSpml()) {
+                    LOG.info("Psp '{}' - Calc XML:\n{}", getId(), toXML(calcResponse));
+                }
+            }
+            else{
+                LOG.error("Psp '{}' - Calc {}", getId(), errorMsg);
+                if (isLogSpml()) {
+                    LOG.error("Psp '{}' - Calc XML:\n{}", getId(), toXML(calcResponse));
+                }
             }
         }
 
