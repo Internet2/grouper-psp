@@ -54,7 +54,7 @@
     <!-- location of grouper api distribution -->
     <grouper.dir>../grouper</grouper.dir>
     <!-- leave this as previous version, until release, then change to latest -->
-    <grouper.version>2.1.4</grouper.version>
+    <grouper.version>2.1.5</grouper.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.6</maven.compiler.source>
