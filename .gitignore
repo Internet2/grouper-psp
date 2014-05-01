@@ -1,2 +1,14 @@
 /psp-parent/target/
 /psp/target/
+/psp-grouper-target/target/
+/psp-grouper-source/target/
+/psp-grouper-ldap/target/
+/psp-example-grouper-to-ldap/target/
+/psp-example-grouper-to-active-directory/target/
+/psp-example-grouper-to-openldap/target/
+/psp-example-grouper-to-openldap-memberof-overlay/target/
+/psp-example-grouper-to-openldap-multiple/target/
+/psp-example-grouper-to-tivoli/target/
+/psp-example-ldap-to-grouper/target/
+/psp-distribution/target/
+/psp-distribution-for-grouper/target/
