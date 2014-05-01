@@ -512,7 +512,11 @@ public class LdapSpmlTarget extends BaseSpmlTarget {
                         LOG.info("Target '{}' - Retrying modify request", getId(), PSPUtil.toString(emptyReference));
                         execute(emptyReference, modifyResponse, false);
                     }
-                }
+                }else {
+					//send a failure up the chain due to objectClass violation we haven't trapped yet GRP-821
+					fail(modifyResponse,ErrorCode.CUSTOM_ERROR, e);
+					return;
+				}
             } else {
                 // return the failure response
                 fail(modifyResponse, ErrorCode.CUSTOM_ERROR, e);
