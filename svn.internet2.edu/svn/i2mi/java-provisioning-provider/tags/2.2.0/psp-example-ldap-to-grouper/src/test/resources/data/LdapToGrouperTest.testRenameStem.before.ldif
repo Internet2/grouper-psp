@@ -1,0 +1,8 @@
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: organizationalUnit
+ou: edu
+
+dn: ou=stemNEW,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: organizationalUnit
+ou: stemNEW
+ou: stemOLD

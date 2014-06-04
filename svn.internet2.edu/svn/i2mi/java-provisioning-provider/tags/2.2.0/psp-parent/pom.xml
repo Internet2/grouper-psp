@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <name>Provisioning Service Provider - Parent</name>
+  <description>
+  An incomplete SPMLv2 provisioning service provider supporting calc, diff, and sync operations whose provisioning data
+  is calculated by a Shibboleth attribute resolver.
+  </description>
+  <groupId>edu.internet2.middleware.psp</groupId>
+  <artifactId>psp-parent</artifactId>
+  <version>2.2.0</version>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>../psp</module>
+    <module>../psp-grouper-ldap</module>
+    <module>../psp-grouper-source</module>
+    <module>../psp-grouper-target</module>
+    <module>../psp-ldap-target</module>
+    <module>../psp-grouper-changelog</module>
+    <module>../psp-example-grouper-to-active-directory</module>
+    <module>../psp-example-grouper-to-ldap</module>
+    <module>../psp-example-grouper-to-openldap</module>
+    <module>../psp-example-grouper-to-openldap-memberof-overlay</module>
+    <module>../psp-example-grouper-to-openldap-multiple</module>
+    <module>../psp-example-grouper-to-tivoli</module>
+    <module>../psp-example-ldap-to-grouper</module>
+    <module>../psp-distribution</module>
+    <module>../psp-distribution-for-grouper</module>
+  </modules>
+
+  <repositories>
+    <repository>
+      <id>shib-release</id>
+      <url>https://shibboleth.net/nexus/content/groups/public</url>
+    </repository>
+  </repositories>
+
+  <properties>
+    <!-- location of grouper api distribution -->
+    <grouper.dir>${settings.grouper-trunk}</grouper.dir>
+    <grouper.version>2.2.0-SNAPSHOT</grouper.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
+
+  <dependencies>
+    <!-- Compile Dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.6.4</version>
+    </dependency>
+
+    <!-- Provided Dependencies -->
+
+    <!-- Runtime Dependencies -->
+
+    <!-- Test Dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.8.2</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- Managed Dependencies -->
+  </dependencies>
+
+  <!-- Dependencies not required by every project module. Defines versions. -->
+  <dependencyManagement>
+    <dependencies>
+
+      <!-- Compile Dependencies -->
+      <dependency>
+        <groupId>commons-cli</groupId>
+        <artifactId>commons-cli</artifactId>
+        <version>1.2</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-lang</groupId>
+        <artifactId>commons-lang</artifactId>
+        <version>2.6</version>
+      </dependency>
+
+      <dependency>
+        <groupId>edu.internet2.middleware.grouper</groupId>
+        <artifactId>grouper</artifactId>
+        <version>${grouper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>edu.internet2.middleware.grouper</groupId>
+        <artifactId>grouper-shib</artifactId>
+        <version>${grouper.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>edu.internet2.middleware.grouper</groupId>
+        <artifactId>subject</artifactId>
+        <version>${grouper.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>edu.internet2.middleware</groupId>
+        <artifactId>shibboleth-common</artifactId>
+        <version>1.3.4</version>
+        <exclusions>
+          <!-- Exclude logback in lieu of sl4j-log4j12 binding. -->
+          <exclusion>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+          </exclusion>
+        </exclusions>
+      </dependency>
+      <dependency>
+        <groupId>edu.vt.middleware</groupId>
+        <artifactId>vt-ldap</artifactId>
+        <version>3.3.5</version>
+      </dependency>
+      <dependency>
+        <groupId>org.openspml</groupId>
+        <artifactId>openspml2</artifactId>
+        <version>1.0-SNAPSHOT</version>
+      </dependency>
+
+      <!-- Test Dependencies -->
+      <dependency>
+        <groupId>edu.internet2.middleware.grouper</groupId>
+        <artifactId>grouper</artifactId>
+        <version>${grouper.version}</version>
+        <scope>test</scope>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>edu.internet2.middleware.grouper</groupId>
+        <artifactId>grouper-shib</artifactId>
+        <version>${grouper.version}</version>
+        <scope>test</scope>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>xmlunit</groupId>
+        <artifactId>xmlunit</artifactId>
+        <version>1.0</version>
+        <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.directory.shared</groupId>
+        <artifactId>shared-ldap</artifactId>
+        <version>0.9.15</version>
+        <scope>test</scope>
+      </dependency>
+
+    </dependencies>
+  </dependencyManagement>
+
+  <distributionManagement>
+    <repository>
+      <id>sonatype-nexus-staging</id>
+      <name>Nexus Release Repository</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+      <id>sonatype-nexus-snapshots</id>
+      <name>Sonatype Nexus Snapshots</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.5</version>
+          <configuration>
+            <argLine>-Xmx1024m</argLine>
+            <additionalClasspathElements>
+              <additionalClasspathElement>${grouper.dir}/confForTest</additionalClasspathElement>
+              <additionalClasspathElement>${grouper.dir}/conf</additionalClasspathElement>
+            </additionalClasspathElements>
+          </configuration>
+        </plugin>
+
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <configuration>
+            <tarLongFileMode>gnu</tarLongFileMode>
+            <descriptors>
+              <descriptor>src/main/assembly/bin.xml</descriptor>
+              <!-- <descriptor>src/main/assembly/src.xml</descriptor> -->
+            </descriptors>
+          </configuration>
+          <executions>
+            <execution>
+              <id>make-assembly</id>
+              <phase>package</phase>
+              <goals>
+                <goal>attached</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>source</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.3.1</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.2.2</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+
+  <profiles>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>2.1.2</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>2.7</version>
+            <executions>
+              <execution>
+                <id>release-javadoc</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>javadoc</goal>
+                </goals>
+              </execution>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>1.1</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
+  <!-- Project Metadata -->
+  <url>http://grouper.internet2.edu</url>
+
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <organization>
+    <name>Internet2</name>
+    <url>http://www.internet2.edu/</url>
+  </organization>
+
+  <issueManagement>
+    <system>JIRA</system>
+    <url>http://bugs.internet2.edu/</url>
+  </issueManagement>
+
+  <mailingLists>
+    <mailingList>
+      <name>Grouper Users</name>
+      <subscribe>http://www.internet2.edu/grouper/lists.html</subscribe>
+      <unsubscribe>http://www.internet2.edu/grouper/lists.html</unsubscribe>
+      <post>grouper-users@internet2.edu</post>
+      <archive>https://mail.internet2.edu/wws/arc/grouper-users</archive>
+      <otherArchives>
+        <otherArchive>http://groups.google.com/group/grouper-users</otherArchive>
+      </otherArchives>
+    </mailingList>
+    <mailingList>
+      <name>Grouper Development</name>
+      <subscribe>http://www.internet2.edu/grouper/lists.html</subscribe>
+      <unsubscribe>http://www.internet2.edu/grouper/lists.html</unsubscribe>
+      <post>grouper-dev@internet2.edu</post>
+      <archive>https://mail.internet2.edu/wws/arc/grouper-dev</archive>
+      <otherArchives>
+        <otherArchive>http://groups.google.com/group/grouper-dev</otherArchive>
+      </otherArchives>
+    </mailingList>
+  </mailingLists>
+
+  <scm>
+    <connection>scm:svn:http://anonsvn.internet2.edu/svn/i2mi/java-provisioning-provider</connection>
+    <developerConnection>scm:svn:https://svn.internet2.edu/svn/i2mi/java-provisioning-provider</developerConnection>
+    <tag>HEAD</tag>
+    <url>http://anonsvn.internet2.edu/cgi-bin/viewvc.cgi/i2mi/java-provisioning-provider</url>
+  </scm>
+
+  <developers>
+    <developer>
+      <id>tzeller</id>
+      <name>Tom Zeller</name>
+      <organization>Unicon</organization>
+      <organizationUrl>http://www.unicon.net</organizationUrl>
+      <email>tzeller@unicon.net</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-6</timezone>
+    </developer>
+	<developer>
+      <id>davel</id>
+      <name>David Langenberg</name>
+      <organization>The University of Chicago</organization>
+      <organizationUrl>http://www.uchicago.edu</organizationUrl>
+      <email>davel@uchicago.edu</email>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>-7</timezone>
+    </developer>
+  </developers>
+
+</project>

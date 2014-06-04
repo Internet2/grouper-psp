@@ -1,0 +1,20 @@
+<psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:syncResponse status='success' requestID='2012/08/29-13:26:33.663'>
+    <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+      <psp:psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </psp:synchronizedResponse>
+    <psp:id ID='edu'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='2012/08/29-13:26:33.702'>
+    <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+      <psp:psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </psp:synchronizedResponse>
+    <psp:id ID='edu:groupA'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='2012/08/29-13:26:33.773'>
+    <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+      <psp:psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </psp:synchronizedResponse>
+    <psp:id ID='edu:groupB'/>
+  </psp:syncResponse>
+</psp:bulkSyncResponse>

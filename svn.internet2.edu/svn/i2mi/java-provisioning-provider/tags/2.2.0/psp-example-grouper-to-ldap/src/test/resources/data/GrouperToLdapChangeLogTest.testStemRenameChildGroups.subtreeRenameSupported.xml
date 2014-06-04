@@ -1,0 +1,138 @@
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/18-00:18:50.902' returnData='data'>
+  <psp:id ID='change_log_sequence_number:357'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/18-00:18:50.902'>
+  <psp:id ID='change_log_sequence_number:357'/>
+  <psp:pso entityName='stem'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <psoID ID='ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.035' returnData='identifier'>
+  <psoID ID='ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='failure' requestID='2012/02/18-00:18:51.035' error='noSuchIdentifier'/>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.043' returnData='identifier'>
+  <psoID ID='ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/18-00:18:51.043'>
+  <pso entityName='stem'>
+    <psoID ID='ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</lookupResponse>
+
+<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.057' returnData='everything'>
+  <psoID ID='ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  <modification modificationMode='replace'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </modification>
+</modifyRequest>
+
+<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/18-00:18:51.057'>
+  <pso entityName='stem'>
+    <psoID ID='ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+        <dsml:value>organizationalUnit</dsml:value>
+        <dsml:value>top</dsml:value>
+      </dsml:attr>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
+        <dsml:value>newChild1</dsml:value>
+      </dsml:attr>
+    </data>
+  </pso>
+</modifyResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/18-00:18:51.101' returnData='data'>
+  <psp:id ID='change_log_sequence_number:358'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/18-00:18:51.101'>
+  <psp:id ID='change_log_sequence_number:358'/>
+  <psp:pso entityName='group'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='cn=group1,ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <psoID ID='cn=group1,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.151' returnData='identifier'>
+  <psoID ID='cn=group1,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/18-00:18:51.151'>
+  <pso entityName='group'>
+    <psoID ID='cn=group1,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</lookupResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/18-00:18:51.175' returnData='data'>
+  <psp:id ID='change_log_sequence_number:359'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/18-00:18:51.175'>
+  <psp:id ID='change_log_sequence_number:359'/>
+  <psp:pso entityName='group'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='cn=group2,ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <psoID ID='cn=group2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.233' returnData='identifier'>
+  <psoID ID='cn=group2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/18-00:18:51.233'>
+  <pso entityName='group'>
+    <psoID ID='cn=group2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</lookupResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/18-00:18:51.259' returnData='data'>
+  <psp:id ID='change_log_sequence_number:360'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/18-00:18:51.259'>
+  <psp:id ID='change_log_sequence_number:360'/>
+  <psp:pso entityName='stem'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='ou=child2,ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <psoID ID='ou=child2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.318' returnData='identifier'>
+  <psoID ID='ou=child2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/18-00:18:51.318'>
+  <pso entityName='stem'>
+    <psoID ID='ou=child2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</lookupResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/18-00:18:51.352' returnData='data'>
+  <psp:id ID='change_log_sequence_number:361'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/18-00:18:51.352'>
+  <psp:id ID='change_log_sequence_number:361'/>
+  <psp:pso entityName='group'>
+    <psp:alternateIdentifier xmlns:psp='http://grouper.internet2.edu/psp' ID='cn=group3,ou=child2,ou=child1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <psoID ID='cn=group3,ou=child2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/18-00:18:51.420' returnData='identifier'>
+  <psoID ID='cn=group3,ou=child2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/18-00:18:51.420'>
+  <pso entityName='group'>
+    <psoID ID='cn=group3,ou=child2,ou=newChild1,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</lookupResponse>

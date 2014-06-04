@@ -1,0 +1,99 @@
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-20:38:09.430' returnData='everything'>
+  <psp:id ID='change_log_sequence_number:335'/>
+</psp:calcRequest>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' returnData='identifier'>
+  <psp:id ID='test.subject.0'/>
+  <psp:schemaEntity targetID='ldap' entityName='member'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/08-20:38:09.515'>
+  <psp:id ID='test.subject.0'/>
+  <psp:pso entityName='member'>
+    <psoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/08-20:38:09.430'>
+  <psp:id ID='change_log_sequence_number:335'/>
+  <psp:pso entityName='groupMembership'>
+    <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+      <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+        <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      </spmlref:reference>
+    </capabilityData>
+  </psp:pso>
+</psp:calcResponse>
+
+<spmlsearch:SearchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/02/08-20:38:09.556' returnData='identifier'>
+  <spmlsearch:query targetID='ldap' scope='pso'>
+    <spmlref:hasReference typeOfReference='member'>
+      <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+    </spmlref:hasReference>
+    <spmlsearch:basePsoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </spmlsearch:query>
+</spmlsearch:SearchRequest>
+
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='failure' requestID='2012/02/08-20:38:09.556' error='noSuchIdentifier'>
+  <errorMessage>[LDAP: error code 32 - No Such Object]</errorMessage>
+</spmlsearch:searchResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-20:38:09.591' returnData='everything'>
+  <psp:id ID='change_log_sequence_number:336'/>
+</psp:calcRequest>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' returnData='identifier'>
+  <psp:id ID='test.subject.1'/>
+  <psp:schemaEntity targetID='ldap' entityName='member'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/08-20:38:09.630'>
+  <psp:id ID='test.subject.1'/>
+  <psp:pso entityName='member'>
+    <psoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/08-20:38:09.591'>
+  <psp:id ID='change_log_sequence_number:336'/>
+  <psp:pso entityName='groupMembership'>
+    <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+      <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+        <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+      </spmlref:reference>
+    </capabilityData>
+  </psp:pso>
+</psp:calcResponse>
+
+<spmlsearch:SearchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/02/08-20:38:09.662' returnData='identifier'>
+  <spmlsearch:query targetID='ldap' scope='pso'>
+    <spmlref:hasReference typeOfReference='member'>
+      <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+    </spmlref:hasReference>
+    <spmlsearch:basePsoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </spmlsearch:query>
+</spmlsearch:SearchRequest>
+
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='failure' requestID='2012/02/08-20:38:09.662' error='noSuchIdentifier'>
+  <errorMessage>[LDAP: error code 32 - No Such Object]</errorMessage>
+</spmlsearch:searchResponse>
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/08-20:38:09.685' returnData='identifier'>
+  <psp:id ID='change_log_sequence_number:337'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/08-20:38:09.685'>
+  <psp:id ID='change_log_sequence_number:337'/>
+  <psp:pso entityName='group'>
+    <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2012/02/08-20:38:09.710' returnData='identifier'>
+  <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='failure' requestID='2012/02/08-20:38:09.710' error='noSuchIdentifier'/>

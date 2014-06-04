@@ -1,0 +1,44 @@
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/17-15:29:05.630' returnData='data'>
+  <psp:id ID='change_log_sequence_number:335'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2012/02/17-15:29:05.630'>
+  <psp:id ID='change_log_sequence_number:335'/>
+  <psp:pso entityName='group'>
+    <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    <data>
+      <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+        <dsml:value></dsml:value>
+      </dsml:attr>
+    </data>
+  </psp:pso>
+</psp:calcResponse>
+
+<spmlsearch:searchRequest xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' requestID='2012/02/17-15:29:05.714' returnData='identifier'>
+  <spmlsearch:query targetID='ldap' scope='pso'>
+    <dsml:filter xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core'>
+      <dsml:equalityMatch name='description'>
+        <dsml:value></dsml:value>
+      </dsml:equalityMatch>
+    </dsml:filter>
+    <spmlsearch:basePsoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </spmlsearch:query>
+</spmlsearch:searchRequest>
+
+<spmlsearch:searchResponse xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlsearch='urn:oasis:names:tc:SPML:2:0:search' status='success' requestID='2012/02/17-15:29:05.714'/>
+
+<modifyRequest xmlns='urn:oasis:names:tc:SPML:2:0' entityName='group' requestID='2012/02/17-15:29:05.727' returnData='identifier'>
+  <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  <modification modificationMode='replace'>
+    <dsml:modification xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description' operation='replace'>
+      <dsml:value></dsml:value>
+    </dsml:modification>
+  </modification>
+</modifyRequest>
+
+<modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/02/17-15:29:05.727'>
+  <pso>
+    <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</modifyResponse>

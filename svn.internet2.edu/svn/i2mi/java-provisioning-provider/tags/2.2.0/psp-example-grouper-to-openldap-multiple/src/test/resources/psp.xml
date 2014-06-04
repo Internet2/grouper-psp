@@ -1,0 +1,736 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Provisioning Service Provider (PSP) configuration. -->
+
+<!-- A <pso /> is a Provisioning Service Object. The authoritative and allSourceIdentifiersRef attributes control the provisioning 
+  of all source and target objects. If authoritative is "true", orphan objects will be deleted. Orphan objects exist on a target 
+  without a corresponding source object. The allSourceIdentifiersRef attribute refers to an attribute resolver definition whose 
+  values are all source identifiers applicable to this provisioned object. -->
+<!-- <pso id="entityName" authoritative="[true|false]" allSourceIdentifiersRef="attributeDefinitionID" /> -->
+
+<!-- The pso identifier refers to an attribute resolver definition. The targetId must match the id of a provisioning service 
+  target in psp-services.xml. The containerId is the string id of the pso identifier containing these objects. -->
+<!-- <identifier ref="attributeDefinitionID" targetId="targetId" containerId="containerId"/> -->
+
+<!-- The identifying attribute has two purposes : (1) to determine the schema entity of target objects returned from a lookup 
+  or search request and (2) to be converted to a query to search a target for all identifiers. If the identifying attribute 
+  is not present, the pso will be ignored during bulk requests. -->
+<!-- <identifyingAttribute name="attributeName" value="attributeValue" /> -->
+
+<!-- The alternate identifier refers to an attribute resolver definition, and is the previous (old) identifier of an object 
+  after it has been renamed. -->
+<!-- <alternateIdentifier ref="attributeDefinitionID" /> -->
+
+<!-- A provisioned attribute refers to an attribute resolver definition. -->
+<!-- <attribute name="attributeName" ref="attributeDefinitionID" /> -->
+
+<!-- References to the identifiers of other objects. -->
+<!-- <references name="attributeName"> <reference ... /> </references> -->
+
+<!-- A reference to the identifier of an object refers to an attribute resolver definition. -->
+<!-- <reference ref="attributeDefinitionID" toObject="psoId" /> -->
+
+<psp
+  xmlns="http://grouper.internet2.edu/psp"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://grouper.internet2.edu/psp classpath:/schema/psp.xsd">
+
+  <!-- Provision a grouper stem as an ldap organizational unit. -->
+  <pso
+    id="stem1"
+    authoritative="true"
+    allSourceIdentifiersRef="stemNames">
+
+    <!-- The ldap organizational unit DN. -->
+    <identifier
+      ref="stemDn"
+      targetId="ldap1"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies stem objects which exist on the target by objectclass attribute value. -->
+    <identifyingAttribute
+      name="objectclass"
+      value="organizationalUnit" />
+
+    <!-- The "old" ldap organizational unit DN calculated from stem update change log events. -->
+    <alternateIdentifier ref="stemDnAlternateChangeLog" />
+
+
+    <!-- The ldap organizational unit "objectClass" attribute. -->
+    <attribute
+      name="objectClass"
+      ref="stemObjectclass" />
+
+    <!-- The ldap organizational unit "ou" attribute. -->
+    <attribute
+      name="ou"
+      ref="stemOu" />
+
+    <!-- The ldap organizational unit "description" attribute. -->
+    <attribute
+      name="description"
+      ref="stemDescription" />
+
+    <!-- The ldap organizational unit "seeAlso" attribute. -->
+    <attribute
+      name="seeAlso"
+      ref="stemSeeAlso" />
+
+  </pso>
+
+  <!-- Provision a grouper stem as an ldap organizational unit. -->
+  <pso
+    id="stem2"
+    authoritative="true"
+    allSourceIdentifiersRef="stemNames">
+
+    <!-- The ldap organizational unit DN. -->
+    <identifier
+      ref="stemDn"
+      targetId="ldap2"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies stem objects which exist on the target by objectclass attribute value. -->
+    <identifyingAttribute
+      name="objectclass"
+      value="organizationalUnit" />
+
+    <!-- The "old" ldap organizational unit DN calculated from stem update change log events. -->
+    <alternateIdentifier ref="stemDnAlternateChangeLog" />
+
+
+    <!-- The ldap organizational unit "objectClass" attribute. -->
+    <attribute
+      name="objectClass"
+      ref="stemObjectclass" />
+
+    <!-- The ldap organizational unit "ou" attribute. -->
+    <attribute
+      name="ou"
+      ref="stemOu" />
+
+    <!-- The ldap organizational unit "description" attribute. -->
+    <attribute
+      name="description"
+      ref="stemDescription" />
+
+    <!-- The ldap organizational unit "seeAlso" attribute. -->
+    <attribute
+      name="seeAlso"
+      ref="stemSeeAlso" />
+
+  </pso>
+
+  <!-- Provision a grouper stem as an ldap organizational unit. -->
+  <pso
+    id="stem3"
+    authoritative="true"
+    allSourceIdentifiersRef="stemNames">
+
+    <!-- The ldap organizational unit DN. -->
+    <identifier
+      ref="stemDn"
+      targetId="ldap3"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies stem objects which exist on the target by objectclass attribute value. -->
+    <identifyingAttribute
+      name="objectclass"
+      value="organizationalUnit" />
+
+    <!-- The "old" ldap organizational unit DN calculated from stem update change log events. -->
+    <alternateIdentifier ref="stemDnAlternateChangeLog" />
+
+
+    <!-- The ldap organizational unit "objectClass" attribute. -->
+    <attribute
+      name="objectClass"
+      ref="stemObjectclass" />
+
+    <!-- The ldap organizational unit "ou" attribute. -->
+    <attribute
+      name="ou"
+      ref="stemOu" />
+
+    <!-- The ldap organizational unit "description" attribute. -->
+    <attribute
+      name="description"
+      ref="stemDescription" />
+
+    <!-- The ldap organizational unit "seeAlso" attribute. -->
+    <attribute
+      name="seeAlso"
+      ref="stemSeeAlso" />
+
+  </pso>
+
+  <!-- Provision a grouper group as an ldap group. -->
+  <pso
+    id="group1"
+    authoritative="true"
+    allSourceIdentifiersRef="groupNames">
+
+    <!-- The ldap group DN. -->
+    <identifier
+      ref="groupDn"
+      targetId="ldap1"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies ldap group objects which exist on the target by objectClass attribute value. -->
+    <identifyingAttribute
+      name="objectClass"
+      value="${edu.internet2.middleware.psp.groupObjectClass}" />
+
+    <!-- The "old" ldap group DN if a group has been renamed. -->
+    <alternateIdentifier ref="groupDnAlternate" />
+
+    <!-- The "old" ldap group DN calculated from group update change log events. -->
+    <alternateIdentifier ref="groupDnAlternateChangeLog" />
+
+    <!-- The ldap group "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="groupObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap group "cn" attribute. -->
+    <attribute name="cn" />
+
+    <!-- The ldap group "description" attribute. -->
+    <attribute
+      name="description"
+      ref="groupDescription" />
+
+    <!-- The ldap group "hasMember" attribute includes the names of the groups that are members of the group. -->
+    <!-- The ldap group "hasMember" attribute includes the ids of the subjects that are members of the group. -->
+    <attribute
+      name="hasMember"
+      ref="hasMember" />
+
+    <!-- The ldap group "isMemberOf" attribute consists of the names of the groups that the group is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="groupIsMemberOf" />
+
+    <!-- The ldap group "mailLocalAddress" attribute. -->
+    <attribute name="mailLocalAddress" />
+
+    <!-- The ldap group "member" attribute. -->
+    <!-- The value of emptyValue is provisioned when the group has no members. -->
+    <references
+      name="member"
+      emptyValue="">
+
+      <reference
+        ref="membersLdap"
+        toObject="member1" />
+
+      <reference
+        ref="membersGsa"
+        toObject="group1" />
+
+    </references>
+
+    <!-- The ldap group "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="groupIsMemberOf"
+        toObject="group1" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a grouper group as an ldap group. -->
+  <pso
+    id="group2"
+    authoritative="true"
+    allSourceIdentifiersRef="groupNames">
+
+    <!-- The ldap group DN. -->
+    <identifier
+      ref="groupDn"
+      targetId="ldap2"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies ldap group objects which exist on the target by objectClass attribute value. -->
+    <identifyingAttribute
+      name="objectClass"
+      value="${edu.internet2.middleware.psp.groupObjectClass}" />
+
+    <!-- The "old" ldap group DN if a group has been renamed. -->
+    <alternateIdentifier ref="groupDnAlternate" />
+
+    <!-- The "old" ldap group DN calculated from group update change log events. -->
+    <alternateIdentifier ref="groupDnAlternateChangeLog" />
+
+    <!-- The ldap group "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="groupObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap group "cn" attribute. -->
+    <attribute name="cn" />
+
+    <!-- The ldap group "description" attribute. -->
+    <attribute
+      name="description"
+      ref="groupDescription" />
+
+    <!-- The ldap group "hasMember" attribute includes the names of the groups that are members of the group. -->
+    <!-- The ldap group "hasMember" attribute includes the ids of the subjects that are members of the group. -->
+    <attribute
+      name="hasMember"
+      ref="hasMember" />
+
+    <!-- The ldap group "isMemberOf" attribute consists of the names of the groups that the group is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="groupIsMemberOf" />
+
+    <!-- The ldap group "mailLocalAddress" attribute. -->
+    <attribute name="mailLocalAddress" />
+
+    <!-- The ldap group "member" attribute. -->
+    <!-- The value of emptyValue is provisioned when the group has no members. -->
+    <references
+      name="member"
+      emptyValue="">
+
+      <reference
+        ref="membersLdap"
+        toObject="member2" />
+
+      <reference
+        ref="membersGsa"
+        toObject="group2" />
+
+    </references>
+
+    <!-- The ldap group "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="groupIsMemberOf"
+        toObject="group2" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a grouper group as an ldap group. -->
+  <pso
+    id="group3"
+    authoritative="true"
+    allSourceIdentifiersRef="groupNames">
+
+    <!-- The ldap group DN. -->
+    <identifier
+      ref="groupDn"
+      targetId="ldap3"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- Identifies ldap group objects which exist on the target by objectClass attribute value. -->
+    <identifyingAttribute
+      name="objectClass"
+      value="${edu.internet2.middleware.psp.groupObjectClass}" />
+
+    <!-- The "old" ldap group DN if a group has been renamed. -->
+    <alternateIdentifier ref="groupDnAlternate" />
+
+    <!-- The "old" ldap group DN calculated from group update change log events. -->
+    <alternateIdentifier ref="groupDnAlternateChangeLog" />
+
+    <!-- The ldap group "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="groupObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap group "cn" attribute. -->
+    <attribute name="cn" />
+
+    <!-- The ldap group "description" attribute. -->
+    <attribute
+      name="description"
+      ref="groupDescription" />
+
+    <!-- The ldap group "hasMember" attribute includes the names of the groups that are members of the group. -->
+    <!-- The ldap group "hasMember" attribute includes the ids of the subjects that are members of the group. -->
+    <attribute
+      name="hasMember"
+      ref="hasMember" />
+
+    <!-- The ldap group "isMemberOf" attribute consists of the names of the groups that the group is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="groupIsMemberOf" />
+
+    <!-- The ldap group "mailLocalAddress" attribute. -->
+    <attribute name="mailLocalAddress" />
+
+    <!-- The ldap group "member" attribute. -->
+    <!-- The value of emptyValue is provisioned when the group has no members. -->
+    <references
+      name="member"
+      emptyValue="">
+
+      <reference
+        ref="membersLdap"
+        toObject="member3" />
+
+      <reference
+        ref="membersGsa"
+        toObject="group3" />
+
+    </references>
+
+    <!-- The ldap group "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="groupIsMemberOf"
+        toObject="group3" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision the memberOf attribute for group members. -->
+  <pso
+    id="member1"
+    allSourceIdentifiersRef="memberSubjectIds">
+
+    <!-- The ldap member DN. -->
+    <identifier
+      ref="memberDn1"
+      targetId="ldap1"
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
+
+    <!-- Identifies member objects which exist on the target by objectclass attribute value. -->
+    <identifyingAttribute
+      name="objectclass"
+      value="person" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="memberIsMemberOf" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="memberIsMemberOf"
+        toObject="group1" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision the memberOf attribute for group members. -->
+  <pso
+    id="member2"
+    allSourceIdentifiersRef="memberSubjectIds">
+
+    <!-- The ldap member DN. -->
+    <identifier
+      ref="memberDn2"
+      targetId="ldap2"
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
+
+    <!-- Identifies member objects which exist on the target by objectclass attribute value. -->
+    <identifyingAttribute
+      name="objectclass"
+      value="person" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="memberIsMemberOf" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="memberIsMemberOf"
+        toObject="group2" />
+
+    </references>
+
+  </pso>
+
+  <!-- Do not provision grouper members, but enable lookup. -->
+  <pso id="member3">
+
+    <!-- The ldap member DN. -->
+    <identifier
+      ref="memberDn3"
+      targetId="ldap3"
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
+
+    <!-- Identifies member objects which exist on the target by objectclass attribute value. -->
+    <identifyingAttribute
+      name="objectclass"
+      value="person" />
+
+  </pso>
+
+  <!-- Provision a group membership triggered by the grouper change log. -->
+  <pso id="groupMembership1">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipGroupDn"
+      targetId="ldap1"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <attribute
+      name="hasMember"
+      ref="changeLogMembershipSubjectName" />
+
+    <!-- The ldap group "member" attribute. -->
+    <references name="member">
+
+      <reference
+        ref="changeLogMembershipLdapSubjectId"
+        toObject="member1" />
+
+      <reference
+        ref="changeLogMembershipGroupSubjectName"
+        toObject="group1" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a group membership triggered by the grouper change log. -->
+  <pso id="groupMembership2">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipGroupDn"
+      targetId="ldap2"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <attribute
+      name="hasMember"
+      ref="changeLogMembershipSubjectName" />
+
+    <!-- The ldap group "member" attribute. -->
+    <references name="member">
+
+      <reference
+        ref="changeLogMembershipLdapSubjectId"
+        toObject="member2" />
+
+      <reference
+        ref="changeLogMembershipGroupSubjectName"
+        toObject="group2" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a group membership triggered by the grouper change log. -->
+  <pso id="groupMembership3">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipGroupDn"
+      targetId="ldap3"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <attribute
+      name="hasMember"
+      ref="changeLogMembershipSubjectName" />
+
+    <!-- The ldap group "member" attribute. -->
+    <references name="member">
+
+      <reference
+        ref="changeLogMembershipLdapSubjectId"
+        toObject="member3" />
+
+      <reference
+        ref="changeLogMembershipGroupSubjectName"
+        toObject="group3" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a member's membership triggered by the grouper change log. -->
+  <pso id="memberMembership1">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipMemberDn"
+      targetId="ldap1"
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="changeLogMembershipGroupName" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="changeLogMembershipGroupName"
+        toObject="group1" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a member's membership triggered by the grouper change log. -->
+  <pso id="memberMembership2">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipMemberDn"
+      targetId="ldap2"
+      containerId="${edu.internet2.middleware.psp.peopleBaseDn}" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="changeLogMembershipGroupName" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="changeLogMembershipGroupName"
+        toObject="group2" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a group's membership triggered by the grouper change log. -->
+  <pso id="groupMemberMembership1">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipGroupMemberDn"
+      targetId="ldap1"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="changeLogMembershipGroupName" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="changeLogMembershipGroupName"
+        toObject="group1" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a group's membership triggered by the grouper change log. -->
+  <pso id="groupMemberMembership2">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipGroupMemberDn"
+      targetId="ldap2"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="changeLogMembershipGroupName" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="changeLogMembershipGroupName"
+        toObject="group2" />
+
+    </references>
+
+  </pso>
+
+  <!-- Provision a group's membership triggered by the grouper change log. -->
+  <pso id="groupMemberMembership3">
+
+    <!-- The ldap group DN calculated from membership change log events. -->
+    <identifier
+      ref="changeLogMembershipGroupMemberDn"
+      targetId="ldap3"
+      containerId="${edu.internet2.middleware.psp.groupsBaseDn}" />
+
+    <!-- The ldap member "objectClass" attribute. No existing values will be deleted since retainAll is true. -->
+    <attribute
+      name="objectClass"
+      ref="memberObjectclass"
+      retainAll="true" />
+
+    <!-- The ldap member "isMemberOf" attribute consisting of the names of the groups that this member is a member of. -->
+    <attribute
+      name="isMemberOf"
+      ref="changeLogMembershipGroupName" />
+
+    <!-- The ldap member "memberOf" attribute. -->
+    <references name="memberOf">
+
+      <reference
+        ref="changeLogMembershipGroupName"
+        toObject="group3" />
+
+    </references>
+
+  </pso>
+
+</psp>
+ 
+
+

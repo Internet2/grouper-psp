@@ -1,0 +1,12 @@
+dn: ou=org,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: organizationalUnit
+description: people
+ou: org
+
+dn: cn=test.subject.10,ou=org,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.10
+sn: subject.10

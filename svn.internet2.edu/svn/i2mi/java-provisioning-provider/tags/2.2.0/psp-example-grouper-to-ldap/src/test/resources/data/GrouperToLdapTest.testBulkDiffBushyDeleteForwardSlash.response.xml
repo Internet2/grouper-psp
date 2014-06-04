@@ -1,0 +1,26 @@
+<psp:bulkDiffResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:diffResponse status='success' requestID='2011/10/18-19:38:35.330_Q37VPY1J'>
+    <psp:synchronizedResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+      <psp:psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </psp:synchronizedResponse>
+    <psp:id ID='edu'/>
+  </psp:diffResponse>
+  <psp:diffResponse>
+    <deleteRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='REQUESTID_TEST' recursive='false'>
+      <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </deleteRequest>
+    <psp:id ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
+  </psp:diffResponse>
+  <psp:diffResponse>
+    <deleteRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='REQUESTID_TEST' recursive='false'>
+      <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </deleteRequest>
+    <psp:id ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
+  </psp:diffResponse>
+  <psp:diffResponse>
+    <deleteRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='REQUESTID_TEST' recursive='false'>
+      <psoID ID='cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+    </deleteRequest>
+    <psp:id ID='cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}'/>
+  </psp:diffResponse>
+</psp:bulkDiffResponse>

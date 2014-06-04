@@ -1,0 +1,324 @@
+<psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.276'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.365'>
+      <pso entityName='stem1'>
+        <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>organizationalUnit</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
+            <dsml:value>edu</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>The edu stem.</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='seeAlso'>
+            <dsml:value>dc=example,dc=edu</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.379'>
+      <pso entityName='stem2'>
+        <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>organizationalUnit</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
+            <dsml:value>edu</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>The edu stem.</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='seeAlso'>
+            <dsml:value>dc=example,dc=edu</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.389'>
+      <pso entityName='stem3'>
+        <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap3'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>organizationalUnit</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
+            <dsml:value>edu</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>The edu stem.</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='seeAlso'>
+            <dsml:value>dc=example,dc=edu</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.463'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.685'>
+      <pso entityName='group1'>
+        <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>inetLocalMailRecipient</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupA</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>test.subject.0</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='mailLocalAddress'>
+            <dsml:value>mail@example.edu</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap1'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.694'>
+      <pso entityName='group2'>
+        <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>inetLocalMailRecipient</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupA</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>test.subject.0</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='mailLocalAddress'>
+            <dsml:value>mail@example.edu</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap2'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.702'>
+      <pso entityName='group3'>
+        <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap3'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>inetLocalMailRecipient</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupA</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>test.subject.0</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='mailLocalAddress'>
+            <dsml:value>mail@example.edu</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap3'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:groupA'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.760'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.871'>
+      <pso entityName='group1'>
+        <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>descriptionB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap1'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.878'>
+      <pso entityName='group2'>
+        <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>descriptionB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap2'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:33.884'>
+      <pso entityName='group3'>
+        <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap3'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>descriptionB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='hasMember'>
+            <dsml:value>test.subject.1</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap3'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:groupB'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:33.953'>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.042'>
+      <pso entityName='member1'>
+        <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap1'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+            <dsml:value>edu:groupA</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </modifyResponse>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.050'>
+      <pso entityName='member2'>
+        <psoID ID='uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap2'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+            <dsml:value>edu:groupA</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </modifyResponse>
+    <psp:id ID='test.subject.0'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='2012/06/25-21:06:34.089'>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.159'>
+      <pso entityName='member1'>
+        <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap1'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+            <dsml:value>edu:groupB</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap1'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </modifyResponse>
+    <modifyResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2012/06/25-21:06:34.167'>
+      <pso entityName='member2'>
+        <psoID ID='uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap2'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>eduMember</dsml:value>
+            <dsml:value>inetOrgPerson</dsml:value>
+            <dsml:value>organizationalPerson</dsml:value>
+            <dsml:value>person</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='isMemberOf'>
+            <dsml:value>edu:groupB</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='memberOf'>
+            <spmlref:toPsoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap2'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </modifyResponse>
+    <psp:id ID='test.subject.1'/>
+  </psp:syncResponse>
+</psp:bulkSyncResponse>

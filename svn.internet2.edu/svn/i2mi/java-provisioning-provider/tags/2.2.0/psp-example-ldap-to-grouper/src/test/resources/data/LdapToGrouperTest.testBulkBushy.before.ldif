@@ -1,0 +1,68 @@
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: organizationalUnit
+ou: edu
+
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupA
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupB
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+description: descriptionB
+
+dn: ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: organizationalUnit
+ou: courses
+
+dn: ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: organizationalUnit
+ou: fall
+
+dn: ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: organizationalUnit
+ou: spring
+
+dn: cn=courseA,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: courseA
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=courseB,ou=fall,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: courseB
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=courseA,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: courseA
+member: cn=test.subject.2,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=test.subject.3,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=courseB,ou=spring,ou=courses,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: courseB
+member: cn=test.subject.3,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=groupC,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupC
+member: cn=groupD,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+
+dn: cn=groupD,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupD
+member: cn=groupC,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}

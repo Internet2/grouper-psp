@@ -1,0 +1,27 @@
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2011/10/28-10:59:12.545_Q4LNKILO' returnData='identifier'>
+  <psp:id ID='change_log_sequence_number:285'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='2011/10/28-10:59:12.545_Q4LNKILO'>
+  <psp:id ID='change_log_sequence_number:285'/>
+  <psp:pso entityName='stem'>
+    <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </psp:pso>
+</psp:calcResponse>
+
+<lookupRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2011/10/28-10:59:12.585_Q4LNKILP' returnData='identifier'>
+  <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</lookupRequest>
+
+<lookupResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2011/10/28-10:59:12.585_Q4LNKILP'>
+  <pso entityName='stem'>
+    <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+  </pso>
+</lookupResponse>
+
+<deleteRequest xmlns='urn:oasis:names:tc:SPML:2:0' requestID='2011/10/28-10:59:12.600_Q4LNKILQ' recursive='false'>
+  <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+</deleteRequest>
+
+<deleteResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='2011/10/28-10:59:12.600_Q4LNKILQ'/>

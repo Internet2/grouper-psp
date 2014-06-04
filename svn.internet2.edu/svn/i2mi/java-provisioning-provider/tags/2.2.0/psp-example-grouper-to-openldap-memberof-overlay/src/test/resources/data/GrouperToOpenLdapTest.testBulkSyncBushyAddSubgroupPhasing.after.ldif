@@ -1,0 +1,55 @@
+dn: ${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: organizationalUnit
+description: people
+ou: people
+
+dn: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: person
+objectclass: organizationalPerson
+objectclass: eduMember
+objectclass: inetOrgPerson
+cn: test.subject.0
+sn: subject.0
+uid: test.subject.0
+isMemberOf: edu:groupA
+
+dn: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: person
+objectclass: organizationalPerson
+objectclass: eduMember
+objectclass: inetOrgPerson
+cn: test.subject.1
+sn: subject.1
+uid: test.subject.1
+isMemberOf: edu:groupA
+isMemberOf: edu:groupB
+
+dn: ${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: organizationalUnit
+ou: groups
+
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: organizationalUnit
+ou: edu
+
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectClass: eduMember
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupA
+hasMember: my name is test.subject.0
+hasMember: my name is test.subject.1
+hasMember: edu:groupB
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+
+dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectClass: eduMember
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupB
+hasMember: my name is test.subject.1
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+description: descriptionB
+isMemberOf: edu:groupA

@@ -1,0 +1,25 @@
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: organizationalUnit
+ou: edu
+description: The edu stem.
+
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupA
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: group/F
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupB
+member: cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+description: descriptionB

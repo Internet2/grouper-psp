@@ -1,0 +1,11 @@
+dn: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+changetype: modify
+add: objectClass
+objectClass: eduMember
+-
+add: isMemberOf
+isMemberOf: edu:groupA
+-
+add: memberOf
+memberOf: cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}
+-

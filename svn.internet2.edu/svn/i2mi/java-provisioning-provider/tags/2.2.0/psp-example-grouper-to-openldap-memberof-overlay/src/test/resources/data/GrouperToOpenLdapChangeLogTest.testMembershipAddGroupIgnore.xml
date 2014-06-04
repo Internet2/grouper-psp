@@ -1,0 +1,9 @@
+
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='2012/02/22-23:34:02.410' returnData='everything'>
+  <psp:id ID='change_log_sequence_number:358'/>
+</psp:calcRequest>
+
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='failure' requestID='2012/02/22-23:34:02.410' error='noSuchIdentifier'>
+  <errorMessage>Unable to calculate provisioned object.</errorMessage>
+  <psp:id ID='change_log_sequence_number:358'/>
+</psp:calcResponse>

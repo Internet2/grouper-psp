@@ -1,0 +1,5 @@
+<psp:calcRequest xmlns:psp='http://grouper.internet2.edu/psp' requestID='REQUESTID_TEST' executionMode='synchronous' returnData='everything'>
+  <psp:id ID='id'/>
+  <psp:schemaEntity targetID='target1'/>
+  <psp:schemaEntity targetID='target2'/>
+</psp:calcRequest>

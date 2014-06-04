@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AttributeResolver
+  xmlns="urn:mace:shibboleth:2.0:resolver"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:resolver="urn:mace:shibboleth:2.0:resolver"
+  xmlns:ad="urn:mace:shibboleth:2.0:resolver:ad"
+  xmlns:dc="urn:mace:shibboleth:2.0:resolver:dc"
+  xmlns:grouper="http://grouper.internet2.edu/shibboleth/2.0"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:psp-grouper-ldap="http://grouper.internet2.edu/psp-grouper-ldap"
+  xmlns:psp-grouper-source="http://grouper.internet2.edu/psp-grouper-source"
+  xsi:schemaLocation="
+   urn:mace:shibboleth:2.0:resolver classpath:/schema/shibboleth-2.0-attribute-resolver.xsd
+   urn:mace:shibboleth:2.0:resolver:dc classpath:/schema/shibboleth-2.0-attribute-resolver-dc.xsd
+   urn:mace:shibboleth:2.0:resolver:ad classpath:/schema/shibboleth-2.0-attribute-resolver-ad.xsd
+   http://grouper.internet2.edu/shibboleth/2.0 classpath:/schema/shibboleth-2.0-grouper.xsd
+   http://grouper.internet2.edu/psp classpath:/schema/psp.xsd
+   http://grouper.internet2.edu/psp-grouper-ldap classpath:/schema/psp-grouper-ldap.xsd
+   http://grouper.internet2.edu/psp-grouper-source classpath:/schema/psp-grouper-source.xsd">
+
+  <resolver:DataConnector
+    id="GroupDataConnector"
+    xsi:type="grouper:GroupDataConnector">
+    <grouper:Filter xsi:type="grouper:AND">
+      <grouper:Filter
+        xsi:type="grouper:GroupExactAttribute"
+        name="Send To"
+        value="ldap" />
+      <grouper:Filter
+        xsi:type="grouper:GroupExactAttribute"
+        name="Type"
+        value="LDAPSync" />
+    </grouper:Filter>
+    <grouper:Attribute id="members" />
+    <grouper:Attribute id="groups" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector
+    id="MemberDataConnector"
+    xsi:type="grouper:MemberDataConnector">
+    <grouper:Attribute
+      id="dn"
+      source="ldap" />
+    <grouper:Attribute id="groups" />
+  </resolver:DataConnector>
+
+  <resolver:DataConnector
+    id="AllGroupNamesConnector"
+    xsi:type="psp-grouper-source:AllGroupNamesDataConnector">
+    <grouper:Filter xsi:type="grouper:AND">
+      <grouper:Filter
+        xsi:type="grouper:GroupExactAttribute"
+        name="Send To"
+        value="ldap" />
+      <grouper:Filter
+        xsi:type="grouper:GroupExactAttribute"
+        name="Type"
+        value="LDAPSync" />
+    </grouper:Filter>
+  </resolver:DataConnector>
+
+  <resolver:AttributeDefinition
+    id="groupNames"
+    xsi:type="ad:Simple">
+    <resolver:Dependency ref="AllGroupNamesConnector" />
+  </resolver:AttributeDefinition>
+
+  <resolver:DataConnector
+    id="AllMemberSubjectIdsConnector"
+    xsi:type="psp-grouper-source:AllMemberSubjectIdsDataConnector">
+    <grouper:Filter
+      xsi:type="grouper:MemberSource"
+      sourceId="ldap" />
+  </resolver:DataConnector>
+
+  <resolver:AttributeDefinition
+    id="memberSubjectIds"
+    xsi:type="ad:Simple">
+    <resolver:Dependency ref="AllMemberSubjectIdsConnector" />
+  </resolver:AttributeDefinition>
+
+  <resolver:DataConnector
+    id="StaticDataConnector"
+    xsi:type="dc:Static">
+    <dc:Attribute id="staticGroupObjectclass">
+      <dc:Value>top</dc:Value>
+      <dc:Value>groupOfNames</dc:Value>
+      <dc:Value>eduMember</dc:Value>
+    </dc:Attribute>
+    <dc:Attribute id="memberObjectclass">
+      <dc:Value>eduMember</dc:Value>
+    </dc:Attribute>
+  </resolver:DataConnector>
+
+  <!-- Group identifier and attributes. -->
+
+  <!-- The LDAP DN of a group. For example, "cn=groupExtension,ou=stem,ou=groups,dc=example,dc=edu". -->
+  <resolver:AttributeDefinition
+    id="groupDn"
+    xsi:type="psp:PSOIdentifier">
+    <resolver:Dependency ref="groupDnsFromContainerAttribute" />
+  </resolver:AttributeDefinition>
+
+  <resolver:AttributeDefinition
+    id="groupDnsFromContainerAttribute"
+    xsi:type="ad:Script"
+    dependencyOnly="true">
+    <resolver:Dependency ref="GroupDataConnector" />
+    <resolver:Dependency ref="cn" />
+    <ad:Script><![CDATA[
+        // Import Shibboleth attribute provider.
+        importPackage(Packages.edu.internet2.middleware.shibboleth.common.attribute.provider);
+        
+        // Import logging provider.
+        importPackage(Packages.org.slf4j);
+
+        // The logger.
+        logger = LoggerFactory.getLogger("edu.internet2.middleware.shibboleth.resolver.Script.scriptTest");
+                
+        // Create the attribute to be returned.
+        groupDnsFromContainerAttribute = new BasicAttribute("groupDnsFromContainerAttribute");
+                      
+        // If the group "Containers" attribute exists
+        if (typeof Containers != "undefined" && Containers != null) {
+                    
+            // For every value of "Containers"
+            for ( i = 0; i < Containers.getValues().size(); i++ ){
+                
+                // A single container value.
+                containerValue = Containers.getValues().get(i);                
+                
+                // Split the container value by semicolon
+                splitContainers = containerValue.split(";");
+
+                // For every container, compute the resulting dn.                            
+                for ( j = 0; j < splitContainers.length; j++ ){
+
+                    // A container.
+                    container = splitContainers[j];
+
+                    // Compute the ldap dn.
+                    dn = "cn=" + cn.getValues().get(0) + "," + container;
+                    
+                    logger.info("Container DN : '" + dn + "'");
+                    
+                    // Return the dn.
+                    groupDnsFromContainerAttribute.getValues().add(dn);
+               }              
+            }            
+        }                       
+    ]]></ad:Script>
+  </resolver:AttributeDefinition>
+
+  <resolver:AttributeDefinition
+    id="staticGroupObjectclass"
+    xsi:type="ad:Simple">
+    <resolver:Dependency ref="StaticDataConnector" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the group "cn" attribute is the group displayExtension. -->
+  <resolver:AttributeDefinition
+    id="cn"
+    xsi:type="ad:Simple"
+    sourceAttributeID="displayExtension">
+    <resolver:Dependency ref="GroupDataConnector" />
+  </resolver:AttributeDefinition>
+
+  <!-- The value of the group "description" attribute is the group description. -->
+  <resolver:AttributeDefinition
+    id="description"
+    xsi:type="ad:Simple">
+    <resolver:Dependency ref="GroupDataConnector" />
+  </resolver:AttributeDefinition>
+
+  <!-- The values of the group "hasMember" attribute is either the names of the groups or the uids of the subjects which 
+    are members of the group. -->
+  <resolver:AttributeDefinition
+    id="hasMember"
+    xsi:type="grouper:Member"
+    sourceAttributeID="members">
+    <resolver:Dependency ref="GroupDataConnector" />
+    <grouper:Attribute
+      id="uid"
+      source="ldap" />
+    <grouper:Attribute
+      id="name"
+      source="g:gsa" />
+  </resolver:AttributeDefinition>
+
+  <!-- The values of the "membersLdap" attribute are the subject ids of group members from the "ldap" source. -->
+  <resolver:AttributeDefinition
+    id="membersLdap"
+    xsi:type="grouper:Member"
+    sourceAttributeID="members">
+    <resolver:Dependency ref="GroupDataConnector" />
+    <!-- The values of the "id" attribute are the identifiers of subjects whose source id is "ldap". -->
+    <grouper:Attribute
+      id="id"
+      source="ldap" />
+  </resolver:AttributeDefinition>
+
+  <!-- The values of the "membersGsa" attribute are the names of group members which are grouper groups. -->
+  <resolver:AttributeDefinition
+    id="membersGsa"
+    xsi:type="grouper:Member"
+    sourceAttributeID="members">
+    <resolver:Dependency ref="GroupDataConnector" />
+    <!-- The values of the "name" attribute are the names of groups whose source is "g:gsa". -->
+    <grouper:Attribute
+      id="name"
+      source="g:gsa" />
+  </resolver:AttributeDefinition>
+
+  <!-- The LDAP DN of a member. The value of this attribute is the dn of subjects whose source id is ldap. -->
+  <resolver:AttributeDefinition
+    id="memberDn"
+    xsi:type="psp:PSOIdentifier"
+    sourceAttributeID="dn">
+    <resolver:Dependency ref="MemberDataConnector" />
+  </resolver:AttributeDefinition>
+
+  <!-- The member objectclass attribute. -->
+  <resolver:AttributeDefinition
+    id="memberObjectclass"
+    xsi:type="ad:Simple">
+    <resolver:Dependency ref="StaticDataConnector" />
+  </resolver:AttributeDefinition>
+
+  <!-- The values of the member "memberIsMemberOf" attribute are the names of the groups that the member is a member of. -->
+  <resolver:AttributeDefinition
+    id="memberIsMemberOf"
+    xsi:type="grouper:Group"
+    sourceAttributeID="groups">
+    <resolver:Dependency ref="MemberDataConnector" />
+    <grouper:Attribute id="name" />
+  </resolver:AttributeDefinition>
+
+</AttributeResolver>

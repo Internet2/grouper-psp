@@ -1,0 +1,7 @@
+dn: cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: groupOfNames
+objectClass: eduMember
+cn: edu:groupA
+hasMember: my name is test.subject.0
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}

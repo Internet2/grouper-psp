@@ -1,0 +1,6 @@
+dn: cn=groupB,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectclass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupB
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+description: descriptionB

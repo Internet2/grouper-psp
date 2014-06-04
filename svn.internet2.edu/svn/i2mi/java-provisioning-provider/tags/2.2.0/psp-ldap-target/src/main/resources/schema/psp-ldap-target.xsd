@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+  xmlns:psp="http://grouper.internet2.edu/psp"
+  xmlns:psp-ldap-target="http://grouper.internet2.edu/psp-ldap-target"
+  targetNamespace="http://grouper.internet2.edu/psp-ldap-target"
+  elementFormDefault="qualified">
+
+  <import namespace="http://grouper.internet2.edu/psp" schemaLocation="classpath:/schema/psp.xsd" />
+
+  <annotation>
+    <documentation>TODO</documentation>
+  </annotation>
+
+  <complexType name="LdapTarget">
+    <complexContent>
+      <extension base="psp:BaseSpmlProviderType">
+        <attribute name="ldapPoolId" type="string" use="required">
+          <annotation>
+            <documentation>The id of the spring ldap pool bean.</documentation>
+          </annotation>
+        </attribute>
+        <attribute name="ldapPoolIdSource" use="required">
+          <annotation>
+            <documentation>The source of the ldap pool, either spring or the grouper ldap source adapter.</documentation>
+          </annotation>
+          <simpleType>
+            <restriction base="string">
+              <enumeration value="grouper" />
+              <enumeration value="spring" />
+            </restriction>
+          </simpleType>
+        </attribute>
+      </extension>
+    </complexContent>
+  </complexType>
+
+</schema>

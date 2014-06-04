@@ -1,0 +1,11 @@
+<psp:calcResponse xmlns:psp='http://grouper.internet2.edu/psp'>
+  <psp:id ID='id'/>
+  <psp:pso>
+    <psoID ID='id1' targetID='target1'/>
+    <data attr1='value1'/>
+  </psp:pso>
+  <psp:pso>
+    <psoID ID='id2' targetID='target1'/>
+    <data attr2='value2'/>
+  </psp:pso>
+</psp:calcResponse>

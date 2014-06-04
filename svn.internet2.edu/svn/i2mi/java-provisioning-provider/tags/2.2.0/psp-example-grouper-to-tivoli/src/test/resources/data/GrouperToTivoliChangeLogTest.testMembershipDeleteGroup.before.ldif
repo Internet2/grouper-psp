@@ -1,0 +1,22 @@
+dn: cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+objectClass: eduMember
+cn: edu:groupA
+hasMember: my name is test.subject.0
+isMemberOf: edu:groupB
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+memberOf: cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}
+
+dn: cn=edu:groupB,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: eduMember
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: edu:groupB
+description: descriptionB
+hasMember: my name is test.subject.0
+hasMember: my name is test.subject.1
+hasMember: edu:groupA
+member: uid=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+member: uid=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=edu:groupA,${edu.internet2.middleware.psp.groupsBaseDn}
