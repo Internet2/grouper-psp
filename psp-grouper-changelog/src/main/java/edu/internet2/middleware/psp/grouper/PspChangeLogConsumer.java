@@ -366,7 +366,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
 
     /**
      * If the underlying {@link Psp} has not been initialized, instantiate the {@link Psp}. Use the configuration
-     * directory from the 'changeLog.consumer.ldappcng.confDir' property. If this property has not been set, then
+     * directory from the 'changeLog.consumer.psp.confDir' property. If this property has not been set, then
      * configuration resources on the classpath will be used.
      * 
      * @throws ResourceException if the configuration cannot be loaded
