@@ -44,7 +44,7 @@
   <properties>
     <!-- location of grouper api distribution -->
     <grouper.dir>${settings.grouper-trunk}</grouper.dir>
-    <grouper.version>2.2.0-SNAPSHOT</grouper.version>
+    <grouper.version>2.2.1</grouper.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.source>1.6</maven.compiler.source>
