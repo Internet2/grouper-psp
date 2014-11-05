@@ -76,7 +76,7 @@ public abstract class BaseGrouperToLdapChangeLogTest extends BaseGrouperLdapTest
 
         super.setUp();
 
-        GrouperLoaderConfig.testConfig.put("changeLog.consumer.psp.class", PspChangeLogConsumer.class.getName());
+        GrouperLoaderConfig.retrieveConfig().properties().put("changeLog.consumer.psp.class", PspChangeLogConsumer.class.getName());
         // GrouperLoaderConfig.testConfig.put("changeLog.consumer.ldappcng.quartzCron", "0 0 8 * * ?");
         // GrouperLoaderConfig.testConfig.put("changeLog.consumer.ldappcng.confDir",
 
