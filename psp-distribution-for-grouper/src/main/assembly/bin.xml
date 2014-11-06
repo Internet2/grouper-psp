@@ -27,6 +27,8 @@
         <exclude>net.sf.ehcache:ehcache-core</exclude>
         <exclude>org.slf4j:slf4j-api</exclude>
         <exclude>org.slf4j:slf4j-log4j12</exclude>
+        <exclude>edu.vt.middleware:vt-ldap</exclude>
+        <exclude>org.hibernate:hibernate-core</exclude>
       </excludes>
 
       <useProjectArtifact>false</useProjectArtifact>
