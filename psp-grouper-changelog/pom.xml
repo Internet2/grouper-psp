@@ -58,7 +58,6 @@
       <artifactId>hibernate-core</artifactId>
       <version>3.6.7.Final</version>
       <type>jar</type>
-	  <scope>provided</scope>
     </dependency>
   </dependencies>
 
