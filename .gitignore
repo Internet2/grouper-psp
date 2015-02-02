@@ -13,3 +13,5 @@
 /psp-distribution/target/
 /psp-distribution-for-grouper/target/
 */target
+*.iml
+.idea

@@ -99,6 +99,12 @@
         <groupId>edu.internet2.middleware.grouper</groupId>
         <artifactId>grouper</artifactId>
         <version>${grouper.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+            </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>edu.internet2.middleware.grouper</groupId>
@@ -109,6 +115,12 @@
         <groupId>edu.internet2.middleware.grouper</groupId>
         <artifactId>subject</artifactId>
         <version>${grouper.version}</version>
+        <exclusions>
+          <exclusion>
+              <groupId>javax.mail</groupId>
+              <artifactId>mail</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
 
       <dependency>
@@ -120,6 +132,10 @@
           <exclusion>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
           </exclusion>
           <exclusion>
             <groupId>ch.qos.logback</groupId>
@@ -155,6 +171,12 @@
         <version>${grouper.version}</version>
         <scope>test</scope>
         <type>test-jar</type>
+        <exclusions>
+          <exclusion>
+              <groupId>javax.mail</groupId>
+              <artifactId>mail</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>edu.internet2.middleware.grouper</groupId>
