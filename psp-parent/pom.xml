@@ -143,7 +143,9 @@
       <dependency>
         <groupId>org.openspml</groupId>
         <artifactId>openspml2</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
+        <scope>system</scope>
+        <systemPath>${basedir}/../psp-parent/lib/openspml2-1.0.jar</systemPath>
       </dependency>
 
       <!-- Test Dependencies -->
@@ -173,6 +175,13 @@
         <artifactId>shared-ldap</artifactId>
         <version>0.9.15</version>
         <scope>test</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>org.hibernate</groupId>
+        <artifactId>hibernate-core</artifactId>
+        <version>3.6.7.Final</version>
+        <type>jar</type>
       </dependency>
 
     </dependencies>
