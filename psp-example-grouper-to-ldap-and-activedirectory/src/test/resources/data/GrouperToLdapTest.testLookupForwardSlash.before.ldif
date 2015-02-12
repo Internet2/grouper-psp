@@ -1,0 +1,9 @@
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: organizationalUnit
+ou: edu
+
+dn: cn=group/F,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectClass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: group/F
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}

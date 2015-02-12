@@ -1,0 +1,6 @@
+dn: cn=test subject a,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test subject a
+sn: subject.0

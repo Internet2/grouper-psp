@@ -1,0 +1,20 @@
+<psp:bulkCalcResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:calcResponse status='success' requestID='REQUEST_ID'>
+    <psp:id ID='edu'/>
+    <psp:pso entityName='stem'>
+      <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+      <data>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+          <dsml:value>top</dsml:value>
+          <dsml:value>organizationalUnit</dsml:value>
+        </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
+          <dsml:value>edu</dsml:value>
+        </dsml:attr>
+        <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+          <dsml:value>The edu stem.</dsml:value>
+        </dsml:attr>
+      </data>
+    </psp:pso>
+  </psp:calcResponse>
+</psp:bulkCalcResponse>

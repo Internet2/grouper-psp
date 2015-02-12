@@ -25,6 +25,7 @@
     <module>../psp-grouper-changelog</module>
     <module>../psp-example-grouper-to-active-directory</module>
     <module>../psp-example-grouper-to-ldap</module>
+    <module>../psp-example-grouper-to-ldap-and-activedirectory</module>
     <module>../psp-example-grouper-to-openldap</module>
     <module>../psp-example-grouper-to-openldap-memberof-overlay</module>
     <module>../psp-example-grouper-to-openldap-multiple</module>

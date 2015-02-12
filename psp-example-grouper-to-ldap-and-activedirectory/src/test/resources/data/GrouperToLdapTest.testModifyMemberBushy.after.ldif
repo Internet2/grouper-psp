@@ -1,0 +1,101 @@
+dn: ${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectClass: organizationalUnit
+ou: groups
+
+dn: ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectClass: organizationalUnit
+ou: edu
+
+dn: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupA
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+
+dn: cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+objectclass: top
+objectClass: ${edu.internet2.middleware.psp.groupObjectClass}
+cn: groupB
+member: cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}
+member: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+member: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+description: descriptionB
+
+dn: ${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: organizationalUnit
+description: people
+ou: people
+
+dn: cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.0
+sn: subject.0
+
+dn: cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.1
+sn: subject.1
+
+dn: cn=test.subject.2,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.2
+sn: subject.2
+
+dn: cn=test.subject.3,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.3
+sn: subject.3
+
+dn: cn=test.subject.4,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.4
+sn: subject.4
+
+dn: cn=test.subject.5,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.5
+sn: subject.5
+
+dn: cn=test.subject.6,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.6
+sn: subject.6
+
+dn: cn=test.subject.7,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.7
+sn: subject.7
+
+dn: cn=test.subject.8,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.8
+sn: subject.8
+
+dn: cn=test.subject.9,${edu.internet2.middleware.psp.peopleBaseDn}
+objectclass: top
+objectclass: person
+objectclass: organizationalPerson
+cn: test.subject.9
+sn: subject.9
+

@@ -1,0 +1,69 @@
+<psp:bulkSyncResponse xmlns:psp='http://grouper.internet2.edu/psp' status='success' requestID='REQUESTID_TEST'>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
+      <pso entityName='stem'>
+        <psoID ID='ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>organizationalUnit</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='ou'>
+            <dsml:value>edu</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>The edu stem.</dsml:value>
+          </dsml:attr>
+        </data>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
+      <pso entityName='group'>
+        <psoID ID='cn=groupA,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupA</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='cn=test.subject.0,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:groupA'/>
+  </psp:syncResponse>
+  <psp:syncResponse status='success' requestID='REQUESTID_TEST'>
+    <addResponse xmlns='urn:oasis:names:tc:SPML:2:0' status='success' requestID='REQUESTID_TEST'>
+      <pso entityName='group'>
+        <psoID ID='cn=groupB,ou=edu,${edu.internet2.middleware.psp.groupsBaseDn}' targetID='ldap'/>
+        <data>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='objectClass'>
+            <dsml:value>${edu.internet2.middleware.psp.groupObjectClass}</dsml:value>
+            <dsml:value>top</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='cn'>
+            <dsml:value>groupB</dsml:value>
+          </dsml:attr>
+          <dsml:attr xmlns:dsml='urn:oasis:names:tc:DSML:2:0:core' name='description'>
+            <dsml:value>descriptionB</dsml:value>
+          </dsml:attr>
+        </data>
+        <capabilityData mustUnderstand='true' capabilityURI='urn:oasis:names:tc:SPML:2:0:reference'>
+          <spmlref:reference xmlns='urn:oasis:names:tc:SPML:2:0' xmlns:spmlref='urn:oasis:names:tc:SPML:2:0:reference' typeOfReference='member'>
+            <spmlref:toPsoID ID='cn=test.subject.1,${edu.internet2.middleware.psp.peopleBaseDn}' targetID='ldap'/>
+          </spmlref:reference>
+        </capabilityData>
+      </pso>
+    </addResponse>
+    <psp:id ID='edu:groupB'/>
+  </psp:syncResponse>
+</psp:bulkSyncResponse>
