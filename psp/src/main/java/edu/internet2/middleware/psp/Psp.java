@@ -114,8 +114,10 @@ import edu.internet2.middleware.psp.util.PSPUtil;
 import edu.internet2.middleware.shibboleth.common.attribute.AttributeAuthority;
 import edu.internet2.middleware.shibboleth.common.attribute.AttributeRequestException;
 import edu.internet2.middleware.shibboleth.common.attribute.BaseAttribute;
+import edu.internet2.middleware.shibboleth.common.attribute.resolver.AttributeResolutionException;
 import edu.internet2.middleware.shibboleth.common.profile.provider.BaseSAMLProfileRequestContext;
 import edu.internet2.middleware.shibboleth.common.service.ServiceException;
+import javax.script.ScriptException;
 
 /**
  * Represents an (incomplete) spmlv2 provisioning service provider supporting calc, diff, and sync operations whose data
@@ -1080,7 +1082,15 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
             // resolve attributes
             LOG.debug("PSP '{}' - Calc {} Resolving attributes '{}'.",
                     new Object[] {getId(), calcRequest, attributeIds});
-            Map<String, BaseAttribute<?>> attributes = getAttributeAuthority().getAttributes(attributeRequestContext);
+            Map<String, BaseAttribute<?>> attributes = null;
+			try{
+				attributes = getAttributeAuthority().getAttributes(attributeRequestContext);
+			}catch(AttributeResolutionException are){
+				if(are.getCause() instanceof ScriptException){
+					LOG.error("PSP '{}' - You are using Java {}.  The PSP does NOT support Java versions greater than 1.7. Information on how to work-around this issue: https://wiki.shibboleth.net/confluence/display/SHIB2/IdPJava1.8", new Object[] {getId(),System.getProperty("java.version")});
+				}
+				throw are; //re-throw this exception 
+			}
             LOG.debug("PSP '{}' - Calc {} Resolved attributes '{}'.",
                     new Object[] {getId(), calcRequest, attributes.keySet()});
             pspContext.setAttributes(attributes);
