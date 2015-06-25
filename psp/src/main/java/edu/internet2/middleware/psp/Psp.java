@@ -118,6 +118,7 @@ import edu.internet2.middleware.shibboleth.common.attribute.resolver.AttributeRe
 import edu.internet2.middleware.shibboleth.common.profile.provider.BaseSAMLProfileRequestContext;
 import edu.internet2.middleware.shibboleth.common.service.ServiceException;
 import javax.script.ScriptException;
+import org.springframework.core.JdkVersion;
 
 /**
  * Represents an (incomplete) spmlv2 provisioning service provider supporting calc, diff, and sync operations whose data
@@ -1087,7 +1088,10 @@ public class Psp extends BaseSpmlProvider implements SpmlProvider {
 				attributes = getAttributeAuthority().getAttributes(attributeRequestContext);
 			}catch(AttributeResolutionException are){
 				if(are.getCause() instanceof ScriptException){
-					LOG.error("PSP '{}' - You are using Java {}.  The PSP does NOT support Java versions greater than 1.7. Information on how to work-around this issue: https://wiki.shibboleth.net/confluence/display/SHIB2/IdPJava1.8", new Object[] {getId(),System.getProperty("java.version")});
+					if(System.getProperty("java.version").contains("1.8.")){
+						LOG.error("PSP '{}' - You are using Java {}.  The PSP does NOT support Java versions greater than 1.7. Information on how to work-around this issue: https://wiki.shibboleth.net/confluence/display/SHIB2/IdPJava1.8", new Object[] {getId(),System.getProperty("java.version")});
+
+					}
 				}
 				throw are; //re-throw this exception 
 			}
