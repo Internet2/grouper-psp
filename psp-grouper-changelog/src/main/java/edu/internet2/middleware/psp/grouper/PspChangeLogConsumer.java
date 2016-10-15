@@ -46,6 +46,7 @@ import org.openspml.v2.profiles.dsml.DSMLValue;
 import org.openspml.v2.util.Spml2Exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.lang.StringUtils;
 
 import edu.internet2.middleware.grouper.app.loader.GrouperLoaderConfig;
 import edu.internet2.middleware.grouper.changeLog.ChangeLogConsumer;
@@ -507,7 +508,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             }
 
             // if the change log context id has changed, log and restart stop watch
-            if (!lastContextId.equals(changeLogEntry.getContextId())) {
+            if (!StringUtils.equals(lastContextId, changeLogEntry.getContextId())) {
                 stopWatch.stop();
                 LOG.debug("PSP Consumer '{}' - Processed change log context '{}' Elapsed time {}", new Object[] {name,
                         lastContextId, stopWatch,});
