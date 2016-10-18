@@ -470,7 +470,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
         String lastContextId = null;
 
         LOG.debug("PSP Consumer '{}' - Processing change log entry list size '{}'", name, changeLogEntryList.size());
-
+        boolean first = true;
         // process each change log entry
         for (ChangeLogEntry changeLogEntry : changeLogEntryList) {
 
@@ -485,7 +485,8 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             }
 
             // if first run, start the stop watch and store the last sequence number
-            if (lastContextId == null) {
+            if (first) {
+                first = false;
                 stopWatch.start();
                 lastContextId = changeLogEntry.getContextId();
             }
@@ -508,7 +509,7 @@ public class PspChangeLogConsumer extends ChangeLogConsumerBase {
             }
 
             // if the change log context id has changed, log and restart stop watch
-            if (!StringUtils.equals(lastContextId, changeLogEntry.getContextId())) {
+            if (lastContextId == null || changeLogEntry.getContextId() == null || !StringUtils.equals(lastContextId, changeLogEntry.getContextId())) {
                 stopWatch.stop();
                 LOG.debug("PSP Consumer '{}' - Processed change log context '{}' Elapsed time {}", new Object[] {name,
                         lastContextId, stopWatch,});
