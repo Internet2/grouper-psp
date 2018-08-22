@@ -112,7 +112,7 @@
         <artifactId>grouper-shib</artifactId>
         <version>${grouper.version}</version>
       </dependency>
-      <dependency>
+      <!--  dependency>
         <groupId>edu.internet2.middleware.grouper</groupId>
         <artifactId>subject</artifactId>
         <version>${grouper.version}</version>
@@ -122,7 +122,7 @@
               <artifactId>mail</artifactId>
           </exclusion>
         </exclusions>
-      </dependency>
+      </dependency -->
 
       <dependency>
         <groupId>edu.internet2.middleware</groupId>
